@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduAssess — Talabalarni Baholash Platformasi</title>
+<meta name="description" content="Online baholash platformasi — moslashuvchan testlar, anti-cheat tizimi, tahliliy dashboard">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* ===== RESET & ROOT ===== */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8f7f4;--card:#fff;--border:#e5e3dd;--text:#1a1a18;--muted:#6b6b66;
+  --blue:#185fa5;--blue-l:#e6f1fb;--blue-d:#0c447c;
+  --green:#3b6d11;--green-l:#eaf3de;
+  --amber:#ba7517;--amber-l:#faeeda;
+  --red:#a32d2d;--red-l:#fcebeb;
+  --purple:#534ab7;--purple-l:#eeedfe;
+  --teal:#0f6e56;--teal-l:#e1f5ee;
+  --radius:10px;--radius-lg:14px;
+  --shadow:0 1px 4px rgba(0,0,0,.08);
+  --sidebar:220px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--card:#252523;--border:#3a3a36;--text:#e8e6df;--muted:#8a8880;
+    --blue-l:#0c2a4a;--green-l:#0d2405;--amber-l:#2a1a00;--red-l:#2a0d0d;
+    --purple-l:#1a1840;--teal-l:#041f18;
+  }
+}
+html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+/* ===== LANDING PAGE ===== */
+#landing{display:flex;flex-direction:column;min-height:100vh;background:var(--bg)}
+.land-nav{display:flex;justify-content:space-between;align-items:center;padding:16px 48px;background:var(--card);border-bottom:1px solid var(--border)}
+.land-logo{font-size:20px;font-weight:700;color:var(--blue)}
+.land-nav-links{display:flex;gap:24px;align-items:center}
+.land-nav-links a{text-decoration:none;color:var(--muted);font-size:14px;transition:color .15s}
+.land-nav-links a:hover{color:var(--text)}
+.hero{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px 60px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:var(--blue-l);color:var(--blue);border-radius:20px;font-size:12px;font-weight:500;margin-bottom:20px}
+.hero h1{font-size:42px;font-weight:700;line-height:1.2;max-width:700px;margin-bottom:16px}
+.hero h1 span{color:var(--blue)}
+.hero p{font-size:16px;color:var(--muted);max-width:560px;line-height:1.7;margin-bottom:32px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:40px 48px 60px;max-width:1200px;margin:0 auto;width:100%}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px}
+.feat-icon{font-size:28px;margin-bottom:12px}
+.feat-title{font-size:15px;font-weight:600;margin-bottom:8px}
+.feat-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.land-footer{text-align:center;padding:24px;color:var(--muted);font-size:13px;border-top:1px solid var(--border);margin-top:auto}
+/* ===== LOGIN PAGE ===== */
+#login-page{display:none;min-height:100vh;align-items:center;justify-content:center;background:var(--bg);padding:24px}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:36px;width:100%;max-width:420px;box-shadow:var(--shadow)}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo-icon{font-size:40px}
+.login-logo h2{font-size:22px;font-weight:700;margin-top:8px;color:var(--blue)}
+.login-logo p{font-size:13px;color:var(--muted);margin-top:4px}
+.role-selector{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+.role-btn{padding:12px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--bg);cursor:pointer;text-align:center;transition:all .15s}
+.role-btn:hover{border-color:var(--blue)}
+.role-btn.active{border-color:var(--blue);background:var(--blue-l);color:var(--blue)}
+.role-btn-icon{font-size:22px;display:block;margin-bottom:4px}
+.role-btn-label{font-size:13px;font-weight:500}
+.demo-accounts{background:var(--bg);border-radius:8px;padding:12px;margin-bottom:16px;font-size:12px;color:var(--muted);line-height:1.8}
+.demo-accounts strong{color:var(--text)}
+/* ===== APP LAYOUT ===== */
+#app{display:none;height:100vh;overflow:hidden}
+.app-inner{display:flex;height:100%}
+/* ===== SIDEBAR ===== */
+.sidebar{width:var(--sidebar);background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;transition:width .2s}
+.sidebar-logo{padding:18px 16px;border-bottom:1px solid var(--border)}
+.sidebar-logo-title{font-size:15px;font-weight:700;color:var(--blue)}
+.sidebar-logo-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.sidebar-user{display:flex;align-items:center;gap:10px;margin-top:10px}
+.user-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+.user-info{min-width:0}
+.user-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-role-badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:500;margin-top:2px}
+.role-admin-badge{background:var(--purple-l);color:var(--purple)}
+.role-student-badge{background:var(--teal-l);color:var(--teal)}
+.sidebar-nav{flex:1;overflow-y:auto;padding:8px 0}
+.nav-section-title{padding:10px 16px 4px;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;font-size:13px;color:var(--muted);transition:all .15s;border-left:2px solid transparent}
+.nav-item:hover{background:var(--bg);color:var(--text)}
+.nav-item.active{background:var(--blue-l);color:var(--blue);font-weight:500;border-left-color:var(--blue)}
+.nav-item-icon{font-size:16px;width:20px;text-align:center}
+.sidebar-footer{padding:12px 16px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
+.sidebar-footer-btn{width:100%;padding:7px;border:1px solid var(--border);border-radius:var(--radius);background:transparent;cursor:pointer;font-size:12px;color:var(--muted);transition:all .15s;text-align:left;display:flex;align-items:center;gap:6px}
+.sidebar-footer-btn:hover{border-color:var(--blue);color:var(--blue)}
+/* ===== MAIN CONTENT ===== */
+.main-content{flex:1;overflow-y:auto;padding:24px 28px;background:var(--bg)}
+.page{display:none}
+.page.active{display:block}
+/* ===== PAGE HEADER ===== */
+.page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;gap:16px}
+.page-title{font-size:20px;font-weight:700}
+.page-subtitle{font-size:13px;color:var(--muted);margin-top:3px}
+.page-actions{display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0}
+/* ===== CARDS ===== */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;box-shadow:var(--shadow)}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.card-title{font-size:13px;font-weight:500;color:var(--muted)}
+.card-body{font-size:13px}
+/* ===== STATS ===== */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;box-shadow:var(--shadow)}
+.stat-value{font-size:26px;font-weight:700;line-height:1;margin-bottom:4px}
+.stat-label{font-size:12px;color:var(--muted)}
+.stat-delta{font-size:11px;margin-top:5px}
+.up{color:var(--green)}.down{color:var(--red)}.neutral{color:var(--muted)}
+/* ===== GRIDS ===== */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.col-span-2{grid-column:span 2}
+/* ===== TABLE ===== */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:9px 12px;font-size:11px;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border:none}
+tbody tr:hover td{background:var(--bg)}
+/* ===== BADGES ===== */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap}
+.b-green{background:var(--green-l);color:var(--green)}
+.b-amber{background:var(--amber-l);color:var(--amber)}
+.b-red{background:var(--red-l);color:var(--red)}
+.b-blue{background:var(--blue-l);color:var(--blue)}
+.b-purple{background:var(--purple-l);color:var(--purple)}
+.b-teal{background:var(--teal-l);color:var(--teal)}
+.b-muted{background:var(--bg);color:var(--muted)}
+/* ===== PROGRESS ===== */
+.progress{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width .4s}
+/* ===== BUTTONS ===== */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--radius);border:1px solid var(--border);background:var(--card);cursor:pointer;font-size:13px;font-weight:500;color:var(--text);transition:all .15s;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--blue);color:var(--blue)}
+.btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-primary:hover{background:var(--blue-d);border-color:var(--blue-d);color:#fff}
+.btn-danger{background:var(--red-l);color:var(--red);border-color:#f7c1c1}
+.btn-success{background:var(--green-l);color:var(--green);border-color:#c0dd97}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-lg{padding:12px 24px;font-size:15px}
+.btn-icon{width:32px;height:32px;padding:0;justify-content:center}
+/* ===== FORMS ===== */
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:12px;font-weight:500;margin-bottom:5px;color:var(--muted)}
+.form-control{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:var(--bg);color:var(--text);transition:border-color .15s;font-family:inherit}
+.form-control:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(24,95,165,.1)}
+textarea.form-control{resize:vertical;min-height:80px}
+select.form-control{cursor:pointer}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* ===== TABS ===== */
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:16px;gap:0}
+.tab{padding:9px 16px;cursor:pointer;font-size:13px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--blue);font-weight:500;border-color:var(--blue)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+/* ===== ALERTS ===== */
+.alert{padding:10px 16px;border-radius:8px;font-size:13px;display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
+.alert-info{background:var(--blue-l);color:var(--blue);border:1px solid #b5d4f4}
+.alert-success{background:var(--green-l);color:var(--green);border:1px solid #c0dd97}
+.alert-warning{background:var(--amber-l);color:var(--amber);border:1px solid #fac775}
+.alert-danger{background:var(--red-l);color:var(--red);border:1px solid #f7c1c1}
+/* ===== MODAL ===== */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.open{display:flex}
+.modal{background:var(--card);border-radius:var(--radius-lg);padding:24px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;position:relative;box-shadow:0 8px 32px rgba(0,0,0,.15)}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:16px;padding-right:28px}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted);line-height:1;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px}
+.modal-close:hover{background:var(--bg);color:var(--text)}
+/* ===== CHART ===== */
+.chart-wrap{position:relative;height:200px}
+.chart-wrap canvas{max-height:200px!important}
+/* ===== TEST TAKING ===== */
+.test-progress{margin-bottom:20px}
+.test-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.q-nav-btn{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;font-size:12px;font-weight:500;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.q-nav-btn:hover{border-color:var(--blue)}
+.q-nav-btn.answered{background:var(--blue-l);border-color:var(--blue);color:var(--blue)}
+.q-nav-btn.current{background:var(--blue);border-color:var(--blue);color:#fff}
+.answer-option{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;margin-bottom:8px;transition:all .15s;user-select:none}
+.answer-option:hover{border-color:var(--blue);background:var(--blue-l)}
+.answer-option.selected{border-color:var(--blue);background:var(--blue-l)}
+.answer-option.correct{border-color:var(--green);background:var(--green-l)}
+.answer-option.wrong{border-color:var(--red);background:var(--red-l)}
+.opt-circle{width:28px;height:28px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;color:var(--muted)}
+.answer-option.selected .opt-circle{border-color:var(--blue);color:var(--blue);background:rgba(24,95,165,.1)}
+.diff-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+.diff-easy{background:#639922}.diff-medium{background:#ba7517}.diff-hard{background:#a32d2d}
+.diff-label-easy{color:var(--green);font-size:11px;font-weight:600}
+.diff-label-medium{color:var(--amber);font-size:11px;font-weight:600}
+.diff-label-hard{color:var(--red);font-size:11px;font-weight:600}
+/* ===== TIMER ===== */
+.timer{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:var(--card);border:1px solid var(--border);border-radius:20px;font-size:14px;font-weight:600;transition:all .3s}
+.timer.urgent{background:var(--red-l);border-color:#f7c1c1;color:var(--red)}
+/* ===== SCORE RING ===== */
+.score-ring-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:120px;height:120px}
+.score-ring-wrap svg{position:absolute;top:0;left:0;transform:rotate(-90deg)}
+.score-ring-num{font-size:26px;font-weight:700;line-height:1}
+.score-ring-label{font-size:11px;color:var(--muted);margin-top:2px;text-align:center}
+/* ===== QUESTION BUILDER ===== */
+.q-item{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px}
+.q-item-num{width:24px;height:24px;border-radius:50%;background:var(--blue-l);color:var(--blue);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.q-item-body{flex:1;min-width:0}
+.q-item-text{font-size:13px;font-weight:500;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q-item-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.q-item-actions{display:flex;gap:4px;flex-shrink:0}
+/* ===== ANTI-CHEAT OVERLAY ===== */
+.cheat-overlay{position:fixed;inset:0;background:rgba(160,30,30,.97);z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;gap:16px;padding:24px}
+.cheat-overlay.show{display:flex}
+.cheat-icon{font-size:64px;animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+/* ===== LEADERBOARD ===== */
+.leaderboard-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.leaderboard-item:last-child{border:none}
+.lb-rank{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.lb-1{background:#ffd700;color:#5a4200}
+.lb-2{background:#e8e8e8;color:#444}
+.lb-3{background:#cd7f32;color:#fff}
+.lb-other{background:var(--bg);color:var(--muted)}
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+/* ===== RESPONSIVE ===== */
+@media(max-width:1100px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:1fr 1fr}
+  .col-span-2{grid-column:span 1}
+}
+@media(max-width:768px){
+  :root{--sidebar:60px}
+  .sidebar-logo-sub,.user-info,.nav-item span:last-child,.sidebar-footer-btn span{display:none}
+  .nav-item{padding:10px;justify-content:center}
+  .nav-item-icon{width:auto;font-size:18px}
+  .main-content{padding:16px}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .features-grid{grid-template-columns:1fr}
+  .hero h1{font-size:28px}
+  .land-nav{padding:14px 20px}
+  .features-grid{padding:20px}
+}
+</style>
+</head>
+<body>
+<!-- ===== LANDING PAGE ===== -->
+<div id="landing">
+  <nav class="land-nav">
+    <div class="land-logo">📊 EduAssess</div>
+    <div class="land-nav-links">
+      <a href="#features">Imkoniyatlar</a>
+      <a href="#methodology">Metodika</a>
+      <button class="btn btn-primary btn-sm" onclick="showLogin()">Kirish →</button>
+    </div>
+  </nav>
+  <div class="hero">
+    <div class="hero-badge">✨ Moslashuvchan baholash metodikasi</div>
+    <h1>Talabalarni baholash <span>aqlli va samarali</span></h1>
+    <p>Adaptive testing, anti-cheat nazorat, real-vaqt tahlil va batafsil hisobotlar — zamonaviy ta'lim platformasi.</p>
+    <div class="hero-btns">
+      <button class="btn btn-primary btn-lg" onclick="showLogin()">Platformaga kirish →</button>
+      <button class="btn btn-lg" onclick="demoLogin('admin')">Demo ko'rish</button>
+    </div>
+  </div>
+  <div id="features" class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon">🎯</div>
+      <div class="feat-title">Moslashuvchan testlar</div>
+      <div class="feat-desc">Savollarning qiyinchilik darajasiga qarab ball berish — oson (1×), o'rta (2×), qiyin (3×). Formula: Σ(To'g'ri × Og'irlik) / Jami × 100%</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🛡️</div>
+      <div class="feat-title">Anti-cheat tizim</div>
+      <div class="feat-desc">Talaba boshqa oynaga o'tganda real-vaqt ogohlantirish. 3 marta qoidabuzarlik — test avtomatik yakunlanadi va o'qituvchiga xabar ketadi.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📊</div>
+      <div class="feat-title">Tahliliy dashboard</div>
+      <div class="feat-desc">Guruhlar bo'yicha dinamika, reytinglar, o'sish grafiklari, xatolar tahlili va CSV/PDF hisobotlar.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">⏱️</div>
+      <div class="feat-title">Vaqt nazorati</div>
+      <div class="feat-desc">Har bir savol uchun alohida taymer yoki umumiy test vaqti. Vaqt tugaganda savol avtomatik o'tadi.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📈</div>
+      <div class="feat-title">O'sish dinamikasi</div>
+      <div class="feat-desc">Talabaning semestrdagi o'sish chizig'i, fan bo'yicha radar diagramma, guruh ichida reyting.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🔧</div>
+      <div class="feat-title">Xatolar ustida ishlash</div>
+      <div class="feat-desc">Noto'g'ri javob berilgan savollar tahlili, izohlar va takrorlash rejimi — bilimni mustahkamlash uchun.</div>
+    </div>
+  </div>
+  <div id="methodology" style="max-width:800px;margin:0 auto 40px;padding:0 24px">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Baholash metodikasi formulasi</div></div>
+      <div style="background:var(--bg);border-radius:8px;padding:16px;font-size:15px;font-weight:600;text-align:center;margin-bottom:12px;color:var(--blue)">
+        Score = Σ (To'g'ri × Og'irlik) / Jami mumkin × 100%
+      </div>
+      <div class="grid-3" style="gap:10px">
+        <div style="text-align:center;padding:12px;background:var(--green-l);border-radius:8px">
+          <div style="font-size:20px;font-weight:700;color:var(--green)">×1</div>
+          <div style="font-size:12px;color:var(--green)">Oson savollar</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:var(--amber-l);border-radius:8px">
+          <div style="font-size:20px;font-weight:700;color:var(--amber)">×2</div>
+          <div style="font-size:12px;color:var(--amber)">O'rta savollar</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:var(--red-l);border-radius:8px">
+          <div style="font-size:20px;font-weight:700;color:var(--red)">×3</div>
+          <div style="font-size:12px;color:var(--red)">Qiyin savollar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="land-footer">
+    © 2025 EduAssess — Talabalarni baholashda online platformalardan foydalanish metodikasi
+  </footer>
+</div>
+<!-- ===== LOGIN PAGE ===== -->
+<div id="login-page">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">📊</div>
+      <h2>EduAssess</h2>
+      <p>Baholash platformasiga xush kelibsiz</p>
+    </div>
+    <div class="role-selector">
+      <button class="role-btn active" id="role-admin-btn" onclick="selectLoginRole('admin')">
+        <span class="role-btn-icon">👨🏫</span>
+        <span class="role-btn-label">O'qituvchi</span>
+      </button>
+      <button class="role-btn" id="role-student-btn" onclick="selectLoginRole('student')">
+        <span class="role-btn-icon">👨🎓</span>
+        <span class="role-btn-label">Talaba</span>
+      </button>
+    </div>
+    <div class="demo-accounts">
+      <strong>Demo kirish:</strong><br>
+      Admin: admin@edu.uz / admin123<br>
+      Talaba: aziz@edu.uz / student123
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="form-control" type="email" id="login-email" placeholder="email@edu.uz">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Parol</label>
+      <input class="form-control" type="password" id="login-password" placeholder="••••••••">
+    </div>
+    <div id="login-error" class="alert alert-danger" style="display:none"></div>
+    <button class="btn btn-primary" style="width:100%;margin-bottom:12px" onclick="doLogin()">Kirish →</button>
+    <button class="btn" style="width:100%;font-size:12px" onclick="showLanding()">← Orqaga</button>
+  </div>
+</div>
+<!-- ===== MAIN APP ===== -->
+<div id="app">
+  <div class="app-inner">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-title">📊 EduAssess</div>
+        <div class="sidebar-logo-sub">v1.0 • Baholash platformasi</div>
+        <div class="sidebar-user" id="sidebar-user"></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebar-nav"></nav>
+      <div class="sidebar-footer">
+        <button class="sidebar-footer-btn" onclick="switchRole()">
+          🔄 <span>Rol almashtirish</span>
+        </button>
+        <button class="sidebar-footer-btn" onclick="doLogout()">
+          🚪 <span>Chiqish</span>
+        </button>
+      </div>
+    </div>
+    <!-- MAIN -->
+    <div class="main-content" id="main-content">
+      <!-- === ADMIN: DASHBOARD === -->
+      <div class="page" id="page-dashboard">
+        <div class="page-header">
+          <div><div class="page-title">Dashboard</div><div class="page-subtitle" id="dash-date"></div></div>
+          <div class="page-actions">
+            <button class="btn btn-sm" onclick="refreshDash()">🔄 Yangilash</button>
+            <button class="btn btn-primary btn-sm" onclick="nav('page-create')">+ Test yaratish</button>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-value" style="color:var(--blue)" id="s-students">147</div><div class="stat-label">Jami talabalar</div><div class="stat-delta up">↑ +12 bu oy</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:var(--green)" id="s-tests">38</div><div class="stat-label">Aktiv testlar</div><div class="stat-delta up">↑ +5 yangi</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:var(--amber)" id="s-submissions">2,841</div><div class="stat-label">Jami topshiriqlar</div><div class="stat-delta neutral">Bu hafta: 234</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:var(--purple)" id="s-avg">74.2%</div><div class="stat-label">O'rtacha ball</div><div class="stat-delta up">↑ +3.1%</div></div>
+        </div>
+        <div class="grid-2" style="margin-bottom:16px">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Haftalik o'zlashtirish dinamikasi</div></div>
+            <div class="chart-wrap"><canvas id="c-line"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Guruhlar o'rtacha balli</div></div>
+            <div class="chart-wrap"><canvas id="c-bar"></canvas></div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div class="card-title">So'nggi topshiriqlar</div><button class="btn btn-sm" onclick="nav('page-reports')">Barchasi →</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Talaba</th><th>Test</th><th>Ball</th><th>Daraja</th></tr></thead><tbody id="t-recent"></tbody></table></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Reyting (TOP-5)</div></div>
+            <div id="leaderboard-list"></div>
+          </div>
+        </div>
+      </div>
+      <!-- === ADMIN: TEST YARATISH === -->
+      <div class="page" id="page-create">
+        <div class="page-header">
+          <div><div class="page-title">Test yaratish</div><div class="page-subtitle">Moslashuvchan baholash — adaptive testing</div></div>
+        </div>
+        <div class="grid-2">
+          <div>
+            <div class="card" style="margin-bottom:14px">
+              <div class="card-header"><div class="card-title">Test asosiy ma'lumotlari</div></div>
+              <div class="form-group"><label class="form-label">Test nomi</label><input class="form-control" id="t-title" placeholder="Masalan: Algoritmlar va ma'lumotlar strukturasi"></div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Fan</label>
+                  <select class="form-control" id="t-subject"><option>Informatika</option><option>Matematika</option><option>Fizika</option><option>Dasturlash</option><option>Tarmoq</option><option>Boshqa</option></select>
+                </div>
+                <div class="form-group"><label class="form-label">Guruh</label>
+                  <select class="form-control" id="t-group"><option>CS-301</option><option>CS-302</option><option>IT-201</option><option>Barcha guruhlar</option></select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Muddati (kun)</label><input class="form-control" type="number" id="t-deadline" value="7" min="1"></div>
+                <div class="form-group"><label class="form-label">Urinishlar soni</label><input class="form-control" type="number" id="t-attempts" value="1" min="1" max="5"></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">Savol qo'shish</div></div>
+              <div class="form-group"><label class="form-label">Savol matni *</label><textarea class="form-control" id="q-text" rows="3" placeholder="Savolni kiriting..."></textarea></div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Qiyinchilik darajasi</label>
+                  <select class="form-control" id="q-diff">
+                    <option value="easy">🟢 Oson (1 ball)</option>
+                    <option value="medium" selected>🟡 O'rta (2 ball)</option>
+                    <option value="hard">🔴 Qiyin (3 ball)</option>
+                  </select>
+                </div>
+                <div class="form-group"><label class="form-label">Taymer (soniya)</label><input class="form-control" type="number" id="q-time" value="45" min="10" max="300"></div>
+              </div>
+              <div class="form-group"><label class="form-label">Variantlar (har biri yangi qatorda, masalan: A) Javob)</label>
+                <textarea class="form-control" id="q-opts" rows="5" placeholder="A) Birinchi variant&#10;B) Ikkinchi variant&#10;C) Uchinchi variant&#10;D) To'rtinchi variant"></textarea>
+              </div>
+              <div class="form-group"><label class="form-label">To'g'ri javob (A/B/C/D)</label><input class="form-control" id="q-correct" placeholder="A" maxlength="1" style="width:80px;text-transform:uppercase"></div>
+              <button class="btn btn-primary" style="width:100%" onclick="addQuestion()">+ Savol qo'shish</button>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Savollar ro'yxati <span class="badge b-blue" id="q-count-badge">0 ta</span></div>
+                <button class="btn btn-sm btn-danger" onclick="clearQuestions()">Tozalash</button>
+              </div>
+              <div id="q-list" style="max-height:400px;overflow-y:auto;margin-bottom:12px"></div>
+              <div style="padding:12px;background:var(--bg);border-radius:8px;margin-bottom:14px">
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;font-size:12px">
+                  <div><div style="font-size:18px;font-weight:700;color:var(--green)" id="q-easy-count">0</div><div style="color:var(--muted)">Oson</div></div>
+                  <div><div style="font-size:18px;font-weight:700;color:var(--amber)" id="q-mid-count">0</div><div style="color:var(--muted)">O'rta</div></div>
+                  <div><div style="font-size:18px;font-weight:700;color:var(--red)" id="q-hard-count">0</div><div style="color:var(--muted)">Qiyin</div></div>
+                </div>
+                <div style="border-top:1px solid var(--border);margin-top:10px;padding-top:10px;display:flex;justify-content:space-between;font-size:12px;color:var(--muted)">
+                  <span>Maks. ball: <strong id="q-max-pts">0</strong></span>
+                  <span>Test vaqti: <strong id="q-total-time">0</strong> daq.</span>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-lg" style="width:100%" onclick="publishTest()">🚀 Testni nashr qilish</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- === ADMIN: TALABALAR === -->
+      <div class="page" id="page-students">
+        <div class="page-header">
+          <div><div class="page-title">Talabalar</div><div class="page-subtitle" id="students-count"></div></div>
+          <div class="page-actions">
+            <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-student')">+ Talaba qo'shish</button>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <input class="form-control" type="text" id="s-search" placeholder="🔍 Ism yoki email bo'yicha qidirish..." style="flex:1;min-width:200px" oninput="renderStudents()">
+            <select class="form-control" id="s-group-filter" style="width:160px" onchange="renderStudents()">
+              <option value="">Barcha guruhlar</option><option>CS-301</option><option>CS-302</option><option>IT-201</option>
+            </select>
+            <select class="form-control" id="s-status-filter" style="width:130px" onchange="renderStudents()">
+              <option value="">Barcha holat</option><option value="active">Aktiv</option><option value="inactive">Nofaol</option>
+            </select>
+          </div>
+        </div>
+        <div class="card">
+          <div class="table-wrap">
+            <table><thead><tr><th>#</th><th>Talaba</th><th>Guruh</th><th>O'rtacha ball</th><th>Testlar</th><th>So'nggi faollik</th><th>Holat</th><th>Amal</th></tr></thead>
+            <tbody id="t-students"></tbody></table>
+          </div>
+        </div>
+      </div>
+      <!-- === ADMIN: HISOBOT === -->
+      <div class="page" id="page-reports">
+        <div class="page-header">
+          <div><div class="page-title">Hisobotlar</div><div class="page-subtitle">Baholash natijalari va guruh tahlili</div></div>
+          <div class="page-actions">
+            <button class="btn btn-sm" onclick="exportCSV()">📥 CSV</button>
+            <button class="btn btn-primary btn-sm" onclick="exportPDF()">📄 PDF hisobot</button>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-value" style="color:var(--green)">32%</div><div class="stat-label">A daraja (90+)</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:var(--blue)">45%</div><div class="stat-label">B daraja (70-89)</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:var(--amber)">18%</div><div class="stat-label">C daraja (50-69)</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:var(--red)">5%</div><div class="stat-label">F daraja (50 dan past)</div></div>
+        </div>
+        <div class="grid-2" style="margin-bottom:16px">
+          <div class="card"><div class="card-header"><div class="card-title">Ball taqsimoti</div></div><div class="chart-wrap"><canvas id="c-hist"></canvas></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">Guruh radar tahlili</div></div><div class="chart-wrap"><canvas id="c-radar"></canvas></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Batafsil natijalar</div></div>
+          <div class="table-wrap">
+            <table><thead><tr><th>Talaba</th><th>Test</th><th>Oson ✓</th><th>O'rta ✓</th><th>Qiyin ✓</th><th>Metodika balli</th><th>%</th><th>Daraja</th></tr></thead>
+            <tbody id="t-report"></tbody></table>
+          </div>
+        </div>
+      </div>
+      <!-- === ADMIN: ANALYTICS === -->
+      <div class="page" id="page-analytics">
+        <div class="page-header">
+          <div><div class="page-title">Metodika tahlili</div><div class="page-subtitle">Adaptive testing samaradorligi</div></div>
+        </div>
+        <div class="alert alert-success">✅ Baholash formulasi: Score = Σ(To'g'ri × Og'irlik) / Jami mumkin × 100% — Adaptive algoritm faol</div>
+        <div class="grid-3" style="margin-bottom:16px">
+          <div class="card" style="text-align:center">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">Oson savollar</div>
+            <div style="font-size:32px;font-weight:700;color:var(--green)">1×</div>
+            <div class="progress" style="margin:10px 0"><div class="progress-fill" style="width:68%;background:var(--green)"></div></div>
+            <div style="font-size:12px;color:var(--muted)">68% talaba to'g'ri javob berdi</div>
+          </div>
+          <div class="card" style="text-align:center">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">O'rta savollar</div>
+            <div style="font-size:32px;font-weight:700;color:var(--amber)">2×</div>
+            <div class="progress" style="margin:10px 0"><div class="progress-fill" style="width:54%;background:var(--amber)"></div></div>
+            <div style="font-size:12px;color:var(--muted)">54% talaba to'g'ri javob berdi</div>
+          </div>
+          <div class="card" style="text-align:center">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">Qiyin savollar</div>
+            <div style="font-size:32px;font-weight:700;color:var(--red)">3×</div>
+            <div class="progress" style="margin:10px 0"><div class="progress-fill" style="width:31%;background:var(--red)"></div></div>
+            <div style="font-size:12px;color:var(--muted)">31% talaba to'g'ri javob berdi</div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card"><div class="card-header"><div class="card-title">Anti-cheat hodisalari (haftalik)</div></div><div class="chart-wrap"><canvas id="c-cheat"></canvas></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">O'rtacha javob vaqti dinamikasi</div></div><div class="chart-wrap"><canvas id="c-time"></canvas></div></div>
+        </div>
+      </div>
+      <!-- === STUDENT: BOS SAHIFA === -->
+      <div class="page" id="page-student-home">
+        <div class="page-header">
+          <div><div class="page-title" id="st-greeting">Salom! 👋</div><div class="page-subtitle">Sizning shaxsiy o'quv dashboardingiz</div></div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-value" style="color:var(--blue)">78.5%</div><div class="stat-label">O'rtacha ball</div><div class="stat-delta up">↑ +5.2% o'sish</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:var(--green)">12</div><div class="stat-label">Tugatilgan testlar</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:var(--amber)">3</div><div class="stat-label">Kutilayotgan</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:var(--purple)">4/5 ⭐</div><div class="stat-label">Guruh reytingi</div><div class="stat-delta up">↑ 2 o'rin</div></div>
+        </div>
+        <div class="grid-2" style="margin-bottom:16px">
+          <div class="card"><div class="card-header"><div class="card-title">O'sish dinamikam</div></div><div class="chart-wrap"><canvas id="c-student-line"></canvas></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">Fan bo'yicha o'zlashtirish</div></div><div class="chart-wrap"><canvas id="c-student-radar"></canvas></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Mavjud testlar</div><span class="badge b-amber">3 kutilmoqda</span></div>
+          <div id="available-tests-list"></div>
+        </div>
+      </div>
+      <!-- === STUDENT: TEST TOPSHIRISH === -->
+      <div class="page" id="page-take-test">
+        <div id="test-container"></div>
+      </div>
+      <!-- === STUDENT: NATIJALAR === -->
+      <div class="page" id="page-my-results">
+        <div class="page-header">
+          <div><div class="page-title">Mening natijalarim</div><div class="page-subtitle">Tarix, tahlil va xatolar ustida ishlash</div></div>
+        </div>
+        <div class="card">
+          <div class="tabs">
+            <div class="tab active" onclick="switchTab(this,'tp-history')">📋 Tarix</div>
+            <div class="tab" onclick="switchTab(this,'tp-mistakes')">❌ Xatolar tahlili</div>
+            <div class="tab" onclick="switchTab(this,'tp-progress')">📈 O'sish grafigi</div>
+          </div>
+          <div class="tab-panel active" id="tp-history">
+            <div class="table-wrap">
+              <table><thead><tr><th>Test nomi</th><th>Sana</th><th>Metodika balli</th><th>Oson</th><th>O'rta</th><th>Qiyin</th><th>Vaqt</th><th>Daraja</th></tr></thead>
+              <tbody id="t-my-results"></tbody></table>
+            </div>
+          </div>
+          <div class="tab-panel" id="tp-mistakes">
+            <div id="mistakes-container"></div>
+          </div>
+          <div class="tab-panel" id="tp-progress">
+            <div class="chart-wrap" style="height:260px"><canvas id="c-progress"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /main-content -->
+  </div><!-- /app-inner -->
+</div><!-- /app -->
+<!-- ===== ANTI-CHEAT OVERLAY ===== -->
+<div class="cheat-overlay" id="cheat-overlay">
+  <div class="cheat-icon">⚠️</div>
+  <div style="font-size:24px;font-weight:700">Test to'xtatildi!</div>
+  <div style="font-size:16px;opacity:.9" id="cheat-msg">Siz boshqa oynaga o'tdingiz</div>
+  <div style="font-size:13px;opacity:.7">3 marta qoidabuzarlik — test avtomatik yakunlanadi</div>
+  <div style="display:flex;gap:12px;margin-top:8px">
+    <button onclick="resumeTest()" style="padding:10px 28px;border-radius:8px;border:2px solid rgba(255,255,255,.7);background:transparent;color:#fff;font-size:14px;font-weight:600;cursor:pointer">Testga qaytish</button>
+  </div>
+</div>
+<!-- ===== MODALS ===== -->
+<div class="modal-backdrop" id="modal-add-student">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-add-student')">✕</button>
+    <div class="modal-title">Yangi talaba qo'shish</div>
+    <div class="form-group"><label class="form-label">Ism Familiya *</label><input class="form-control" id="new-s-name" placeholder="Ism Familiya"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Guruh</label>
+        <select class="form-control" id="new-s-group"><option>CS-301</option><option>CS-302</option><option>IT-201</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-control" id="new-s-email" placeholder="email@edu.uz"></div>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="saveNewStudent()">💾 Saqlash</button>
+  </div>
+</div>
+<div class="modal-backdrop" id="modal-student-detail">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-student-detail')">✕</button>
+    <div id="student-detail-content"></div>
+  </div>
+</div>
+<script>
+// ========== DATA ==========
+const DB = {
+  users: [
+    {id:1,name:'Abdullayev Firdavs',email:'admin@edu.uz',pass:'admin123',role:'admin',avatar:'AF',color:'#534ab7'},
+    {id:2,name:'Aziz Karimov',email:'aziz@edu.uz',pass:'student123',role:'student',group:'CS-301',avatar:'AK',color:'#185fa5'},
+  ],
+  students: [
+    {id:1,name:'Aziz Karimov',group:'CS-301',avg:82,tests:8,last:'2025-06-10',status:'active',email:'aziz@edu.uz'},
+    {id:2,name:'Malika Yusupova',group:'CS-301',avg:91,tests:9,last:'2025-06-11',status:'active',email:'malika@edu.uz'},
+    {id:3,name:'Jasur Toshmatov',group:'CS-302',avg:67,tests:6,last:'2025-06-09',status:'active',email:'jasur@edu.uz'},
+    {id:4,name:'Nodira Rahimova',group:'IT-201',avg:78,tests:7,last:'2025-06-08',status:'active',email:'nodira@edu.uz'},
+    {id:5,name:'Bobur Mirzayev',group:'CS-302',avg:55,tests:5,last:'2025-06-07',status:'inactive',email:'bobur@edu.uz'},
+    {id:6,name:'Zilola Hamidova',group:'CS-301',avg:88,tests:10,last:'2025-06-11',status:'active',email:'zilola@edu.uz'},
+    {id:7,name:'Otabek Nazarov',group:'IT-201',avg:73,tests:7,last:'2025-06-10',status:'active',email:'otabek@edu.uz'},
+  ],
+  tests: [
+    {id:1,title:'Algoritmlar asoslari',subject:'Informatika',group:'CS-301',duration:12,attempts:1,
+      questions:[
+        {text:'Qaysi algoritm O(n log n) murakkablikka ega?',opts:['A) Bubble sort','B) Merge sort','C) Insertion sort','D) Selection sort'],correct:'B',diff:'medium',time:45},
+        {text:"Stack ma'lumot strukturasining asosiy operatsiyasi nima?",opts:['A) Enqueue','B) Push/Pop','C) Insert/Delete','D) Search/Find'],correct:'B',diff:'easy',time:30},
+        {text:"Binary search daraxtida eng yomon holatda qidirish murakkabligi?",opts:['A) O(1)','B) O(log n)','C) O(n)','D) O(n²)'],correct:'C',diff:'hard',time:60},
+        {text:'Queue qanday tartibda ishlaydi?',opts:['A) LIFO','B) FIFO','C) Random','D) Priority'],correct:'B',diff:'easy',time:25},
+        {text:"Dynamic programming asosiy printsipi nima?",opts:["A) Divide and conquer","B) Greedy approach","C) Memoization / subproblemlar","D) Backtracking"],correct:'C',diff:'hard',time:60},
+      ]},
+    {id:2,title:"Ma'lumotlar bazasi asoslari",subject:'Dasturlash',group:'CS-302',duration:8,attempts:2,
+      questions:[
+        {text:"SQL'da qaysi kalit so'z takrorlanuvchi qatorlarni olib tashlaydi?",opts:['A) UNIQUE','B) DISTINCT','C) FILTER','D) REMOVE'],correct:'B',diff:'easy',time:25},
+        {text:'3NF normalizatsiyasining asosiy sharti?',opts:["A) 1NF va 2NF bajarilishi","B) Tranzitiv bog'liqlik yo'q","C) Ikkilamchi kalit yo'q","D) A va B to'g'ri"],correct:'D',diff:'hard',time:60},
+        {text:'JOIN operatsiyasi nima qiladi?',opts:["A) Jadvallarni birlashtiradi","B) Yozuvlarni o'chiradi","C) Yangi jadval yaratadi","D) Indeks qo'shadi"],correct:'A',diff:'medium',time:35},
+      ]},
+  ],
+  results: [
+    {student:'Aziz Karimov',test:'Algoritmlar asoslari',date:'2025-06-10',score:82,easy:'2/2',mid:'2/3',hard:'1/3',time:'9:42',grade:'B+'},
+    {student:'Aziz Karimov',test:"Ma'lumotlar bazasi",date:'2025-06-08',score:78,easy:'1/1',mid:'1/2',hard:'0/2',time:'6:55',grade:'B'},
+    {student:'Malika Yusupova',test:'Algoritmlar asoslari',date:'2025-06-10',score:94,easy:'2/2',mid:'3/3',hard:'2/3',time:'8:12',grade:'A'},
+    {student:'Jasur Toshmatov',test:'Algoritmlar asoslari',date:'2025-06-09',score:61,easy:'1/2',mid:'2/3',hard:'0/3',time:'11:30',grade:'C+'},
+  ],
+  mistakes: [
+    {q:"Binary search daraxtida eng yomon holatda qidirish murakkabligi?",userAns:'B) O(log n)',correct:'C) O(n)',diff:'hard',explanation:"Balanced BST da O(log n), lekin skewed (bir tomonlama o'sgan) BST da O(n) bo'ladi. Eng yomon holat — bu skewed BST."},
+    {q:"3NF normalizatsiyasining asosiy sharti?",userAns:'A) 1NF va 2NF bajarilishi',correct:"D) A va B to'g'ri",diff:'hard',explanation:"3NF uchun: 1) 1NF bajarilishi, 2) 2NF bajarilishi, 3) tranzitiv bog'liqlik bo'lmasligi — hammasi birga talab qilinadi."},
+  ],
+};
+let currentUser = null;
+let currentPage = '';
+let questions = [];
+let cheatCount = 0;
+let testActive = false;
+let timerInterval = null;
+let timeLeft = 0;
+let currentQ = 0;
+let userAnswers = [];
+let activeTest = null;
+let chartsBuilt = {};
+// ========== AUTH ==========
+function showLogin(role='admin') {
+  document.getElementById('landing').style.display='none';
+  document.getElementById('login-page').style.display='flex';
+  selectLoginRole(role);
+}
+function showLanding() {
+  document.getElementById('login-page').style.display='none';
+  document.getElementById('landing').style.display='flex';
+}
+function selectLoginRole(role) {
+  document.getElementById('role-admin-btn').classList.toggle('active', role==='admin');
+  document.getElementById('role-student-btn').classList.toggle('active', role==='student');
+  if(role==='admin'){document.getElementById('login-email').value='admin@edu.uz';document.getElementById('login-password').value='admin123';}
+  else{document.getElementById('login-email').value='aziz@edu.uz';document.getElementById('login-password').value='student123';}
+}
+function demoLogin(role) {
+  selectLoginRole(role);
+  showLogin(role);
+  setTimeout(doLogin, 300);
+}
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-password').value.trim();
+  const err = document.getElementById('login-error');
+  const user = DB.users.find(u=>u.email===email && u.pass===pass);
+  if(!user){err.style.display='flex';err.textContent="❌ Email yoki parol noto'g'ri. Demo: admin@edu.uz / admin123";return;}
+  err.style.display='none';
+  currentUser = user;
+  document.getElementById('login-page').style.display='none';
+  document.getElementById('app').style.display='block';
+  buildSidebar();
+  nav(user.role==='admin'?'page-dashboard':'page-student-home');
+}
+function doLogout() {
+  currentUser=null;
+  document.getElementById('app').style.display='none';
+  document.getElementById('landing').style.display='flex';
+  chartsBuilt={};
+}
+function switchRole() {
+  const newRole = currentUser.role==='admin'?'student':'admin';
+  const altUser = DB.users.find(u=>u.role===newRole);
+  if(altUser){currentUser=altUser;buildSidebar();nav(newRole==='admin'?'page-dashboard':'page-student-home');}
+}
+// ========== SIDEBAR ==========
+const adminMenu = [
+  {section:'Asosiy'},
+  {id:'page-dashboard',icon:'📊',label:'Dashboard'},
+  {section:'Boshqaruv'},
+  {id:'page-create',icon:'✏️',label:'Test yaratish'},
+  {id:'page-students',icon:'👥',label:'Talabalar'},
+  {section:'Tahlil'},
+  {id:'page-reports',icon:'📋',label:'Hisobotlar'},
+  {id:'page-analytics',icon:'📈',label:'Metodika tahlili'},
+];
+const studentMenu = [
+  {section:'Talaba'},
+  {id:'page-student-home',icon:'🏠',label:'Bosh sahifa'},
+  {id:'page-take-test',icon:'📝',label:'Test topshirish'},
+  {id:'page-my-results',icon:'🏆',label:'Natijalarim'},
+];
+function buildSidebar() {
+  if(!currentUser) return;
+  const menu = currentUser.role==='admin'?adminMenu:studentMenu;
+  document.getElementById('sidebar-nav').innerHTML = menu.map(item=>{
+    if(item.section) return `<div class="nav-section-title">${item.section}</div>`;
+    return `<div class="nav-item${item.id===currentPage?' active':''}" onclick="nav('${item.id}')"><span class="nav-item-icon">${item.icon}</span><span>${item.label}</span></div>`;
+  }).join('');
+  const initials = currentUser.avatar||currentUser.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('sidebar-user').innerHTML = `
+    <div class="user-avatar" style="background:${currentUser.color||'var(--blue-l)'};color:${currentUser.color||'var(--blue)'}">${initials}</div>
+    <div class="user-info">
+      <div class="user-name">${currentUser.name.split(' ')[0]}</div>
+      <div class="user-role-badge ${currentUser.role==='admin'?'role-admin-badge':'role-student-badge'}">${currentUser.role==='admin'?'O\'qituvchi':'Talaba'}</div>
+    </div>`;
+}
+// ========== NAVIGATION ==========
+function nav(pageId) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const page = document.getElementById(pageId);
+  if(page) page.classList.add('active');
+  currentPage = pageId;
+  buildSidebar();
+  onPageLoad(pageId);
+}
+function onPageLoad(id) {
+  if(id==='page-dashboard') loadDashboard();
+  if(id==='page-students') renderStudents();
+  if(id==='page-reports') loadReports();
+  if(id==='page-analytics') loadAnalytics();
+  if(id==='page-student-home') loadStudentHome();
+  if(id==='page-take-test') renderAvailableTestsForTaking();
+  if(id==='page-my-results') loadMyResults();
+}
+// ========== DASHBOARD ==========
+function loadDashboard() {
+  const d=new Date();
+  document.getElementById('dash-date').textContent=d.toLocaleDateString('uz-UZ',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  renderRecentTable();
+  renderLeaderboard();
+  buildChart('c-line','line',{
+    labels:['1-haf','2-haf','3-haf','4-haf','5-haf','6-haf'],
+    datasets:[
+      {label:'CS-301',data:[68,72,74,79,82,86],borderColor:'#185fa5',tension:.4,fill:false,pointRadius:3,borderWidth:2},
+      {label:'CS-302',data:[62,64,68,70,72,75],borderColor:'#0f6e56',tension:.4,fill:false,pointRadius:3,borderWidth:2},
+      {label:'IT-201',data:[70,73,71,76,78,80],borderColor:'#ba7517',tension:.4,fill:false,pointRadius:3,borderWidth:2},
+    ]},{y:{min:50,max:100}});
+  buildChart('c-bar','bar',{
+    labels:['CS-301','CS-302','IT-201','CS-303'],
+    datasets:[{label:"O'rtacha ball",data:[82,71,76,68],backgroundColor:['#185fa5','#0f6e56','#ba7517','#534ab7'],borderRadius:6}]
+  },{y:{min:0,max:100}});
+}
+function refreshDash() { chartsBuilt['c-line']=chartsBuilt['c-bar']=false; loadDashboard(); }
+function renderRecentTable() {
+  document.getElementById('t-recent').innerHTML = DB.results.slice(0,5).map(r=>`
+    <tr><td>${r.student.split(' ')[0]}</td><td>${r.test.split(' ')[0]}...</td><td><strong>${r.score}%</strong></td>
+    <td><span class="badge ${gradeBadge(r.score)}">${r.grade}</span></td></tr>`).join('');
+}
+function renderLeaderboard() {
+  const sorted=[...DB.students].sort((a,b)=>b.avg-a.avg);
+  document.getElementById('leaderboard-list').innerHTML=sorted.slice(0,5).map((s,i)=>`
+    <div class="leaderboard-item">
+      <div class="lb-rank ${i<3?'lb-'+(i+1):'lb-other'}">${i+1}</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:500">${s.name}</div><div style="font-size:11px;color:var(--muted)">${s.group}</div></div>
+      <div style="font-weight:700;color:${s.avg>=80?'var(--green)':s.avg>=60?'var(--amber)':'var(--red)'}">${s.avg}%</div>
+    </div>`).join('');
+}
+// ========== STUDENTS ==========
+function renderStudents() {
+  const q=(document.getElementById('s-search')?.value||'').toLowerCase();
+  const g=document.getElementById('s-group-filter')?.value||'';
+  const st=document.getElementById('s-status-filter')?.value||'';
+  const filtered=DB.students.filter(s=>
+    (!q||s.name.toLowerCase().includes(q)||s.email.toLowerCase().includes(q))&&
+    (!g||s.group===g)&&(!st||s.status===st));
+  document.getElementById('students-count').textContent=`${filtered.length} ta talaba`;
+  document.getElementById('t-students').innerHTML=filtered.map((s,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td><div style="font-weight:500">${s.name}</div><div style="font-size:11px;color:var(--muted)">${s.email}</div></td>
+      <td><span class="badge b-blue">${s.group}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="progress" style="width:70px"><div class="progress-fill" style="width:${s.avg}%;background:${s.avg>=80?'var(--green)':s.avg>=60?'var(--amber)':'var(--red)'}"></div></div>
+          <span style="font-weight:500">${s.avg}%</span>
+        </div>
+      </td>
+      <td>${s.tests}</td>
+      <td>${s.last}</td>
+      <td><span class="badge ${s.status==='active'?'b-green':'b-muted'}">${s.status==='active'?'Aktiv':'Nofaol'}</span></td>
+      <td><button class="btn btn-sm" onclick="viewStudent(${s.id})">Ko'rish</button></td>
+    </tr>`).join('');
+}
+function viewStudent(id) {
+  const s=DB.students.find(x=>x.id===id);
+  const results=DB.results.filter(r=>r.student===s.name);
+  document.getElementById('student-detail-content').innerHTML=`
+    <div class="modal-title">👤 ${s.name}</div>
+    <div style="display:flex;gap:12px;margin-bottom:16px">
+      <div class="user-avatar" style="width:56px;height:56px;font-size:20px;border-radius:50%;background:var(--blue-l);color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700">${s.name.split(' ').map(n=>n[0]).join('').slice(0,2)}</div>
+      <div><div style="font-weight:600;font-size:15px">${s.name}</div><div style="font-size:13px;color:var(--muted)">${s.group} • ${s.email}</div>
+        <span class="badge ${s.status==='active'?'b-green':'b-muted'}" style="margin-top:4px">${s.status==='active'?'Aktiv':'Nofaol'}</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+      <div style="text-align:center;padding:10px;background:var(--bg);border-radius:8px">
+        <div style="font-size:22px;font-weight:700;color:${s.avg>=80?'var(--green)':s.avg>=60?'var(--amber)':'var(--red)'}">${s.avg}%</div>
+        <div style="font-size:11px;color:var(--muted)">O'rtacha</div></div>
+      <div style="text-align:center;padding:10px;background:var(--bg);border-radius:8px">
+        <div style="font-size:22px;font-weight:700;color:var(--blue)">${s.tests}</div>
+        <div style="font-size:11px;color:var(--muted)">Testlar</div></div>
+      <div style="text-align:center;padding:10px;background:var(--bg);border-radius:8px">
+        <div style="font-size:22px;font-weight:700;color:var(--purple)">${s.last}</div>
+        <div style="font-size:11px;color:var(--muted)">Oxirgi</div></div>
+    </div>
+    ${results.length?`<div style="font-size:12px;font-weight:500;color:var(--muted);margin-bottom:8px">NATIJALAR TARIXI</div>
+      ${results.map(r=>`<div style="padding:10px;background:var(--bg);border-radius:8px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-size:13px;font-weight:500">${r.test}</div><div style="font-size:11px;color:var(--muted)">${r.date}</div></div>
+        <span class="badge ${gradeBadge(r.score)}">${r.grade} — ${r.score}%</span></div>`).join('')}`:'<div style="color:var(--muted);font-size:13px">Hali natijalar yo\'q</div>'}`;
+  openModal('modal-student-detail');
+}
+function openAddStudentModal() { openModal('modal-add-student'); }
+function saveNewStudent() {
+  const name=document.getElementById('new-s-name').value.trim();
+  if(!name){alert('Ism kiriting!');return;}
+  DB.students.push({id:DB.students.length+1,name,group:document.getElementById('new-s-group').value,avg:0,tests:0,last:'—',status:'active',email:document.getElementById('new-s-email').value});
+  closeModal('modal-add-student');renderStudents();
+  document.getElementById('new-s-name').value='';document.getElementById('new-s-email').value='';
+}
+// ========== REPORTS ==========
+function loadReports() {
+  buildChart('c-hist','bar',{
+    labels:['0-10','10-20','20-30','30-40','40-50','50-60','60-70','70-80','80-90','90-100'],
+    datasets:[{label:'Talabalar',data:[2,3,4,6,8,12,22,28,35,27],backgroundColor:'#185fa5',borderRadius:5}]
+  },{y:{}});
+  buildChart('c-radar','radar',{
+    labels:['Algoritmlar','Ma\'lumotlar','Dasturlash','Tarmoq','Matematika'],
+    datasets:[
+      {label:'CS-301',data:[82,75,88,72,79],borderColor:'#185fa5',backgroundColor:'rgba(24,95,165,.1)',pointRadius:3},
+      {label:'CS-302',data:[71,80,68,77,65],borderColor:'#0f6e56',backgroundColor:'rgba(15,110,86,.1)',pointRadius:3},
+    ]},{r:{min:0,max:100,ticks:{stepSize:25,font:{size:9}}}});
+  document.getElementById('t-report').innerHTML=DB.results.map(r=>`
+    <tr><td>${r.student}</td><td>${r.test}</td><td>${r.easy}</td><td>${r.mid}</td><td>${r.hard}</td>
+    <td><strong>${calcScore(r)}</strong></td><td><strong>${r.score}%</strong></td>
+    <td><span class="badge ${gradeBadge(r.score)}">${r.grade}</span></td></tr>`).join('');
+}
+function calcScore(r) {
+  const parts=r.easy.split('/'),partsM=r.mid.split('/'),partsH=r.hard.split('/');
+  return parseInt(parts[0])*1+parseInt(partsM[0])*2+parseInt(partsH[0])*3+'/'+
+    (parseInt(parts[1])*1+parseInt(partsM[1])*2+parseInt(partsH[1])*3);
+}
+function exportCSV() {
+  const rows=[['Talaba','Test','Ball','Daraja'],...DB.results.map(r=>[r.student,r.test,r.score,r.grade])];
+  const csv=rows.map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  a.download='eduassess_natijalar.csv';a.click();
+}
+function exportPDF() { alert('📄 PDF hisobot generatsiya qilinmoqda...\nHaqiqiy serverda jsPDF yoki server-side PDF kutubxonasi ishlatiladi.'); }
+// ========== ANALYTICS ==========
+function loadAnalytics() {
+  buildChart('c-cheat','bar',{
+    labels:['Dush','Sesh','Chor','Pay','Jum','Shan'],
+    datasets:[{label:'Ogohlantirishlar',data:[3,1,5,2,4,0],backgroundColor:'#f09595',borderRadius:5}]
+  },{y:{}});
+  buildChart('c-time','line',{
+    labels:['1-haf','2-haf','3-haf','4-haf','5-haf','6-haf'],
+    datasets:[{label:'Soniya/savol',data:[48,42,39,36,33,30],borderColor:'#534ab7',backgroundColor:'rgba(83,74,183,.1)',tension:.4,fill:true,pointRadius:3}]
+  },{y:{min:20}});
+}
+// ========== STUDENT HOME ==========
+function loadStudentHome() {
+  if(currentUser) document.getElementById('st-greeting').textContent=`Salom, ${currentUser.name.split(' ')[0]}! 👋`;
+  buildChart('c-student-line','line',{
+    labels:['Apr','May','Iyn 1','Iyn 2','Iyn 3'],
+    datasets:[{label:'Ball',data:[65,71,78,82,86],borderColor:'#185fa5',tension:.4,fill:false,pointRadius:4,pointBackgroundColor:'#185fa5',borderWidth:2}]
+  },{y:{min:40,max:100}});
+  buildChart('c-student-radar','radar',{
+    labels:['Algoritmlar','Ma\'lumotlar','Dasturlash','Tarmoq','Matematika'],
+    datasets:[{label:'Men',data:[82,78,91,65,74],borderColor:'#185fa5',backgroundColor:'rgba(24,95,165,.15)',pointRadius:3}]
+  },{r:{min:0,max:100,ticks:{stepSize:25,font:{size:9}}}});
+  document.getElementById('available-tests-list').innerHTML=DB.tests.map(t=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-weight:500;font-size:14px">${t.title}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px">${t.subject} • ${t.questions.length} savol • ${t.duration} daqiqa • Adaptive baholash</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="startTest(${t.id})">Boshlash →</button>
+    </div>`).join('');
+}
+function renderAvailableTestsForTaking() {
+  document.getElementById('test-container').innerHTML=`
+    <div class="page-header"><div class="page-title">Test tanlang</div><div class="page-subtitle">Mavjud testlar ro'yxati</div></div>
+    <div class="grid-2">${DB.tests.map(t=>`
+      <div class="card">
+        <div style="font-size:16px;font-weight:600;margin-bottom:8px">${t.title}</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:12px">${t.subject} • ${t.questions.length} savol • ⏱ ${t.duration} daq.</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+          ${[...new Set(t.questions.map(q=>q.diff))].map(d=>`<span class="badge ${d==='easy'?'b-green':d==='medium'?'b-amber':'b-red'}">${d==='easy'?'Oson':d==='medium'?"O'rta":'Qiyin'}</span>`).join('')}
+        </div>
+        <button class="btn btn-primary" style="width:100%" onclick="startTest(${t.id})">Testni boshlash →</button>
+      </div>`).join('')}</div>`;
+}
+// ========== TEST TAKING ==========
+function startTest(testId) {
+  activeTest=DB.tests.find(t=>t.id===testId);
+  userAnswers=new Array(activeTest.questions.length).fill(null);
+  currentQ=0;cheatCount=0;testActive=true;
+  nav('page-take-test');
+  renderQuestion();
+  document.addEventListener('visibilitychange',onVisibilityChange);
+}
+function onVisibilityChange() {
+  if(document.hidden&&testActive){
+    cheatCount++;
+    const overlay=document.getElementById('cheat-overlay');
+    overlay.classList.add('show');
+    document.getElementById('cheat-msg').textContent=`Ogohlantirish: ${cheatCount}/3 — ${cheatCount>=3?'Test yakunlanmoqda...':'Iltimos testga qayting'}`;
+    if(cheatCount>=3){clearInterval(timerInterval);setTimeout(()=>{overlay.classList.remove('show');finishTest(true);},1800);}
+  }
+}
+function resumeTest() { document.getElementById('cheat-overlay').classList.remove('show'); }
+function renderQuestion() {
+  const q=activeTest.questions[currentQ];
+  const totalQ=activeTest.questions.length;
+  timeLeft=q.time;
+  clearInterval(timerInterval);
+  timerInterval=setInterval(()=>{timeLeft--;updateTimerDisplay();if(timeLeft<=0){clearInterval(timerInterval);autoAdvance();}},1000);
+  const progress=Math.round((currentQ/totalQ)*100);
+  const diffLabel=q.diff==='easy'?'🟢 Oson — 1 ball':q.diff==='medium'?"🟡 O'rta — 2 ball":'🔴 Qiyin — 3 ball';
+  const navBtns=Array.from({length:totalQ},(_,i)=>`<button class="q-nav-btn${i===currentQ?' current':userAnswers[i]?' answered':''}" onclick="jumpQ(${i})">${i+1}</button>`).join('');
+  document.getElementById('test-container').innerHTML=`
+    <div class="page-header">
+      <div>
+        <div class="page-title">${activeTest.title}</div>
+        <div class="page-subtitle">Savol ${currentQ+1}/${totalQ}</div>
+      </div>
+      <div id="timer-display" class="timer">⏱ ${timeLeft}s</div>
+    </div>
+    <div class="test-progress">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px"><span>Progress</span><span>${progress}%</span></div>
+      <div class="progress" style="height:8px"><div class="progress-fill" style="width:${progress}%;background:var(--blue)"></div></div>
+    </div>
+    <div class="test-nav">${navBtns}</div>
+    <div class="card" style="margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+        <span style="font-size:12px;font-weight:600">${diffLabel}</span>
+        ${cheatCount>0?`<span class="badge b-red">⚠️ Ogohlantirish: ${cheatCount}/3</span>`:'<span class="badge b-green">✅ Anti-cheat aktiv</span>'}
+      </div>
+      <div style="font-size:16px;font-weight:500;line-height:1.6;margin-bottom:20px">${q.text}</div>
+      <div id="options-container">
+        ${q.opts.map((opt,i)=>`
+          <div class="answer-option${userAnswers[currentQ]===opt[0]?' selected':''}" id="opt-${i}" onclick="selectOpt(${i},'${opt[0]}')">
+            <div class="opt-circle">${opt[0]}</div>
+            <div style="font-size:14px">${opt.substring(3)}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+      ${currentQ>0?`<button class="btn" onclick="jumpQ(${currentQ-1})">← Oldingi</button>`:'<div></div>'}
+      <button class="btn btn-primary" onclick="${currentQ<totalQ-1?`nextQ()`:`finishTest(false)`}">
+        ${currentQ<totalQ-1?'Keyingisi →':'✅ Testni yakunlash'}
+      </button>
+    </div>`;
+}
+function updateTimerDisplay() {
+  const el=document.getElementById('timer-display');
+  if(!el)return;
+  el.textContent=`⏱ ${timeLeft}s`;
+  el.className='timer'+(timeLeft<=10?' urgent':'');
+}
+function selectOpt(idx,letter) {
+  userAnswers[currentQ]=letter;
+  document.querySelectorAll('.answer-option').forEach(o=>o.classList.remove('selected'));
+  document.getElementById('opt-'+idx)?.classList.add('selected');
+}
+function jumpQ(idx) { clearInterval(timerInterval);currentQ=idx;renderQuestion(); }
+function nextQ() { clearInterval(timerInterval);currentQ++;renderQuestion(); }
+function autoAdvance() { currentQ<activeTest.questions.length-1?nextQ():finishTest(false); }
+function finishTest(forced=false) {
+  testActive=false;clearInterval(timerInterval);
+  document.removeEventListener('visibilitychange',onVisibilityChange);
+  let score=0,total=0,easy=0,eTot=0,mid=0,mTot=0,hard=0,hTot=0;
+  activeTest.questions.forEach((q,i)=>{
+    const w=q.diff==='easy'?1:q.diff==='medium'?2:3;
+    total+=w;
+    if(q.diff==='easy')eTot++;else if(q.diff==='medium')mTot++;else hTot++;
+    if(userAnswers[i]===q.correct){score+=w;if(q.diff==='easy')easy++;else if(q.diff==='medium')mid++;else hard++;}
+  });
+  const pct=Math.round((score/total)*100);
+  const grade=pct>=90?'A+':pct>=85?'A':pct>=80?'B+':pct>=70?'B':pct>=60?'C+':pct>=50?'C':'F';
+  const gc=pct>=80?'var(--green)':pct>=60?'var(--amber)':'var(--red)';
+  const c=2*Math.PI*50;const dash=(pct/100)*c;
+  document.getElementById('test-container').innerHTML=`
+    <div class="page-header"><div class="page-title">${forced?'⚠️ Test majburiy yakunlandi':'🎉 Natijalar'}</div></div>
+    ${forced?`<div class="alert alert-danger">Anti-cheat tizimi: 3 marta boshqa tab/oynaga o'tildi. Test avtomatik yakunlandi va o'qituvchiga xabar yuborildi.</div>`:''}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+      <div class="card" style="text-align:center;padding:32px">
+        <div class="score-ring-wrap" style="margin:0 auto 12px">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border)" stroke-width="10"/>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="${gc}" stroke-width="10" stroke-dasharray="${dash} ${c}" stroke-linecap="round"/>
+          </svg>
+          <div><div class="score-ring-num" style="color:${gc}">${pct}%</div><div class="score-ring-label">Metodika balli</div></div>
+        </div>
+        <div style="font-size:36px;font-weight:800;color:${gc};margin-bottom:4px">${grade}</div>
+        <div style="font-size:13px;color:var(--muted)">Umumiy: ${score}/${total} ball</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Qiyinchilik bo'yicha tahlil</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--green)">🟢 Oson (×1)</span><span>${easy}/${eTot}</span></div>
+            <div class="progress"><div class="progress-fill" style="width:${eTot?Math.round(easy/eTot*100):0}%;background:var(--green)"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--amber)">🟡 O'rta (×2)</span><span>${mid}/${mTot}</span></div>
+            <div class="progress"><div class="progress-fill" style="width:${mTot?Math.round(mid/mTot*100):0}%;background:var(--amber)"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--red)">🔴 Qiyin (×3)</span><span>${hard}/${hTot}</span></div>
+            <div class="progress"><div class="progress-fill" style="width:${hTot?Math.round(hard/hTot*100):0}%;background:var(--red)"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:16px;padding:10px;background:var(--bg);border-radius:8px;font-size:12px;color:var(--muted)">
+          Baholash formulasi:<br>
+          <strong style="color:var(--text)">${score} / ${total} × 100 = ${pct}%</strong>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn" style="flex:1" onclick="nav('page-student-home')">← Bosh sahifa</button>
+      <button class="btn btn-primary" style="flex:1" onclick="nav('page-my-results')">📊 Natijalarni ko'rish →</button>
+    </div>`;
+}
+// ========== MY RESULTS ==========
+function loadMyResults() {
+  const myRes=DB.results.filter(r=>r.student==='Aziz Karimov');
+  document.getElementById('t-my-results').innerHTML=myRes.map(r=>`
+    <tr><td>${r.test}</td><td>${r.date}</td><td><strong>${calcScore(r)}</strong></td><td>${r.easy}</td><td>${r.mid}</td><td>${r.hard}</td><td>${r.time}</td>
+    <td><span class="badge ${gradeBadge(r.score)}">${r.grade} — ${r.score}%</span></td></tr>`).join('');
+  document.getElementById('mistakes-container').innerHTML=DB.mistakes.map(m=>`
+    <div class="card" style="margin-bottom:12px;border-left:3px solid var(--red)">
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+        <span class="badge ${m.diff==='hard'?'b-red':m.diff==='medium'?'b-amber':'b-green'}">${m.diff==='hard'?'Qiyin':m.diff==='medium'?"O'rta":'Oson'}</span>
+        <div style="font-weight:500;font-size:13px;line-height:1.4">${m.q}</div>
+      </div>
+      <div style="display:flex;gap:20px;font-size:12px;margin-bottom:10px;flex-wrap:wrap">
+        <span style="color:var(--red)">❌ Sizning javob: ${m.userAns}</span>
+        <span style="color:var(--green)">✅ To'g'ri javob: ${m.correct}</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);background:var(--bg);padding:10px;border-radius:8px;line-height:1.6">💡 ${m.explanation}</div>
+    </div>`).join('');
+  setTimeout(()=>{
+    if(!chartsBuilt['c-progress']){
+      chartsBuilt['c-progress']=true;
+      const ctx=document.getElementById('c-progress');
+      if(ctx) new Chart(ctx,{type:'line',data:{labels:myRes.map(r=>r.date).reverse(),datasets:[{label:'Ball',data:myRes.map(r=>r.score).reverse(),borderColor:'#185fa5',backgroundColor:'rgba(24,95,165,.1)',tension:.4,fill:true,pointRadius:5,pointBackgroundColor:'#185fa5',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,ticks:{font:{size:11}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:11}},grid:{display:false}}}}});
+    }
+  },100);
+}
+// ========== QUESTION BUILDER ==========
+function addQuestion() {
+  const text=document.getElementById('q-text').value.trim();
+  const diff=document.getElementById('q-diff').value;
+  const time=parseInt(document.getElementById('q-time').value)||45;
+  const opts=document.getElementById('q-opts').value.trim().split('\n').map(o=>o.trim()).filter(o=>o.length>1);
+  const correct=document.getElementById('q-correct').value.trim().toUpperCase();
+  if(!text){alert('Savol matnini kiriting!');return;}
+  if(opts.length<2){alert('Kamida 2 ta variant kiriting!');return;}
+  if(!correct||!'ABCD'.includes(correct)){alert("To'g'ri javob harfini kiriting (A, B, C yoki D)!");return;}
+  questions.push({text,diff,time,opts,correct});
+  document.getElementById('q-text').value='';
+  document.getElementById('q-opts').value='';
+  document.getElementById('q-correct').value='';
+  renderQList();
+}
+function renderQList() {
+  let easy=0,mid=0,hard=0,pts=0,tm=0;
+  questions.forEach(q=>{const w=q.diff==='easy'?1:q.diff==='medium'?2:3;pts+=w;tm+=q.time;if(q.diff==='easy')easy++;else if(q.diff==='medium')mid++;else hard++;});
+  document.getElementById('q-count-badge').textContent=questions.length+' ta';
+  document.getElementById('q-easy-count').textContent=easy;
+  document.getElementById('q-mid-count').textContent=mid;
+  document.getElementById('q-hard-count').textContent=hard;
+  document.getElementById('q-max-pts').textContent=pts;
+  document.getElementById('q-total-time').textContent=Math.ceil(tm/60);
+  document.getElementById('q-list').innerHTML=questions.map((q,i)=>`
+    <div class="q-item">
+      <div class="q-item-num">${i+1}</div>
+      <div class="q-item-body">
+        <div class="q-item-text">${q.text}</div>
+        <div class="q-item-meta">
+          <span class="badge ${q.diff==='easy'?'b-green':q.diff==='medium'?'b-amber':'b-red'}">${q.diff==='easy'?'Oson ×1':q.diff==='medium'?"O'rta ×2":'Qiyin ×3'}</span>
+          <span>⏱ ${q.time}s</span><span>✅ ${q.correct}</span><span>${q.opts.length} variant</span>
+        </div>
+      </div>
+      <div class="q-item-actions">
+        <button class="btn btn-icon btn-sm btn-danger" onclick="removeQ(${i})" title="O'chirish">×</button>
+      </div>
+    </div>`).join('');
+}
+function removeQ(i){questions.splice(i,1);renderQList();}
+function clearQuestions(){if(confirm("Barcha savollarni o'chirmoqchimisiz?")){questions=[];renderQList();}}
+function publishTest() {
+  const title=document.getElementById('t-title').value.trim();
+  if(!title){alert("Test nomini kiriting!");document.getElementById('t-title').focus();return;}
+  if(questions.length<2){alert("Kamida 2 ta savol qo'shing!");return;}
+  const newTest={id:DB.tests.length+1,title,subject:document.getElementById('t-subject').value,group:document.getElementById('t-group').value,duration:Math.ceil(questions.reduce((a,q)=>a+q.time,0)/60),attempts:parseInt(document.getElementById('t-attempts').value)||1,questions:[...questions]};
+  DB.tests.push(newTest);
+  alert(`✅ "${title}" testi muvaffaqiyatli nashr qilindi!\n📝 ${questions.length} ta savol\n👥 ${newTest.group}\n⏱ ${newTest.duration} daqiqa`);
+  questions=[];renderQList();document.getElementById('t-title').value='';
+}
+// ========== CHART HELPER ==========
+function buildChart(id,type,data,scalesOverride={}) {
+  if(chartsBuilt[id]) return;
+  const ctx=document.getElementById(id);
+  if(!ctx) return;
+  chartsBuilt[id]=true;
+  const defaults={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11},boxWidth:16}}},scales:{}};
+  if(scalesOverride.y) defaults.scales.y={...scalesOverride.y,ticks:{font:{size:11},...(scalesOverride.y.ticks||{})},grid:{color:'rgba(0,0,0,.05)'}};
+  if(scalesOverride.x) defaults.scales.x={...scalesOverride.x,ticks:{font:{size:11}},grid:{display:false}};
+  else if(type!=='radar') defaults.scales.x={ticks:{font:{size:11}},grid:{display:false}};
+  if(scalesOverride.r) defaults.scales.r=scalesOverride.r;
+  new Chart(ctx,{type,data,options:defaults});
+}
+// ========== HELPERS ==========
+function gradeBadge(score){return score>=80?'b-green':score>=60?'b-blue':score>=50?'b-amber':'b-red';}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function switchTab(el,panelId){
+  el.closest('.tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
+  el.closest('.card').querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(panelId).classList.add('active');
+  if(panelId==='tp-progress') setTimeout(loadMyResults,50);
+}
+// Close modal on backdrop click
+document.querySelectorAll('.modal-backdrop').forEach(bd=>bd.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');}));
+</script>
+</body>
+</html>
