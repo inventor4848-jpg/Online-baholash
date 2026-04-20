@@ -2010,7 +2010,7 @@
               <div class="page-title">📚 Fanlar</div>
               <div class="page-subtitle">O'qituvchilarga fan biriktirish</div>
             </div>
-            <div class="page-actions"><button class="btn btn-sm btn-primary" onclick="openModal('modal-add-subject')">+
+            <div class="page-actions"><button class="btn btn-sm btn-primary" onclick="openAddSubject()">+
                 Yangi fan</button></div>
           </div>
           <div class="card">
@@ -3341,9 +3341,15 @@
 
     // Global handlers for opening modals
     function openAddGroup() { openModal('modal-add-group'); }
-    function openAddSubject() {
-      document.getElementById('sub-teacher').innerHTML = DB.users.filter(u => u.role === 'teacher').map(t => `<option value="${t.id}">${t.fname} ${t.lname}</option>`).join('');
-      document.getElementById('sub-groups-checkboxes').innerHTML = DB.groups.map(g => `<label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" value="${g.id}"> ${g.name}</label>`).join('');
+    async function openAddSubject() {
+      await fetchDB();
+      const teachers = DB.users.filter(u => u.role === 'teacher' && u.active !== false);
+      document.getElementById('sub-teacher').innerHTML = teachers.length
+        ? teachers.map(t => `<option value="${t.id}">${t.fname} ${t.lname}</option>`).join('')
+        : '<option value="">-- O\'qituvchi topilmadi --</option>';
+      document.getElementById('sub-groups-checkboxes').innerHTML = DB.groups.length
+        ? DB.groups.map(g => `<label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" value="${g.id}"> ${g.name}</label>`).join('')
+        : '<span style="color:var(--muted);font-size:13px">Guruh topilmadi</span>';
       openModal('modal-add-subject');
     }
 
