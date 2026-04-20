@@ -95,6 +95,10 @@ else:
         url = os.getenv("DATABASE_URL", "NOT_SET")
         return {"url_prefix": url[:15] if url else "Empty", "full_len": len(url) if url else 0}
 
+    @app.get("/api/config")
+    def get_config():
+        return {"groqKey": os.getenv("GROQ_KEY", "")}
+
     @app.get("/api/debug/ping")
     @app.get("/debug/ping")
     def ping():
