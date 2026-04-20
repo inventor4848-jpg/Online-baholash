@@ -81,7 +81,7 @@ def get_all_data(db: Session = Depends(get_db), current_user: models.User = Depe
     
     # Needs transformation to match frontend DB structure
     def to_dict(obj):
-        return {c.name: getattr(obj, c.name) for c.table.columns}
+        return {c.name: getattr(obj, c.name) for c in obj.__table__.columns}
     
     def transform_subject(s):
         d = to_dict(s)
@@ -253,5 +253,3 @@ def perform_action(payload: GenericPayload, db: Session = Depends(get_db), curre
         db.commit()
         
     return {"message": "Success"}
-
-app.include_router(app.router)

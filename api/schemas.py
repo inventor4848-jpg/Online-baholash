@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from typing import List, Optional, Any
 from datetime import datetime
 
@@ -13,7 +13,7 @@ class TokenData(BaseModel):
 
 # --- User Schemas ---
 class UserBase(BaseModel):
-    email: EmailStr
+    email: str
     fname: str
     lname: str
     role: str
