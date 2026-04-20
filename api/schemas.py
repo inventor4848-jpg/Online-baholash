@@ -9,11 +9,11 @@ class Token(BaseModel):
     user: dict
 
 class TokenData(BaseModel):
-    email: Optional[str] = None
+    username: Optional[str] = None
 
 # --- User Schemas ---
 class UserBase(BaseModel):
-    email: str
+    username: str
     fname: str
     lname: str
     role: str

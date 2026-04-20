@@ -1854,8 +1854,8 @@
         </button>
       </div>
       <div class="demo-hint" id="demo-hint"></div>
-      <div class="form-group"><label class="form-label">Login (Email)</label><input class="form-control" type="email"
-          id="login-email" placeholder="email@edu.uz"></div>
+      <div class="form-group"><label class="form-label">Login</label><input class="form-control" type="text"
+          id="login-username" placeholder="admin123"></div>
       <div class="form-group"><label class="form-label">Parol</label><input class="form-control" type="password"
           id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
       <div id="login-error" class="alert alert-danger" style="display:none"></div>
@@ -1940,7 +1940,7 @@
           </div>
           <div class="card" style="margin-bottom:14px">
             <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <input class="form-control" id="u-search" placeholder="🔍 Ism yoki email..."
+              <input class="form-control" id="u-search" placeholder="🔍 Ism yoki login..."
                 style="flex:1;min-width:180px" oninput="renderUsersTable()">
               <select class="form-control" id="u-role-filter" style="width:160px" onchange="renderUsersTable()">
                 <option value="">Barcha rollar</option>
@@ -2251,8 +2251,8 @@
           <select class="form-control" id="u-group"></select>
         </div>
       </div>
-      <div class="form-group"><label class="form-label">Email *</label><input class="form-control" id="u-email"
-          type="email" placeholder="ism@edu.uz"></div>
+      <div class="form-group"><label class="form-label">Login *</label><input class="form-control" id="u-username"
+          type="text" placeholder="username123"></div>
       <div class="alert alert-info" style="font-size:12px">🔑 Login va vaqtinchalik parol tizim tomonidan avtomatik
         yaratiladi va ko'rsatiladi.</div>
       <button class="btn btn-primary" style="width:100%" onclick="saveUser()">💾 Saqlash va credential ko'rish</button>
@@ -2467,13 +2467,13 @@
         { id: 4, name: 'EK-101', deptId: 3, course: 1 }
       ],
       users: [
-        { id: 1, fname: 'Firdavs', lname: 'Abdullayev', email: 'admin@edu.uz', pass: 'admin123', role: 'admin', active: true, color: '#3b82f6' },
-        { id: 2, fname: 'Sardor', lname: 'Tursunov', email: 'teacher@edu.uz', pass: 'teach123', role: 'teacher', active: true, color: '#10b981' },
-        { id: 3, fname: 'Nodira', lname: 'Xoliqova', email: 'nodira@edu.uz', pass: 'teach456', role: 'teacher', active: true, color: '#10b981' },
-        { id: 4, fname: 'Aziz', lname: 'Karimov', email: 'aziz@edu.uz', pass: 'student123', role: 'student', groupId: 1, active: true, color: '#a855f7' },
-        { id: 5, fname: 'Malika', lname: 'Yusupova', email: 'malika@edu.uz', pass: 'student456', role: 'student', groupId: 1, active: true, color: '#a855f7' },
-        { id: 6, fname: 'Jasur', lname: 'Toshmatov', email: 'jasur@edu.uz', pass: 'student789', role: 'student', groupId: 2, active: true, color: '#a855f7' },
-        { id: 7, fname: 'Nilufar', lname: 'Rahimova', email: 'nilufar@edu.uz', pass: 'stud001', role: 'student', groupId: 3, active: true, color: '#a855f7' }
+        { id: 1, fname: 'Firdavs', lname: 'Abdullayev', username: 'admin@edu.uz', pass: 'admin123', role: 'admin', active: true, color: '#3b82f6' },
+        { id: 2, fname: 'Sardor', lname: 'Tursunov', username: 'teacher@edu.uz', pass: 'teach123', role: 'teacher', active: true, color: '#10b981' },
+        { id: 3, fname: 'Nodira', lname: 'Xoliqova', username: 'nodira@edu.uz', pass: 'teach456', role: 'teacher', active: true, color: '#10b981' },
+        { id: 4, fname: 'Aziz', lname: 'Karimov', username: 'aziz@edu.uz', pass: 'student123', role: 'student', groupId: 1, active: true, color: '#a855f7' },
+        { id: 5, fname: 'Malika', lname: 'Yusupova', username: 'malika@edu.uz', pass: 'student456', role: 'student', groupId: 1, active: true, color: '#a855f7' },
+        { id: 6, fname: 'Jasur', lname: 'Toshmatov', username: 'jasur@edu.uz', pass: 'student789', role: 'student', groupId: 2, active: true, color: '#a855f7' },
+        { id: 7, fname: 'Nilufar', lname: 'Rahimova', username: 'nilufar@edu.uz', pass: 'stud001', role: 'student', groupId: 3, active: true, color: '#a855f7' }
       ],
       subjects: [
         { id: 1, name: 'Algoritmlar va murakkablik', teacherId: 2, groupIds: [1, 2], credits: 4 },
@@ -2738,7 +2738,7 @@
       document.getElementById('edit-user-id').value = '';
       document.getElementById('u-fname').value = '';
       document.getElementById('u-lname').value = '';
-      document.getElementById('u-email').value = '';
+      document.getElementById('u-username').value = '';
       document.getElementById('u-role').value = 'student';
       document.getElementById('u-group').innerHTML = DB.groups.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
       updateUserFormFields();
@@ -2751,7 +2751,7 @@
       document.getElementById('edit-user-id').value = id;
       document.getElementById('u-fname').value = u.fname;
       document.getElementById('u-lname').value = u.lname;
-      document.getElementById('u-email').value = u.email;
+      document.getElementById('u-username').value = u.username;
       document.getElementById('u-role').value = u.role;
       document.getElementById('u-group').innerHTML = DB.groups.map(g => `<option value="${g.id}" ${u.groupId === g.id ? 'selected' : ''}>${g.name}</option>`).join('');
       updateUserFormFields();
@@ -3072,12 +3072,12 @@
     function exportSubjectCSV() {
       const s = DB.subjects.find(x => x.id === currentSubjectId);
       const myTests = DB.tests.filter(t => t.subjectId === currentSubjectId);
-      const rows = [['Talaba', 'Email', 'Guruh', 'Test', 'Ball', 'Daraja', 'Sana']];
+      const rows = [['Talaba', 'Login', 'Guruh', 'Test', 'Ball', 'Daraja', 'Sana']];
       DB.results.filter(r => myTests.some(t => t.id === r.testId)).forEach(r => {
         const st = DB.users.find(u => u.id === r.studentId);
         const t = DB.tests.find(x => x.id === r.testId);
         const grp = st ? DB.groups.find(g => g.id === st.groupId)?.name || '' : '';
-        rows.push([st ? st.fname + ' ' + st.lname : '', st?.email || '', grp, t?.title || '', r.score + '%', gradeShort(r.score), r.date]);
+        rows.push([st ? st.fname + ' ' + st.lname : '', st?.username || '', grp, t?.title || '', r.score + '%', gradeShort(r.score), r.date]);
       });
       const csv = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
       const link = document.createElement('a');
@@ -3384,12 +3384,12 @@
 
     // Override Login
     async function doLogin() {
-      const email = document.getElementById('login-email').value.trim();
+      const username = document.getElementById('login-username').value.trim();
       const pass = document.getElementById('login-password').value.trim();
       const err = document.getElementById('login-error');
 
       let fd = new FormData();
-      fd.append("username", email);
+      fd.append("username", username);
       fd.append("password", pass);
 
       try {
@@ -3407,6 +3407,7 @@
         token = data.access_token;
         localStorage.setItem("token", token);
         currentUser = data.user;
+        currentUser.email = data.user.username; // Maintain backward compat if needed in some templates
 
         await fetchDB();
 
@@ -3452,21 +3453,21 @@
     saveUser = async function () {
       const fname = document.getElementById('u-fname').value.trim();
       const lname = document.getElementById('u-lname').value.trim();
-      const email = document.getElementById('u-email').value.trim();
+      const username = document.getElementById('u-username').value.trim();
       const role = document.getElementById('u-role').value;
       const groupId = role === 'student' ? parseInt(document.getElementById('u-group').value) : null;
-      if (!fname || !email) { alert('Ism va email majburiy!'); return; }
+      if (!fname || !username) { alert('Ism va login majburiy!'); return; }
       const editId = document.getElementById('edit-user-id').value;
 
       const pass = fname.toLowerCase() + Math.floor(1000 + Math.random() * 9000);
       await apiAction("saveUser", {
-        id: editId ? parseInt(editId) : null,
-        fname, lname, email, role, groupId, pass
+        id: editId ? parseInt(edit_id) : null,
+        fname, lname, username, role, groupId, pass
       });
       closeModal('modal-add-user');
       if (!editId) {
         document.getElementById('cred-name').textContent = `${fname} ${lname}`;
-        document.getElementById('cred-login').textContent = email;
+        document.getElementById('cred-login').textContent = username;
         document.getElementById('cred-pass').textContent = pass;
         openModal('modal-credentials');
       }

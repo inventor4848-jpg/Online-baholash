@@ -15,11 +15,11 @@ def ensure_demo_users(db: Session):
     # Ensure tables exist
     models.Base.metadata.create_all(bind=engine)
     
-    def seed_user(email, password, fname, lname, role, color):
-        u = db.query(models.User).filter(models.User.email == email).first()
+    def seed_user(username, password, fname, lname, role, color):
+        u = db.query(models.User).filter(models.User.username == username).first()
         if not u:
             db.add(models.User(
-                email=email, hashed_password=auth.get_password_hash(password),
+                username=username, hashed_password=auth.get_password_hash(password),
                 fname=fname, lname=lname, role=role, color=color
             ))
             db.commit()
@@ -53,7 +53,7 @@ def manual_seed(db: Session = Depends(get_db)):
     try:
         ensure_demo_users(db)
         users = db.query(models.User).all()
-        return {"status": "success", "user_count": len(users), "users": [u.email for u in users]}
+        return {"status": "success", "user_count": len(users), "users": [u.username for u in users]}
     except Exception as e:
         return {"status": "error", "message": str(e), "traceback": traceback.format_exc()}
 
@@ -61,7 +61,7 @@ def manual_seed(db: Session = Depends(get_db)):
 def debug_users(db: Session = Depends(get_db)):
     try:
         users = db.query(models.User).all()
-        return [{"id": u.id, "email": u.email, "role": u.role} for u in users]
+        return [{"id": u.id, "username": u.username, "role": u.role} for u in users]
     except Exception as e:
         return {"error": str(e)}
 
@@ -87,7 +87,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     # Ensure demo users exist
     ensure_demo_users(db)
     
-    user = db.query(models.User).filter(models.User.email == form_data.username).first()
+    user = db.query(models.User).filter(models.User.username == form_data.username).first()
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -105,12 +105,12 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     if not user.active:
         raise HTTPException(status_code=400, detail="Foydalanuvchi faol emas")
         
-    access_token = auth.create_access_token(data={"sub": user.email})
+    access_token = auth.create_access_token(data={"sub": user.username})
     return {
         "access_token": access_token, 
         "token_type": "bearer",
         "user": {
-            "id": user.id, "email": user.email, "fname": user.fname, 
+            "id": user.id, "username": user.username, "fname": user.fname, 
             "lname": user.lname, "role": user.role, "color": user.color,
             "groupId": user.group_id
         }
@@ -182,22 +182,23 @@ def perform_action(payload: GenericPayload, db: Session = Depends(get_db), curre
     d = payload.data
     
     if action == "saveUser":
-        if "id" in d and d["id"]:
-            u = db.query(models.User).filter(models.User.id == d["id"]).first()
-            if u:
-                u.fname = d['fname']
-                u.lname = d['lname']
-                u.email = d['email']
-                u.role = d['role']
-                u.group_id = d.get('groupId')
-                if 'pass' in d and d['pass']:
-                    u.hashed_password = auth.get_password_hash(d['pass'])
+        password = d.get('pass')
+        edit_id = d.get('id')
+        u = db.query(models.User).get(edit_id) if edit_id else None
+        if u:
+            u.fname = d['fname']
+            u.lname = d['lname']
+            u.username = d['username']
+            u.role = d['role']
+            u.group_id = d.get('groupId')
+            if password:
+                u.hashed_password = auth.get_password_hash(password)
         else:
             u = models.User(
-                fname=d['fname'], lname=d['lname'], email=d['email'],
+                fname=d['fname'], lname=d['lname'], username=d['username'],
                 role=d['role'], group_id=d.get('groupId'), active=True,
                 color=d.get('color', '#3b82f6'),
-                hashed_password=auth.get_password_hash(d['pass'])
+                hashed_password=auth.get_password_hash(password)
             )
             db.add(u)
         db.commit()
