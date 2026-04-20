@@ -80,31 +80,48 @@ def health_check():
 def ping():
     return {"ping": "pong"}
 
-# --- AUTH ROUTES ---
+class LoginSchema(BaseModel):
+    username: str
+    password: str
+
 @app.post("/api/auth/login")
 @app.post("/auth/login")
-def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+async def login(request: Request, db: Session = Depends(get_db)):
+    # Standard OAuth2 form or JSON
+    try:
+        content_type = request.headers.get("content-type", "")
+        if "application/json" in content_type:
+            data = await request.json()
+            username = data.get("username")
+            password = data.get("password")
+        else:
+            form = await request.form()
+            username = form.get("username")
+            password = form.get("password")
+            
+        if not username or not password:
+            raise HTTPException(status_code=422, detail="Login va parol kiritilmadi")
+    except Exception as e:
+        raise HTTPException(status_code=422, detail=f"Ma'lumotlarni o'qishda xato: {str(e)}")
+
     # Ensure demo users exist
     ensure_demo_users(db)
     
-    user = db.query(models.User).filter(models.User.username == form_data.username).first()
+    user = db.query(models.User).filter(models.User.username == username).first()
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Login topilmadi: {form_data.username}. Seedlash uchun /api/debug/seed manziliga o'ting.",
+            detail=f"Login topilmadi: {username}",
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    if not auth.verify_password(form_data.password, user.hashed_password):
+    if not auth.verify_password(password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Parol noto'g'ri",
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    if not user.active:
-        raise HTTPException(status_code=400, detail="Foydalanuvchi faol emas")
-        
     access_token = auth.create_access_token(data={"sub": user.username})
     return {
         "access_token": access_token, 
