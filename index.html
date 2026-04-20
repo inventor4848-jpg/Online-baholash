@@ -2186,6 +2186,68 @@
           </div>
         </div>
 
+        <!-- Admin: Schedule Management -->
+        <div class="page" id="page-admin-schedule">
+          <div class="page-header">
+            <div><div class="page-title">🗓️ Dars jadvali boshqaruvi</div><div class="page-subtitle">Guruhlar bo'yicha haftalik jadval</div></div>
+            <div class="page-actions">
+              <select class="form-control" id="sched-group-sel" onchange="renderAdminSchedule()" style="min-width:160px"></select>
+              <button class="btn btn-primary" onclick="openAddScheduleModal()">+ Dars qo'shish</button>
+            </div>
+          </div>
+          <div id="admin-schedule-table"></div>
+        </div>
+
+        <!-- Admin: Messages -->
+        <div class="page" id="page-admin-messages">
+          <div class="page-header"><div><div class="page-title">📩 Murojaatlar</div><div class="page-subtitle">Foydalanuvchilardan kelgan xabarlar</div></div></div>
+          <div id="admin-messages-list"></div>
+        </div>
+
+        <!-- Admin: Polls -->
+        <div class="page" id="page-admin-polls">
+          <div class="page-header">
+            <div><div class="page-title">📊 So'rovnomalar</div><div class="page-subtitle">Yaratish va natijalarni ko'rish</div></div>
+            <div class="page-actions"><button class="btn btn-primary" onclick="openModal('modal-create-poll')">+ So'rovnoma</button></div>
+          </div>
+          <div id="admin-polls-list"></div>
+        </div>
+
+        <!-- Shared: Schedule view (teacher/student) -->
+        <div class="page" id="page-schedule">
+          <div class="page-header"><div><div class="page-title">🗓️ Dars jadvali</div><div class="page-subtitle">Haftalik dars programma</div></div></div>
+          <div id="schedule-view"></div>
+        </div>
+
+        <!-- Shared: Tasks -->
+        <div class="page" id="page-tasks">
+          <div class="page-header"><div><div class="page-title">📋 Vazifalar</div><div class="page-subtitle">Barcha topshiriqlar</div></div></div>
+          <div id="tasks-list"></div>
+        </div>
+
+        <!-- Shared: Contact admin -->
+        <div class="page" id="page-contact">
+          <div class="page-header"><div><div class="page-title">📩 Adminga murojat</div><div class="page-subtitle">Savol yoki muammo yuboring</div></div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px">
+            <div class="card" style="padding:24px">
+              <div style="font-size:15px;font-weight:700;margin-bottom:16px">✉️ Yangi xabar yuborish</div>
+              <div class="form-group"><label class="form-label">Mavzu *</label><input class="form-control" id="msg-title" placeholder="Masalan: Jadval haqida savol"></div>
+              <div class="form-group"><label class="form-label">Xabar *</label><textarea class="form-control" id="msg-body" rows="5" placeholder="Xabaringizni yozing..." style="resize:vertical"></textarea></div>
+              <button class="btn btn-primary" style="width:100%" onclick="sendMessage()">📤 Yuborish</button>
+            </div>
+            <div class="card" style="padding:24px">
+              <div style="font-size:15px;font-weight:700;margin-bottom:16px">📬 Mening xabarlarim</div>
+              <div id="my-messages-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shared: Polls -->
+        <div class="page" id="page-polls">
+          <div class="page-header"><div><div class="page-title">📊 So'rovnomalar</div><div class="page-subtitle">Faol so'rovnomalar</div></div></div>
+          <div id="polls-list"></div>
+        </div>
+
         <!-- Profile Page -->
         <div class="page" id="page-profile">
           <div class="page-header">
@@ -2220,6 +2282,77 @@
     <button onclick="resumeAfterCheat()"
       style="margin-top:8px;padding:12px 32px;border-radius:12px;border:2px solid rgba(255,255,255,.6);background:transparent;color:#fff;font-size:14px;font-weight:700;cursor:pointer">Testga
       qaytish</button>
+  </div>
+
+  <!-- Add Schedule Entry -->
+  <div class="modal-backdrop" id="modal-add-schedule">
+    <div class="modal" style="max-width:420px">
+      <button class="modal-close" onclick="closeModal('modal-add-schedule')">✕</button>
+      <div class="modal-title">📅 Dars qo'shish</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Guruh *</label><select class="form-control" id="sch-group"></select></div>
+        <div class="form-group"><label class="form-label">Fan *</label><select class="form-control" id="sch-subject"></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Kun *</label>
+          <select class="form-control" id="sch-day">
+            <option>Dushanba</option><option>Seshanba</option><option>Chorshanba</option>
+            <option>Payshanba</option><option>Juma</option><option>Shanba</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Juft *</label>
+          <select class="form-control" id="sch-period">
+            <option value="1">1 — 08:30</option><option value="2">2 — 10:00</option>
+            <option value="3">3 — 11:30</option><option value="4">4 — 13:00</option>
+            <option value="5">5 — 14:30</option><option value="6">6 — 16:00</option>
+            <option value="7">7 — 17:30</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Xona</label><input class="form-control" id="sch-room" placeholder="202-A"></div>
+        <div class="form-group"><label class="form-label">Hafta turi</label>
+          <select class="form-control" id="sch-week">
+            <option value="har">Har hafta</option><option value="toq">Toq hafta</option><option value="juft">Juft hafta</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="saveSchedule()">💾 Saqlash</button>
+    </div>
+  </div>
+
+  <!-- Create Poll -->
+  <div class="modal-backdrop" id="modal-create-poll">
+    <div class="modal" style="max-width:440px">
+      <button class="modal-close" onclick="closeModal('modal-create-poll')">✕</button>
+      <div class="modal-title">📊 So'rovnoma yaratish</div>
+      <div class="form-group"><label class="form-label">Savol *</label><input class="form-control" id="poll-title" placeholder="So'rovnoma savoli"></div>
+      <div class="form-group"><label class="form-label">Kimga</label>
+        <select class="form-control" id="poll-target">
+          <option value="all">Hamma</option><option value="student">Talabalar</option><option value="teacher">O'qituvchilar</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Variantlar *</label>
+        <div id="poll-options-wrap">
+          <input class="form-control" placeholder="1-variant" style="margin-bottom:6px">
+          <input class="form-control" placeholder="2-variant" style="margin-bottom:6px">
+        </div>
+        <button class="btn btn-sm" style="margin-top:4px" onclick="addPollOption()">+ Variant qo'shish</button>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="createPoll()">✅ Yaratish</button>
+    </div>
+  </div>
+
+  <!-- Reply Message (admin) -->
+  <div class="modal-backdrop" id="modal-reply-msg">
+    <div class="modal" style="max-width:440px">
+      <button class="modal-close" onclick="closeModal('modal-reply-msg')">✕</button>
+      <div class="modal-title">↩️ Javob yozish</div>
+      <input type="hidden" id="reply-msg-id">
+      <div id="reply-msg-preview" style="background:var(--bg);border-radius:10px;padding:14px;margin-bottom:14px;font-size:13px"></div>
+      <div class="form-group"><label class="form-label">Javob *</label><textarea class="form-control" id="reply-msg-text" rows="4" placeholder="Javobingizni yozing..."></textarea></div>
+      <button class="btn btn-primary" style="width:100%" onclick="replyMessage()">📤 Yuborish</button>
+    </div>
   </div>
 
   <!-- ===== MODALS ===== -->
@@ -2540,7 +2673,8 @@
       ],
       mistakes: [
         { studentId: 4, testId: 1, q: 'Binary search daraxtida eng yomon holat?', userAns: 'B) O(log n)', correct: 'C) O(n)', diff: 'hard', explanation: 'Balanced BST O(log n), skewed (bir yonlama) BST da O(n) — eng yomon holat skewed BST.' }
-      ]
+      ],
+      schedules: [], messages: [], polls: [], pollResponses: []
     };
     let _nextId = { user: 8, subject: 4, assignment: 3, submission: 3, test: 3, result: 3, faculty: 3, dept: 4, group: 5 };
     function nextId(k) { return _nextId[k]++; }
@@ -2618,15 +2752,26 @@
         { section: 'Boshqaruv' }, { id: 'page-admin-users', icon: '👥', label: 'Foydalanuvchilar' },
         { id: 'page-admin-structure', icon: '🏛️', label: 'Tuzilma' },
         { section: 'Kontent' }, { id: 'page-admin-subjects', icon: '📚', label: 'Fanlar' },
+        { id: 'page-admin-schedule', icon: '🗓️', label: 'Dars jadvali' },
+        { section: 'Boshqaruv' }, { id: 'page-admin-messages', icon: '📩', label: 'Murojaatlar' },
+        { id: 'page-admin-polls', icon: '📊', label: "So'rovnoma" },
         { section: 'Hisob' }, { id: 'page-profile', icon: '👤', label: 'Mening profilim' }
       ],
       teacher: [
         { section: 'O\'qituvchi' }, { id: 'page-teacher-dash', icon: '📚', label: 'Mening fanlarim' },
+        { id: 'page-schedule', icon: '🗓️', label: 'Dars jadvali' },
+        { id: 'page-tasks', icon: '📋', label: 'Vazifalar' },
+        { section: 'Muloqot' }, { id: 'page-contact', icon: '📩', label: 'Adminga murojat' },
+        { id: 'page-polls', icon: '📊', label: "So'rovnoma" },
         { section: 'Hisob' }, { id: 'page-profile', icon: '👤', label: 'Mening profilim' }
       ],
       student: [
         { section: 'Talaba' }, { id: 'page-student-dash', icon: '🏠', label: 'Dashboard' },
         { id: 'page-student-results', icon: '🏆', label: 'Natijalarim' },
+        { id: 'page-schedule', icon: '🗓️', label: 'Dars jadvali' },
+        { id: 'page-tasks', icon: '📋', label: 'Vazifalar' },
+        { section: 'Muloqot' }, { id: 'page-contact', icon: '📩', label: 'Adminga murojat' },
+        { id: 'page-polls', icon: '📊', label: "So'rovnoma" },
         { section: 'Hisob' }, { id: 'page-profile', icon: '👤', label: 'Mening profilim' }
       ]
     };
@@ -2670,6 +2815,13 @@
       else if (id === 'page-student-dash') renderStudentDash();
       else if (id === 'page-student-results') renderStudentResults();
       else if (id === 'page-profile') renderProfilePage();
+      else if (id === 'page-admin-schedule') renderAdminSchedulePage();
+      else if (id === 'page-admin-messages') renderAdminMessages();
+      else if (id === 'page-admin-polls') renderAdminPolls();
+      else if (id === 'page-schedule') renderScheduleView();
+      else if (id === 'page-tasks') renderTasksPage();
+      else if (id === 'page-contact') renderContactPage();
+      else if (id === 'page-polls') renderPollsPage();
     }
 
     // ========== HELPERS ==========
@@ -3258,6 +3410,275 @@
         labels: ['1', '2', '3', '4', '5', '6'],
         datasets: [{ label: 'Ball dinamikasi', data: [0, ...DB.results.filter(r => r.studentId === currentUser.id).slice(-5).map(r => r.score)], borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,.1)', tension: .4, fill: true }]
       }, { legend: false });
+    }
+
+    // ========== SCHEDULE ==========
+    const DAYS = ['Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
+    const PERIODS = ['08:30','10:00','11:30','13:00','14:30','16:00','17:30'];
+
+    function scheduleTable(entries, canDelete) {
+      let html = `<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead><tr><th style="padding:10px;background:var(--bg);border:1px solid var(--border);width:80px">Juft</th>
+        ${DAYS.map(d=>`<th style="padding:10px;background:var(--bg);border:1px solid var(--border);min-width:120px">${d}</th>`).join('')}</tr></thead><tbody>`;
+      for (let p = 1; p <= 7; p++) {
+        html += `<tr><td style="padding:8px;border:1px solid var(--border);text-align:center;font-weight:700;color:var(--muted);background:var(--bg)">${p}<br><span style="font-size:10px;font-weight:400">${PERIODS[p-1]}</span></td>`;
+        for (const day of DAYS) {
+          const cell = entries.filter(e => e.day === day && e.period === p);
+          html += `<td style="padding:6px;border:1px solid var(--border);vertical-align:top;min-height:48px">`;
+          cell.forEach(e => {
+            const subj = DB.subjects.find(s => s.id === e.subjectId);
+            const grp = DB.groups.find(g => g.id === e.groupId);
+            html += `<div style="background:var(--blue-l);border-left:3px solid var(--blue);border-radius:6px;padding:5px 7px;margin-bottom:3px;font-size:12px">
+              <div style="font-weight:700;color:var(--blue)">${subj?.name||'—'}</div>
+              ${grp ? `<div style="color:var(--muted)">${grp.name}</div>` : ''}
+              ${e.room ? `<div style="color:var(--muted)">🚪 ${e.room}</div>` : ''}
+              ${e.weekType!=='har'?`<div style="font-size:10px;color:#f59e0b">${e.weekType} hafta</div>`:''}
+              ${canDelete ? `<button onclick="deleteScheduleEntry(${e.id})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;padding:0;margin-top:2px">✕ O'chirish</button>` : ''}
+            </div>`;
+          });
+          html += `</td>`;
+        }
+        html += `</tr>`;
+      }
+      html += `</tbody></table></div>`;
+      return html;
+    }
+
+    function renderAdminSchedulePage() {
+      const sel = document.getElementById('sched-group-sel');
+      if (sel.innerHTML === '' || DB.groups.length > sel.options.length) {
+        sel.innerHTML = DB.groups.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
+      }
+      renderAdminSchedule();
+    }
+
+    function renderAdminSchedule() {
+      const gid = parseInt(document.getElementById('sched-group-sel').value);
+      const entries = DB.schedules ? DB.schedules.filter(e => e.groupId === gid) : [];
+      const el = document.getElementById('admin-schedule-table');
+      if (!el) return;
+      el.innerHTML = entries.length || true ? scheduleTable(entries, true) : `<div class="alert alert-info">Hali jadval kiritilmagan.</div>`;
+    }
+
+    function openAddScheduleModal() {
+      document.getElementById('sch-group').innerHTML = DB.groups.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
+      const teachers = DB.users.filter(u => u.role === 'teacher');
+      document.getElementById('sch-subject').innerHTML = DB.subjects.map(s => {
+        const t = teachers.find(u => u.id === s.teacherId);
+        return `<option value="${s.id}">${s.name}${t ? ' — '+t.fname : ''}</option>`;
+      }).join('');
+      openModal('modal-add-schedule');
+    }
+
+    async function saveSchedule() {
+      const groupId = parseInt(document.getElementById('sch-group').value);
+      const subjectId = parseInt(document.getElementById('sch-subject').value);
+      const day = document.getElementById('sch-day').value;
+      const period = parseInt(document.getElementById('sch-period').value);
+      const room = document.getElementById('sch-room').value.trim();
+      const weekType = document.getElementById('sch-week').value;
+      if (!groupId || !subjectId) return alert('Guruh va fanni tanlang!');
+      await apiAction('saveSchedule', { groupId, subjectId, day, period, room, weekType });
+      closeModal('modal-add-schedule');
+      renderAdminSchedule();
+    }
+
+    async function deleteScheduleEntry(id) {
+      if (!confirm('Ushbu darsni o\'chirmoqchimisiz?')) return;
+      await apiAction('deleteSchedule', { id });
+      renderAdminSchedule();
+    }
+
+    function renderScheduleView() {
+      const el = document.getElementById('schedule-view');
+      let entries = DB.schedules || [];
+      if (currentUser.role === 'teacher') {
+        const mySubjIds = DB.subjects.filter(s => s.teacherId === currentUser.id).map(s => s.id);
+        entries = entries.filter(e => mySubjIds.includes(e.subjectId));
+      } else if (currentUser.role === 'student') {
+        entries = entries.filter(e => e.groupId === currentUser.groupId);
+      }
+      el.innerHTML = entries.length ? scheduleTable(entries, false) : `<div class="alert alert-info">Dars jadvali hali kiritilmagan.</div>`;
+    }
+
+    // ========== TASKS ==========
+    function renderTasksPage() {
+      const el = document.getElementById('tasks-list');
+      if (currentUser.role === 'teacher') {
+        const mySubjIds = DB.subjects.filter(s => s.teacherId === currentUser.id).map(s => s.id);
+        const assigns = DB.assignments.filter(a => mySubjIds.includes(a.subjectId));
+        el.innerHTML = assigns.length ? assigns.map(a => {
+          const subj = DB.subjects.find(s => s.id === a.subjectId);
+          const subs = DB.submissions.filter(s => s.assignmentId === a.id);
+          const graded = subs.filter(s => s.status === 'graded').length;
+          return `<div class="card" style="margin-bottom:12px;display:flex;align-items:center;gap:16px;padding:16px">
+            <div style="flex:1">
+              <div style="font-weight:700">${a.title}</div>
+              <div style="font-size:12px;color:var(--muted)">${subj?.name||'—'} • Deadline: ${formatDate(a.deadline)}</div>
+            </div>
+            <div style="text-align:center;font-size:13px">
+              <div style="font-size:20px;font-weight:800;color:#10b981">${graded}/${subs.length}</div>
+              <div style="color:var(--muted);font-size:11px">baholandi</div>
+            </div>
+          </div>`;
+        }).join('') : `<div class="alert alert-info">Hali topshiriq yaratilmagan.</div>`;
+      } else {
+        const mySubjs = DB.subjects.filter(s => s.groupIds?.includes(currentUser.groupId));
+        const mySubjIds = mySubjs.map(s => s.id);
+        const assigns = DB.assignments.filter(a => mySubjIds.includes(a.subjectId));
+        const now = new Date();
+        el.innerHTML = assigns.length ? assigns.map(a => {
+          const subj = DB.subjects.find(s => s.id === a.subjectId);
+          const sub = DB.submissions.find(s => s.assignmentId === a.id && s.studentId === currentUser.id);
+          const overdue = a.deadline && new Date(a.deadline) < now && !sub;
+          let badge = sub ? (sub.status === 'graded' ? `<span class="badge b-green">✅ Baholandi: ${sub.score}/${a.maxScore}</span>` : `<span class="badge b-blue">📤 Topshirildi</span>`)
+                          : (overdue ? `<span class="badge b-red">⏰ Muddati o'tdi</span>` : `<span class="badge b-amber">⏳ Kutilmoqda</span>`);
+          return `<div class="card" style="margin-bottom:12px;padding:16px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="flex:1">
+                <div style="font-weight:700">${a.title}</div>
+                <div style="font-size:12px;color:var(--muted)">${subj?.name||'—'} • ⏰ ${formatDate(a.deadline)} • 💯 ${a.maxScore}</div>
+                ${a.desc ? `<div style="font-size:12px;color:var(--muted);margin-top:4px">${a.desc}</div>` : ''}
+              </div>
+              ${badge}
+            </div>
+          </div>`;
+        }).join('') : `<div class="alert alert-info">Hali topshiriq yo'q.</div>`;
+      }
+    }
+
+    // ========== CONTACT / MESSAGES ==========
+    async function sendMessage() {
+      const title = document.getElementById('msg-title').value.trim();
+      const body = document.getElementById('msg-body').value.trim();
+      if (!title || !body) return alert('Mavzu va xabar matni majburiy!');
+      await apiAction('sendMessage', { title, body });
+      document.getElementById('msg-title').value = '';
+      document.getElementById('msg-body').value = '';
+      renderContactPage();
+      alert('✅ Xabar yuborildi!');
+    }
+
+    function renderContactPage() {
+      const el = document.getElementById('my-messages-list');
+      if (!el) return;
+      const mine = (DB.messages || []).filter(m => m.fromUserId === currentUser.id);
+      el.innerHTML = mine.length ? mine.slice().reverse().map(m => `
+        <div style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px;font-size:13px">
+          <div style="font-weight:700;margin-bottom:4px">${m.title}</div>
+          <div style="color:var(--muted);margin-bottom:6px">${m.body}</div>
+          ${m.reply ? `<div style="background:var(--green-l);border-left:3px solid #10b981;padding:8px;border-radius:6px;margin-top:6px"><span style="font-size:11px;color:var(--muted)">Admin javobi:</span><br>${m.reply}</div>` : `<span class="badge b-amber">⏳ Javob kutilmoqda</span>`}
+        </div>`).join('') : `<div style="color:var(--muted);font-size:13px">Hali xabar yuborilmagan.</div>`;
+    }
+
+    function renderAdminMessages() {
+      const el = document.getElementById('admin-messages-list');
+      if (!el) return;
+      const msgs = DB.messages || [];
+      el.innerHTML = msgs.length ? msgs.slice().reverse().map(m => {
+        const user = DB.users.find(u => u.id === m.fromUserId);
+        const statusBadges = { new: '<span class="badge b-red">🆕 Yangi</span>', read: '<span class="badge b-amber">👁 Ko\'rildi</span>', replied: '<span class="badge b-green">✅ Javob berildi</span>' };
+        return `<div class="card" style="margin-bottom:12px;padding:16px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+            <div style="flex:1">
+              <div style="font-weight:700;margin-bottom:4px">${m.title} ${statusBadges[m.status]||''}</div>
+              <div style="font-size:12px;color:var(--muted);margin-bottom:6px">👤 ${user ? user.fname+' '+user.lname : '—'} • ${formatDate(m.createdAt)}</div>
+              <div style="font-size:13px">${m.body}</div>
+              ${m.reply ? `<div style="background:var(--green-l);border-left:3px solid #10b981;padding:8px;border-radius:6px;margin-top:8px;font-size:13px"><strong>Javob:</strong> ${m.reply}</div>` : ''}
+            </div>
+            ${m.status !== 'replied' ? `<button class="btn btn-sm btn-primary" onclick="openReplyModal(${m.id})">↩️ Javob</button>` : ''}
+          </div>
+        </div>`;
+      }).join('') : `<div class="alert alert-info">Hali murojaat yo'q.</div>`;
+    }
+
+    function openReplyModal(id) {
+      const m = (DB.messages || []).find(x => x.id === id);
+      if (!m) return;
+      const user = DB.users.find(u => u.id === m.fromUserId);
+      document.getElementById('reply-msg-id').value = id;
+      document.getElementById('reply-msg-preview').innerHTML = `<strong>${m.title}</strong><br><span style="color:var(--muted)">${user ? user.fname+' '+user.lname : ''}</span><br><br>${m.body}`;
+      document.getElementById('reply-msg-text').value = '';
+      openModal('modal-reply-msg');
+    }
+
+    async function replyMessage() {
+      const id = parseInt(document.getElementById('reply-msg-id').value);
+      const reply = document.getElementById('reply-msg-text').value.trim();
+      if (!reply) return alert('Javob matni kiriting!');
+      await apiAction('replyMessage', { id, reply });
+      closeModal('modal-reply-msg');
+    }
+
+    // ========== POLLS ==========
+    function addPollOption() {
+      const wrap = document.getElementById('poll-options-wrap');
+      const n = wrap.children.length + 1;
+      const inp = document.createElement('input');
+      inp.className = 'form-control'; inp.placeholder = `${n}-variant`; inp.style.marginBottom = '6px';
+      wrap.appendChild(inp);
+    }
+
+    async function createPoll() {
+      const title = document.getElementById('poll-title').value.trim();
+      const targetRole = document.getElementById('poll-target').value;
+      const options = Array.from(document.getElementById('poll-options-wrap').children).map(i => i.value.trim()).filter(Boolean);
+      if (!title || options.length < 2) return alert("Savol va kamida 2 variant kiriting!");
+      await apiAction('createPoll', { title, options, targetRole });
+      closeModal('modal-create-poll');
+    }
+
+    function renderAdminPolls() {
+      const el = document.getElementById('admin-polls-list');
+      if (!el) return;
+      const polls = DB.polls || [];
+      el.innerHTML = polls.length ? polls.slice().reverse().map(p => pollCard(p, true)).join('') : `<div class="alert alert-info">Hali so'rovnoma yaratilmagan.</div>`;
+    }
+
+    function renderPollsPage() {
+      const el = document.getElementById('polls-list');
+      if (!el) return;
+      const polls = (DB.polls || []).filter(p => p.targetRole === 'all' || p.targetRole === currentUser.role);
+      el.innerHTML = polls.length ? polls.slice().reverse().map(p => pollCard(p, false)).join('') : `<div class="alert alert-info">Faol so'rovnoma yo'q.</div>`;
+    }
+
+    function pollCard(p, isAdmin) {
+      const responses = (DB.pollResponses || []).filter(r => r.pollId === p.id);
+      const myResp = responses.find(r => r.userId === currentUser.id);
+      const total = responses.length;
+      const creator = DB.users.find(u => u.id === p.createdBy);
+      let optHtml = p.options.map((opt, idx) => {
+        const cnt = responses.filter(r => r.answerIdx === idx).length;
+        const pct = total ? Math.round(cnt / total * 100) : 0;
+        if (isAdmin || myResp) {
+          return `<div style="margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px"><span>${opt}</span><span style="color:var(--muted)">${cnt} (${pct}%)</span></div>
+            <div style="height:8px;background:var(--border);border-radius:4px"><div style="height:100%;width:${pct}%;background:var(--blue);border-radius:4px;transition:.3s"></div></div>
+          </div>`;
+        }
+        return `<button onclick="answerPoll(${p.id},${idx})" class="btn" style="display:block;width:100%;text-align:left;margin-bottom:6px;border:1px solid var(--border)">${opt}</button>`;
+      }).join('');
+      return `<div class="card" style="margin-bottom:14px;padding:18px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px">
+          <div><div style="font-weight:700;font-size:15px">${p.title}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:3px">📅 ${formatDate(p.createdAt)} • 👤 ${creator ? creator.fname : 'Admin'} • 🗳 ${total} javob</div>
+          </div>
+          ${isAdmin ? `<button onclick="deletePoll(${p.id})" class="btn btn-sm" style="color:var(--red);border:1px solid var(--red);background:transparent">🗑</button>` : ''}
+        </div>
+        ${optHtml}
+        ${myResp && !isAdmin ? `<div style="font-size:12px;color:#10b981;margin-top:8px">✅ Siz "${p.options[myResp.answerIdx]}" deb javob berdingiz</div>` : ''}
+      </div>`;
+    }
+
+    async function answerPoll(pollId, answerIdx) {
+      await apiAction('answerPoll', { pollId, answerIdx });
+      renderPollsPage();
+    }
+
+    async function deletePoll(id) {
+      if (!confirm("So'rovnomani o'chirmoqchimisiz?")) return;
+      await apiAction('deletePoll', { id });
+      renderAdminPolls();
     }
 
     // ========== PROFILE PAGE ==========

@@ -149,6 +149,44 @@ class Mistake(Base):
     correct_ans = Column(String)
     diff = Column(String)
     explanation = Column(Text, nullable=True)
-    
+
     test_id = Column(Integer, ForeignKey("tests.id"))
     student_id = Column(Integer, ForeignKey("users.id"))
+
+class Schedule(Base):
+    __tablename__ = "schedules"
+    id = Column(Integer, primary_key=True, index=True)
+    group_id = Column(Integer, ForeignKey("groups.id"))
+    subject_id = Column(Integer, ForeignKey("subjects.id"))
+    day = Column(String)       # Dushanba..Shanba
+    period = Column(Integer)   # 1-7
+    room = Column(String, nullable=True)
+    week_type = Column(String, default="har")  # har, toq, juft
+
+class Message(Base):
+    __tablename__ = "messages"
+    id = Column(Integer, primary_key=True, index=True)
+    from_user_id = Column(Integer, ForeignKey("users.id"))
+    title = Column(String)
+    body = Column(Text)
+    reply = Column(Text, nullable=True)
+    status = Column(String, default="new")  # new, read, replied
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class Poll(Base):
+    __tablename__ = "polls"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String)
+    options = Column(Text)     # JSON string list
+    created_by = Column(Integer, ForeignKey("users.id"))
+    target_role = Column(String, default="all")  # all, student, teacher
+    deadline = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class PollResponse(Base):
+    __tablename__ = "poll_responses"
+    id = Column(Integer, primary_key=True, index=True)
+    poll_id = Column(Integer, ForeignKey("polls.id"))
+    user_id = Column(Integer, ForeignKey("users.id"))
+    answer_idx = Column(Integer)
+    created_at = Column(DateTime, default=datetime.utcnow)

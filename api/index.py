@@ -173,6 +173,10 @@ else:
         tests = db.query(models.Test).all()
         results = db.query(models.TestResult).all()
         mistakes = db.query(models.Mistake).all()
+        schedules = db.query(models.Schedule).all()
+        messages = db.query(models.Message).all()
+        polls = db.query(models.Poll).all()
+        poll_responses = db.query(models.PollResponse).all()
 
         def to_dict(obj):
             return {c.name: getattr(obj, c.name) for c in obj.__table__.columns}
@@ -208,6 +212,10 @@ else:
             "submissions": [{"id": x.id, "assignmentId": x.assignment_id, "studentId": x.student_id, "fileName": x.file_name, "comment": x.comment, "status": x.status, "score": x.score, "teacherComment": x.teacher_comment, "submittedAt": x.submitted_at.isoformat()} for x in submissions],
             "tests": out_tests,
             "results": [{"id": x.id, "testId": x.test_id, "studentId": x.student_id, "score": x.score, "easy": x.easy_stats, "mid": x.mid_stats, "hard": x.hard_stats, "cheatCount": x.cheat_count, "date": x.date.isoformat()} for x in results],
+            "schedules": [{"id": x.id, "groupId": x.group_id, "subjectId": x.subject_id, "day": x.day, "period": x.period, "room": x.room, "weekType": x.week_type} for x in schedules],
+            "messages": [{"id": x.id, "fromUserId": x.from_user_id, "title": x.title, "body": x.body, "reply": x.reply, "status": x.status, "createdAt": x.created_at.isoformat()} for x in messages],
+            "polls": [{"id": x.id, "title": x.title, "options": eval(x.options), "createdBy": x.created_by, "targetRole": x.target_role, "deadline": x.deadline.isoformat() if x.deadline else None, "createdAt": x.created_at.isoformat()} for x in polls],
+            "pollResponses": [{"id": x.id, "pollId": x.poll_id, "userId": x.user_id, "answerIdx": x.answer_idx} for x in poll_responses],
             "mistakes": [{"id": x.id, "q": x.q_text, "userAns": x.user_ans, "correct": x.correct_ans, "diff": x.diff, "explanation": x.explanation, "studentId": x.student_id, "testId": x.test_id} for x in mistakes]
         }
 
@@ -305,6 +313,42 @@ else:
                 assignment_id=d["assignmentId"], student_id=current_user.id,
                 file_name=d["fileName"], comment=d.get("comment", "")
             )); db.commit()
+        elif action == "saveSchedule":
+            db.add(models.Schedule(
+                group_id=d["groupId"], subject_id=d["subjectId"],
+                day=d["day"], period=d["period"],
+                room=d.get("room", ""), week_type=d.get("weekType", "har")
+            )); db.commit()
+        elif action == "deleteSchedule":
+            s = db.query(models.Schedule).filter(models.Schedule.id == d["id"]).first()
+            if s: db.delete(s); db.commit()
+        elif action == "sendMessage":
+            db.add(models.Message(
+                from_user_id=current_user.id, title=d["title"], body=d["body"]
+            )); db.commit()
+        elif action == "replyMessage":
+            m = db.query(models.Message).filter(models.Message.id == d["id"]).first()
+            if m: m.reply = d["reply"]; m.status = "replied"; db.commit()
+        elif action == "markMessageRead":
+            m = db.query(models.Message).filter(models.Message.id == d["id"]).first()
+            if m and m.status == "new": m.status = "read"; db.commit()
+        elif action == "createPoll":
+            db.add(models.Poll(
+                title=d["title"], options=str(d["options"]),
+                created_by=current_user.id, target_role=d.get("targetRole", "all")
+            )); db.commit()
+        elif action == "deletePoll":
+            p = db.query(models.Poll).filter(models.Poll.id == d["id"]).first()
+            if p: db.delete(p); db.commit()
+        elif action == "answerPoll":
+            existing = db.query(models.PollResponse).filter(
+                models.PollResponse.poll_id == d["pollId"],
+                models.PollResponse.user_id == current_user.id
+            ).first()
+            if not existing:
+                db.add(models.PollResponse(
+                    poll_id=d["pollId"], user_id=current_user.id, answer_idx=d["answerIdx"]
+                )); db.commit()
         elif action == "updateProfile":
             u = db.query(models.User).filter(models.User.id == d["id"]).first()
             if not u:
