@@ -3479,28 +3479,30 @@
       if (origOnload) origOnload();
       const savedUser = localStorage.getItem("currentUser");
       if (token && savedUser) {
+        // Immediately show app (hide landing) while restoring session
+        document.getElementById('landing-page')  && (document.getElementById('landing-page').style.display = 'none');
+        document.getElementById('login-page').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        currentUser = JSON.parse(savedUser);
+        currentUser.email = currentUser.username;
+        buildSidebar();
+        const homePage = { admin: 'page-admin-dash', teacher: 'page-teacher-dash', student: 'page-student-dash' };
+        nav(homePage[currentUser.role]);
+        // Sync data from server in background
         try {
           let res = await fetch("/api/data", { headers: { "Authorization": `Bearer ${token}` } });
           if (res.ok) {
             DB = await res.json();
-            currentUser = JSON.parse(savedUser);
-            currentUser.email = currentUser.username;
-            document.getElementById('login-page').style.display = 'none';
-            document.getElementById('app').style.display = 'block';
-            buildSidebar();
-            const homePage = { admin: 'page-admin-dash', teacher: 'page-teacher-dash', student: 'page-student-dash' };
-            nav(homePage[currentUser.role]);
-          } else {
-            // Token expired — clear and show login
+            if (currentPage) onPageLoad(currentPage);
+          } else if (res.status === 401) {
+            // Token truly expired — go to login
             token = null;
             localStorage.removeItem("token");
             localStorage.removeItem("currentUser");
+            document.getElementById('app').style.display = 'none';
+            showLogin();
           }
-        } catch (e) {
-          token = null;
-          localStorage.removeItem("token");
-          localStorage.removeItem("currentUser");
-        }
+        } catch (e) { /* network error — keep showing cached UI */ }
       }
     }
 
