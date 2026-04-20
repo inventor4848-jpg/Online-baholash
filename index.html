@@ -2252,11 +2252,8 @@
           <select class="form-control" id="u-group"></select>
         </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Login <span style="color:var(--muted);font-size:11px">(avtomatik to'ldiriladi, o'zgartirish mumkin)</span></label>
-        <input class="form-control" id="u-username" type="text" placeholder="ism.familiya@edu.uz">
-      </div>
-      <div class="alert alert-info" style="font-size:12px">🔑 Login va vaqtinchalik parol avtomatik yaratiladi va saqlashdan keyin ko'rsatiladi.</div>
+      <input type="hidden" id="u-username">
+      <div class="alert alert-info" style="font-size:12px">🔑 Login va vaqtinchalik parol tizim tomonidan avtomatik yaratiladi va saqlashdan keyin ko'rsatiladi.</div>
       <button class="btn btn-primary" style="width:100%" onclick="saveUser()">💾 Saqlash va credential ko'rish</button>
     </div>
   </div>
