@@ -237,6 +237,11 @@ else:
             if u:
                 u.active = not u.active
                 db.commit()
+        elif action == "deleteUser":
+            u = db.query(models.User).filter(models.User.id == d["id"]).first()
+            if u:
+                db.delete(u)
+                db.commit()
         elif action == "saveFaculty":
             db.add(models.Faculty(name=d["name"], code=d["code"])); db.commit()
         elif action == "deleteFaculty":

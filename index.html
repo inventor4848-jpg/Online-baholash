@@ -1761,37 +1761,6 @@
       </div>
     </div>
 
-    <!-- Role Demo Cards -->
-    <div id="role-demos" style="padding:20px 0 0;position:relative;z-index:1">
-      <div style="text-align:center;padding:0 5% 28px">
-        <div
-          style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">
-          Rollar va imkoniyatlar</div>
-        <div style="font-size:28px;font-weight:800;font-family:'Outfit',sans-serif">Har rol uchun maxsus panel</div>
-      </div>
-      <div class="role-demo-grid">
-        <div class="role-demo-card rdc-admin" onclick="demoLogin('admin')">
-          <div class="rdc-icon">🛡️</div>
-          <div class="rdc-title">Admin Paneli</div>
-          <div class="rdc-desc">Foydalanuvchilarni boshqarish, tizim tuzilmasini sozlash, global statistika va
-            monitoring.</div>
-          <div class="rdc-badge">Superuser</div>
-        </div>
-        <div class="role-demo-card rdc-teacher" onclick="demoLogin('teacher')">
-          <div class="rdc-icon">👨‍🏫</div>
-          <div class="rdc-title">O'qituvchi Paneli</div>
-          <div class="rdc-desc">Fanlar boshqaruvi, test yaratish, topshiriqlarni baholash va natijalarni eksport qilish.
-          </div>
-          <div class="rdc-badge">Content Creator</div>
-        </div>
-        <div class="role-demo-card rdc-student" onclick="demoLogin('student')">
-          <div class="rdc-icon">🎓</div>
-          <div class="rdc-title">Talaba Paneli</div>
-          <div class="rdc-desc">Shaxsiy dashboard, test topshirish, topshiriqlar yuklash va natijalar tarixi.</div>
-          <div class="rdc-badge">User</div>
-        </div>
-      </div>
-    </div>
 
     <!-- Features section -->
     <div id="features-section" class="features-grid">
@@ -1842,18 +1811,6 @@
         <h2>EduAssess</h2>
         <p>Aqlli baholash platformasi</p>
       </div>
-      <div class="role-tabs">
-        <button class="role-tab-btn active-admin" id="rt-admin" onclick="selectRole('admin')">
-          <span class="rtb-icon">🛡️</span><span class="rtb-label">Admin</span>
-        </button>
-        <button class="role-tab-btn" id="rt-teacher" onclick="selectRole('teacher')">
-          <span class="rtb-icon">👨‍🏫</span><span class="rtb-label">O'qituvchi</span>
-        </button>
-        <button class="role-tab-btn" id="rt-student" onclick="selectRole('student')">
-          <span class="rtb-icon">🎓</span><span class="rtb-label">Talaba</span>
-        </button>
-      </div>
-      <div class="demo-hint" id="demo-hint"></div>
       <div class="form-group"><label class="form-label">Login</label><input class="form-control" type="text"
           id="login-username" placeholder="admin123"></div>
       <div class="form-group"><label class="form-label">Parol</label><input class="form-control" type="password"
@@ -1878,7 +1835,6 @@
         </div>
         <nav class="sidebar-nav" id="sidebar-nav"></nav>
         <div class="sidebar-footer">
-          <button class="sf-btn" onclick="switchRole()">🔄 <span>Rol almashtirish</span></button>
           <button class="sf-btn" onclick="doLogout()">🚪 <span>Chiqish</span></button>
         </div>
       </div>
@@ -2713,17 +2669,20 @@
       let users = DB.users.filter(u => u.role !== 'admin');
       if (roleF) users = users.filter(u => u.role === roleF);
       if (grpF) users = users.filter(u => String(u.groupId) === grpF);
-      if (srch) users = users.filter(u => (u.fname + ' ' + u.lname + u.email).toLowerCase().includes(srch));
+      const login = u => u.username || u.email || '';
+      if (srch) users = users.filter(u => (u.fname + ' ' + u.lname + login(u)).toLowerCase().includes(srch));
+      const roleLabel = r => r === 'teacher' ? "O'qituvchi" : r === 'admin' ? 'Admin' : 'Talaba';
+      const roleBadge = r => r === 'teacher' ? 'b-green' : r === 'admin' ? 'b-blue' : 'b-purple';
       document.getElementById('t-users').innerHTML = users.map((u, i) => {
         const grp = u.groupId ? DB.groups.find(g => g.id === u.groupId)?.name : '—';
         return `<tr>
       <td>${i + 1}</td>
-      <td><div style="font-weight:600">${u.fname} ${u.lname}</div><div style="font-size:11px;color:var(--muted)">${u.email}</div></td>
-      <td><span class="badge ${u.role === 'teacher' ? 'b-green' : 'b-purple'}">${u.role === 'teacher' ? "O'qituvchi" : 'Talaba'}</span></td>
+      <td><div style="font-weight:600">${u.fname} ${u.lname}</div><div style="font-size:11px;color:var(--muted)">${login(u)}</div></td>
+      <td><span class="badge ${roleBadge(u.role)}">${roleLabel(u.role)}</span></td>
       <td>${grp}</td>
-      <td style="font-family:monospace;font-size:12px">${u.email}</td>
-      <td><span class="badge ${u.active ? 'b-green' : 'b-red'}">${u.active ? 'Faol' : 'Nofaol'}</span></td>
-      <td><button class="btn btn-sm" onclick="editUser(${u.id})">✏️</button> <button class="btn btn-sm btn-danger" onclick="toggleUser(${u.id})">${u.active ? '🚫' : '✅'}</button></td>
+      <td style="font-family:monospace;font-size:12px">${login(u)}</td>
+      <td><span class="badge b-green">Faol</span></td>
+      <td><button class="btn btn-sm" onclick="editUser(${u.id})">✏️</button> <button class="btn btn-sm btn-danger" onclick="deleteUser(${u.id})">🗑️</button></td>
     </tr>`;
       }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">Foydalanuvchi topilmadi</td></tr>';
     }
@@ -3510,6 +3469,11 @@
 
     const _toggleUser = toggleUser;
     toggleUser = async function (id) { await apiAction("toggleUser", { id }); };
+
+    async function deleteUser(id) {
+      if (!confirm("Foydalanuvchini o'chirmoqchimisiz?")) return;
+      await apiAction("deleteUser", { id });
+    }
 
     const _saveFaculty = saveFaculty;
     saveFaculty = async function () {
