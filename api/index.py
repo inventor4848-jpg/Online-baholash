@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from database import engine, get_db
 import models, schemas, auth
 
-models.Base.metadata.create_all(bind=engine)
+# No top-level execution here
 
 def ensure_demo_users(db: Session):
     # Ensure tables exist
