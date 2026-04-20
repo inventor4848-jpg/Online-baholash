@@ -51,7 +51,14 @@ else:
         return JSONResponse(status_code=500, content={"detail": error_msg})
 
     def ensure_demo_users(db):
-        models.Base.metadata.create_all(bind=engine)
+        try:
+            models.Base.metadata.create_all(bind=engine)
+            # Quick schema check — if users table has wrong columns, reset
+            db.execute(__import__('sqlalchemy').text("SELECT username FROM users LIMIT 1"))
+        except Exception:
+            db.rollback()
+            models.Base.metadata.drop_all(bind=engine)
+            models.Base.metadata.create_all(bind=engine)
 
         def seed_user(username, password, fname, lname, role, color):
             u = db.query(models.User).filter(models.User.username == username).first()
