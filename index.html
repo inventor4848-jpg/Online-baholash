@@ -1898,7 +1898,7 @@
             <div class="card">
               <div class="card-header">
                 <div class="card-title">Yangi foydalanuvchilar</div><button class="btn btn-sm btn-primary"
-                  onclick="openModal('modal-add-user')">+ Qo'shish</button>
+                  onclick="openAddUser()">+ Qo'shish</button>
               </div>
               <div id="admin-users-mini"></div>
             </div>
@@ -1918,7 +1918,7 @@
               <div class="page-subtitle" id="users-count-lbl"></div>
             </div>
             <div class="page-actions">
-              <button class="btn btn-sm btn-primary" onclick="openModal('modal-add-user')">+ Yangi
+              <button class="btn btn-sm btn-primary" onclick="openAddUser()">+ Yangi
                 foydalanuvchi</button>
             </div>
           </div>
@@ -2773,18 +2773,21 @@
       const gw = document.getElementById('u-group-wrap');
       gw.style.display = r === 'student' ? 'block' : 'none';
     }
-    function openAddUser() {
+    async function openAddUser() {
+      await fetchDB();
       document.getElementById('modal-user-title').textContent = 'Yangi foydalanuvchi';
       document.getElementById('edit-user-id').value = '';
       document.getElementById('u-fname').value = '';
       document.getElementById('u-lname').value = '';
       document.getElementById('u-username').value = '';
+      document.getElementById('u-pass').value = '';
       document.getElementById('u-role').value = 'student';
       document.getElementById('u-group').innerHTML = DB.groups.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
       updateUserFormFields();
       openModal('modal-add-user');
     }
-    function editUser(id) {
+    async function editUser(id) {
+      await fetchDB();
       const u = DB.users.find(x => x.id === id);
       if (!u) return;
       document.getElementById('modal-user-title').textContent = 'Tahrirlash';
@@ -2792,6 +2795,7 @@
       document.getElementById('u-fname').value = u.fname;
       document.getElementById('u-lname').value = u.lname;
       document.getElementById('u-username').value = u.username;
+      document.getElementById('u-pass').value = '';
       document.getElementById('u-role').value = u.role;
       document.getElementById('u-group').innerHTML = DB.groups.map(g => `<option value="${g.id}" ${u.groupId === g.id ? 'selected' : ''}>${g.name}</option>`).join('');
       updateUserFormFields();
