@@ -3388,15 +3388,13 @@
       const pass = document.getElementById('login-password').value.trim();
       const err = document.getElementById('login-error');
 
-      let params = new URLSearchParams();
-      params.append("username", username);
-      params.append("password", pass);
+      const bodyString = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(pass)}`;
 
       try {
         let res = await fetch("/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: params
+          body: bodyString
         });
         if (!res.ok) {
           try {
