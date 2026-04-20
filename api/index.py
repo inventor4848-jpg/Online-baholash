@@ -1,5 +1,10 @@
 import os
+import sys
 import traceback
+
+# Ensure the api/ directory is in the Python path so local modules are found
+sys.path.insert(0, os.path.dirname(__file__))
+
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from fastapi.requests import Request
