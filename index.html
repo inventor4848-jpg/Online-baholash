@@ -2236,13 +2236,14 @@
       <input type="hidden" id="edit-user-id">
       <div class="form-row">
         <div class="form-group"><label class="form-label">Ism *</label><input class="form-control" id="u-fname"
-            placeholder="Ism"></div>
+            placeholder="Ism" oninput="autoFillUsername()"></div>
         <div class="form-group"><label class="form-label">Familiya *</label><input class="form-control" id="u-lname"
-            placeholder="Familiya"></div>
+            placeholder="Familiya" oninput="autoFillUsername()"></div>
       </div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Rol *</label>
           <select class="form-control" id="u-role" onchange="updateUserFormFields()">
+            <option value="admin">Admin</option>
             <option value="teacher">O'qituvchi</option>
             <option value="student">Talaba</option>
           </select>
@@ -2251,10 +2252,11 @@
           <select class="form-control" id="u-group"></select>
         </div>
       </div>
-      <div class="form-group"><label class="form-label">Login *</label><input class="form-control" id="u-username"
-          type="text" placeholder="username123"></div>
-      <div class="alert alert-info" style="font-size:12px">🔑 Login va vaqtinchalik parol tizim tomonidan avtomatik
-        yaratiladi va ko'rsatiladi.</div>
+      <div class="form-group">
+        <label class="form-label">Login <span style="color:var(--muted);font-size:11px">(avtomatik to'ldiriladi, o'zgartirish mumkin)</span></label>
+        <input class="form-control" id="u-username" type="text" placeholder="ism.familiya@edu.uz">
+      </div>
+      <div class="alert alert-info" style="font-size:12px">🔑 Login va vaqtinchalik parol avtomatik yaratiladi va saqlashdan keyin ko'rsatiladi.</div>
       <button class="btn btn-primary" style="width:100%" onclick="saveUser()">💾 Saqlash va credential ko'rish</button>
     </div>
   </div>
@@ -3463,29 +3465,47 @@
       }
     }
 
+    function autoFillUsername() {
+      const editId = document.getElementById('edit-user-id').value;
+      if (editId) return; // tahrirlashda o'zgartirma
+      const fname = document.getElementById('u-fname').value.trim().toLowerCase().replace(/\s+/g, '');
+      const lname = document.getElementById('u-lname').value.trim().toLowerCase().replace(/\s+/g, '');
+      if (fname) {
+        const suffix = lname ? '.' + lname : '';
+        document.getElementById('u-username').value = fname + suffix + '@edu.uz';
+      }
+    }
+
     // Overriding API modifying functions to sync
     const _saveUser = saveUser;
     saveUser = async function () {
       const fname = document.getElementById('u-fname').value.trim();
       const lname = document.getElementById('u-lname').value.trim();
-      const username = document.getElementById('u-username').value.trim();
       const role = document.getElementById('u-role').value;
       const groupId = role === 'student' ? parseInt(document.getElementById('u-group').value) : null;
-      if (!fname || !username) { alert('Ism va login majburiy!'); return; }
-      const editId = document.getElementById('edit-user-id').value;
+      if (!fname) { alert('Ism majburiy!'); return; }
 
-      const pass = fname.toLowerCase() + Math.floor(1000 + Math.random() * 9000);
+      // Auto-generate username if empty
+      let username = document.getElementById('u-username').value.trim();
+      if (!username) {
+        const f = fname.toLowerCase().replace(/\s+/g, '');
+        const l = lname.toLowerCase().replace(/\s+/g, '');
+        username = f + (l ? '.' + l : '') + '@edu.uz';
+      }
+
+      const editId = document.getElementById('edit-user-id').value;
+      // Auto-generate password: ism + 4 raqam
+      const pass = fname.toLowerCase().replace(/\s+/g, '') + Math.floor(1000 + Math.random() * 9000);
+
       await apiAction("saveUser", {
-        id: editId ? parseInt(edit_id) : null,
+        id: editId ? parseInt(editId) : null,
         fname, lname, username, role, groupId, pass
       });
       closeModal('modal-add-user');
-      if (!editId) {
-        document.getElementById('cred-name').textContent = `${fname} ${lname}`;
-        document.getElementById('cred-login').textContent = username;
-        document.getElementById('cred-pass').textContent = pass;
-        openModal('modal-credentials');
-      }
+      document.getElementById('cred-name').textContent = `${fname} ${lname}`;
+      document.getElementById('cred-login').textContent = username;
+      document.getElementById('cred-pass').textContent = pass;
+      openModal('modal-credentials');
     };
 
     const _toggleUser = toggleUser;
