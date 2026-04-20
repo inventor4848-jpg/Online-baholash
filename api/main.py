@@ -30,6 +30,16 @@ def ensure_demo_users(db: Session):
 
 app = FastAPI(title="EduAssess Full-Stack API")
 
+from fastapi.responses import JSONResponse
+from fastapi.requests import Request
+import traceback
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    error_msg = f"{type(exc).__name__}: {str(exc)}\n{traceback.format_exc()}"
+    print(error_msg)
+    return JSONResponse(status_code=500, content={"detail": error_msg})
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -37,6 +47,19 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/api/debug/users")
+def debug_users(db: Session = Depends(get_db)):
+    try:
+        users = db.query(models.User).all()
+        return {"users": [u.email for u in users], "count": len(users)}
+    except Exception as e:
+        return {"error": str(e), "trace": traceback.format_exc()}
+
+@app.get("/api/debug/db-url")
+def debug_db_url():
+    url = os.getenv("DATABASE_URL", "NOT_SET")
+    return {"url_prefix": url[:15] if url else "Empty"}
 
 # --- AUTH ROUTES ---
 @app.post("/api/auth/login")
