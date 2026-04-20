@@ -97,7 +97,7 @@ else:
 
     @app.get("/api/config")
     def get_config():
-        return {"groqKey": os.getenv("GROQ_KEY", "")}
+        return {"groqKey": os.getenv("GROQ_KEY", "").strip()}
 
     @app.get("/api/debug/ping")
     @app.get("/debug/ping")
