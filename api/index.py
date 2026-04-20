@@ -1,14 +1,21 @@
 import os
-from fastapi import FastAPI, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-from contextlib import asynccontextmanager
-from typing import List, Dict, Any
-from pydantic import BaseModel
+import traceback
 
-from database import engine, get_db
-import models, schemas, auth
+STARTUP_ERROR = None
+
+try:
+    from fastapi import FastAPI, Depends, HTTPException, status
+    from fastapi.security import OAuth2PasswordRequestForm
+    from fastapi.middleware.cors import CORSMiddleware
+    from sqlalchemy.orm import Session
+    from contextlib import asynccontextmanager
+    from typing import List, Dict, Any
+    from pydantic import BaseModel
+
+    from database import engine, get_db
+    import models, schemas, auth
+except Exception as _e:
+    STARTUP_ERROR = traceback.format_exc()
 
 # No top-level execution here
 
@@ -29,17 +36,27 @@ def ensure_demo_users(db: Session):
     seed_user("teacher@edu.uz", "teach123", "O'qituvchi", "Demo", "teacher", "#10b981")
     seed_user("student@edu.uz", "stud123", "Talaba", "Demo", "student", "#8b5cf6")
 
-app = FastAPI(title="EduAssess Full-Stack API")
-
+from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from fastapi.requests import Request
-import traceback
 
-@app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
-    error_msg = f"{type(exc).__name__}: {str(exc)}\n{traceback.format_exc()}"
-    print(error_msg)
-    return JSONResponse(status_code=500, content={"detail": error_msg})
+app = FastAPI(title="EduAssess Full-Stack API")
+
+@app.get("/api/health")
+@app.get("/health")
+def health_check():
+    if STARTUP_ERROR:
+        return {"status": "error", "startup_error": STARTUP_ERROR}
+    return {"status": "ok", "message": "Backend is running!"}
+
+if STARTUP_ERROR is None:
+    import traceback
+
+    @app.exception_handler(Exception)
+    async def global_exception_handler(request: Request, exc: Exception):
+        error_msg = f"{type(exc).__name__}: {str(exc)}\n{traceback.format_exc()}"
+        print(error_msg)
+        return JSONResponse(status_code=500, content={"detail": error_msg})
 
 app.add_middleware(
     CORSMiddleware,
@@ -70,11 +87,6 @@ def debug_users(db: Session = Depends(get_db)):
 def debug_db_url():
     url = os.getenv("DATABASE_URL", "NOT_SET")
     return {"url_prefix": url[:15] if url else "Empty", "full_len": len(url) if url else 0}
-
-@app.get("/api/health")
-@app.get("/health")
-def health_check():
-    return {"status": "ok", "message": "Backend is running!"}
 
 @app.get("/api/debug/ping")
 @app.get("/debug/ping")
