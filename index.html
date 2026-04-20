@@ -829,10 +829,10 @@ function selectRole(r){
   const hints={
     admin:'👤 Login: admin@edu.uz\n🔑 Parol: admin123',
     teacher:'👤 Login: teacher@edu.uz\n🔑 Parol: teach123',
-    student:'👤 Login: aziz@edu.uz\n🔑 Parol: student123'
+    student:'👤 Login: student@edu.uz\n🔑 Parol: stud123'
   };
   document.getElementById('demo-hint').innerText=hints[r];
-  const creds={admin:['admin@edu.uz','admin123'],teacher:['teacher@edu.uz','teach123'],student:['aziz@edu.uz','student123']};
+  const creds={admin:['admin@edu.uz','admin123'],teacher:['teacher@edu.uz','teach123'],student:['student@edu.uz','stud123']};
   document.getElementById('login-email').value=creds[r][0];
   document.getElementById('login-password').value=creds[r][1];
 }
