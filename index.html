@@ -3611,7 +3611,7 @@
       const savedUser = localStorage.getItem("currentUser");
       if (token && savedUser) {
         // Immediately show app (hide landing) while restoring session
-        document.getElementById('landing-page')  && (document.getElementById('landing-page').style.display = 'none');
+        document.getElementById('landing').style.display = 'none';
         document.getElementById('login-page').style.display = 'none';
         document.getElementById('app').style.display = 'block';
         currentUser = JSON.parse(savedUser);
