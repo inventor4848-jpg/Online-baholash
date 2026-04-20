@@ -1634,5 +1634,278 @@ function openAddSubject(){
 }
 
 </script>
+
+
+<!-- ===== FULL-STACK API OVERRIDES ===== -->
+<script>
+let token = localStorage.getItem("token") || null;
+
+async function fetchDB() {
+    if (!token) return;
+    try {
+        let res = await fetch("/api/data", { headers: { "Authorization": `Bearer ${token}` } });
+        if (res.ok) {
+            DB = await res.json();
+            console.log("DB Synced from Server Data");
+        }
+    } catch(e) { console.error("Sync Error:", e); }
+}
+
+async function apiAction(action, data) {
+    if(!token) return;
+    try {
+        let res = await fetch("/api/action", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+            body: JSON.stringify({ action, data })
+        });
+        if(res.ok) { 
+            await fetchDB(); 
+            // Re-render current page
+            if (currentPage) onPageLoad(currentPage);
+        }
+    } catch(e) { console.error("Action Error:", e); }
+}
+
+// Override Login
+async function doLogin(){
+    const email=document.getElementById('login-email').value.trim();
+    const pass=document.getElementById('login-password').value.trim();
+    const err=document.getElementById('login-error');
+    
+    let fd = new FormData();
+    fd.append("username", email);
+    fd.append("password", pass);
+    
+    try {
+        let res = await fetch("/api/auth/login", { method: "POST", body: fd });
+        if (!res.ok) {
+            err.style.display='flex'; err.textContent='❌ Login yoki parol noto\'g\'ri!';
+            return;
+        }
+        let data = await res.json();
+        token = data.access_token;
+        localStorage.setItem("token", token);
+        currentUser = data.user;
+        
+        await fetchDB();
+        
+        err.style.display='none';
+        document.getElementById('login-page').style.display='none';
+        document.getElementById('app').style.display='block';
+        buildSidebar();
+        const homePage={admin:'page-admin-dash',teacher:'page-teacher-dash',student:'page-student-dash'};
+        nav(homePage[currentUser.role]);
+    } catch(e) {
+        err.style.display='flex'; err.textContent='❌ Server bilan ulanishda xato!';
+    }
+}
+
+// Override Logout
+const origLogout = doLogout;
+doLogout = function() {
+    token = null;
+    localStorage.removeItem("token");
+    origLogout();
+};
+
+// Check Auth on Init
+let origOnload = window.onload;
+window.onload = async () => {
+    if (origOnload) origOnload();
+    if (token) {
+        // Attempt auto-login if token exists (Needs an endpoint, but we can decode JWT client-side or just fetch data)
+        let res = await fetch("/api/data", { headers: { "Authorization": `Bearer ${token}` } });
+        if(res.ok) {
+            DB = await res.json();
+            // Restore currentUser from logic (mock basic info for now based on previous role if we don't have it)
+            // Or force them to login again for simplicity in this demo.
+            token = null; localStorage.removeItem("token");
+        } else {
+            token = null; localStorage.removeItem("token");
+        }
+    }
+}
+
+// Overriding API modifying functions to sync
+const _saveUser = saveUser;
+saveUser = async function() {
+    const fname=document.getElementById('u-fname').value.trim();
+    const lname=document.getElementById('u-lname').value.trim();
+    const email=document.getElementById('u-email').value.trim();
+    const role=document.getElementById('u-role').value;
+    const groupId=role==='student'?parseInt(document.getElementById('u-group').value):null;
+    if(!fname||!email){alert('Ism va email majburiy!');return;}
+    const editId=document.getElementById('edit-user-id').value;
+    
+    const pass = fname.toLowerCase() + Math.floor(1000+Math.random()*9000);
+    await apiAction("saveUser", {
+        id: editId ? parseInt(editId) : null,
+        fname, lname, email, role, groupId, pass
+    });
+    closeModal('modal-add-user');
+    if(!editId) {
+        document.getElementById('cred-name').textContent=`${fname} ${lname}`;
+        document.getElementById('cred-login').textContent=email;
+        document.getElementById('cred-pass').textContent=pass;
+        openModal('modal-credentials');
+    }
+};
+
+const _toggleUser = toggleUser;
+toggleUser = async function(id) { await apiAction("toggleUser", {id}); };
+
+const _saveFaculty = saveFaculty;
+saveFaculty = async function() {
+    const name=document.getElementById('fac-name').value.trim();
+    const code=document.getElementById('fac-code').value.trim().toUpperCase()||name.slice(0,3).toUpperCase();
+    if(!name)return alert('Nom majburiy!');
+    await apiAction("saveFaculty", {name, code});
+    document.getElementById('fac-name').value='';
+    document.getElementById('fac-code').value='';
+    closeModal('modal-add-faculty');
+};
+
+const _deleteFaculty = deleteFaculty;
+deleteFaculty = async function(id) { if(confirm("O'chirmoqchimisiz?")) await apiAction("deleteFaculty", {id}); };
+
+const _saveDept = saveDept;
+saveDept = async function() {
+    const name=document.getElementById('dept-name').value.trim();
+    const facultyId=parseInt(document.getElementById('dept-faculty').value);
+    if(!name)return alert('Nom majburiy!');
+    await apiAction("saveDept", {name, facultyId});
+    document.getElementById('dept-name').value='';
+    closeModal('modal-add-dept');
+};
+
+const _deleteDept = deleteDept;
+deleteDept = async function(id) { if(confirm("O'chirmoqchimisiz?")) await apiAction("deleteDept", {id}); };
+
+const _saveGroup = saveGroup;
+saveGroup = async function() {
+    const name=document.getElementById('grp-name').value.trim();
+    const deptId=parseInt(document.getElementById('grp-dept').value);
+    const course=parseInt(document.getElementById('grp-course').value);
+    if(!name)return alert('Nom majburiy!');
+    await apiAction("saveGroup", {name, deptId, course});
+    document.getElementById('grp-name').value='';
+    closeModal('modal-add-group');
+};
+
+const _deleteGroup = deleteGroup;
+deleteGroup = async function(id) { if(confirm("O'chirmoqchimisiz?")) await apiAction("deleteGroup", {id}); };
+
+const _saveSubject = saveSubject;
+saveSubject = async function() {
+    const name=document.getElementById('sub-name').value.trim();
+    const teacherId=parseInt(document.getElementById('sub-teacher').value);
+    const credits=parseInt(document.getElementById('sub-credits').value);
+    const groupIds=[...document.querySelectorAll('#sub-groups-checkboxes input:checked')].map(i=>parseInt(i.value));
+    if(!name||!groupIds.length)return alert('Nom va kamida bitta guruh majburiy!');
+    await apiAction("saveSubject", {name, teacherId, credits, groupIds});
+    document.getElementById('sub-name').value='';
+    closeModal('modal-add-subject');
+};
+
+const _deleteSubject = deleteSubject;
+deleteSubject = async function(id) { if(confirm("O'chirmoqchimisiz?")) await apiAction("deleteSubject", {id}); };
+
+const _saveAssignment = saveAssignment;
+saveAssignment = async function() {
+    const title=document.getElementById('assign-title').value.trim();
+    const desc=document.getElementById('assign-desc').value.trim();
+    const maxScore=parseInt(document.getElementById('assign-max').value);
+    const deadline=document.getElementById('assign-deadline').value;
+    const types=document.getElementById('assign-types').value.trim();
+    if(!title||!deadline)return alert('Sarlavha va deadline majburiy!');
+    await apiAction("saveAssignment", {subjectId: currentSubjectId, title, desc, maxScore, deadline, types});
+    closeModal('modal-add-assignment');
+};
+
+const _submitGrade = submitGrade;
+submitGrade = async function() {
+    const subId=parseInt(document.getElementById('grade-sub-id').value);
+    const score=parseInt(document.getElementById('grade-score').value);
+    const comment=document.getElementById('grade-comment').value.trim();
+    if(isNaN(score))return alert('Ball kiriting!');
+    await apiAction("submitGrade", {id: subId, score, comment});
+    closeModal('modal-grade');
+};
+
+const _saveQuiz = saveQuiz;
+saveQuiz = async function() {
+    const title=document.getElementById('quiz-title').value.trim();
+    const attempts=parseInt(document.getElementById('quiz-attempts').value)||1;
+    const days=parseInt(document.getElementById('quiz-days').value)||7;
+    const passingScore=parseInt(document.getElementById('quiz-pass').value)||60;
+    if(!title)return alert('Test nomi majburiy!');
+    if(!quizQuestions.length)return alert('Kamida bitta savol qo\'shing!');
+    
+    await apiAction("saveQuiz", {
+        subjectId: currentSubjectId, title, attempts, days, passingScore, questions: quizQuestions
+    });
+    
+    quizQuestions=[];
+    document.getElementById('quiz-title').value='';
+    document.getElementById('quiz-questions-list').innerHTML='';
+    document.getElementById('qq-count').textContent='0';
+    document.getElementById('qq-maxpts').textContent='0';
+    closeModal('modal-add-quiz');
+};
+
+const _submitAssignmentUpload = submitAssignmentUpload;
+submitAssignmentUpload = async function() {
+    const assignId=parseInt(document.getElementById('upload-assign-id').value);
+    const fileName=document.getElementById('upload-fname').value.trim();
+    const comment=document.getElementById('upload-comment').value.trim();
+    if(!fileName)return alert('Fayl nomi kiriting!');
+    await apiAction("submitAssignment", {assignmentId: assignId, fileName, comment});
+    closeModal('modal-upload-assign');
+};
+
+const _endTest = endTest;
+endTest = async function() {
+    testActive=false; clearInterval(timerInterval);
+    document.getElementById('cheat-overlay').classList.remove('show');
+    
+    const wts={easy:1,medium:2,hard:3};
+    let totalWeight=0, earnedWeight=0, correctEasy=0, totalEasy=0, correctMid=0, totalMid=0, correctHard=0, totalHard=0;
+    
+    let mistakes = [];
+    activeTest.questions.forEach((q,i)=>{
+        const w=wts[q.diff];
+        totalWeight+=w;
+        if(q.diff==='easy') totalEasy++;
+        if(q.diff==='medium') totalMid++;
+        if(q.diff==='hard') totalHard++;
+        
+        if(userAnswers[i] && userAnswers[i].startsWith(q.correct)){
+            earnedWeight+=w;
+            if(q.diff==='easy') correctEasy++;
+            if(q.diff==='medium') correctMid++;
+            if(q.diff==='hard') correctHard++;
+        } else if(userAnswers[i]) {
+            mistakes.push({
+                q: q.text, userAns: userAnswers[i], correct: q.opts.find(o=>o.startsWith(q.correct)) || q.correct,
+                diff: q.diff, explanation: "Noto'g'ri javob berildi."
+            });
+        }
+    });
+    
+    const score=Math.round((earnedWeight/totalWeight)*100);
+    
+    await apiAction("submitTest", {
+        testId: activeTest.id, score,
+        easy: `${correctEasy}/${totalEasy}`, mid: `${correctMid}/${totalMid}`, hard: `${correctHard}/${totalHard}`,
+        cheatCount, mistakes
+    });
+    
+    document.getElementById('test-fullscreen').classList.remove('show');
+    nav('page-student-results');
+    alert(`Test yakunlandi! Sizning natijangiz: ${score}%`);
+};
+
+</script>
 </body>
 </html>
