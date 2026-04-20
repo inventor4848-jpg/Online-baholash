@@ -48,18 +48,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/api/debug/seed")
+def manual_seed(db: Session = Depends(get_db)):
+    try:
+        ensure_demo_users(db)
+        users = db.query(models.User).all()
+        return {"status": "success", "user_count": len(users), "users": [u.email for u in users]}
+    except Exception as e:
+        return {"status": "error", "message": str(e), "traceback": traceback.format_exc()}
+
 @app.get("/api/debug/users")
 def debug_users(db: Session = Depends(get_db)):
     try:
         users = db.query(models.User).all()
-        return {"users": [u.email for u in users], "count": len(users)}
+        return [{"id": u.id, "email": u.email, "role": u.role} for u in users]
     except Exception as e:
-        return {"error": str(e), "trace": traceback.format_exc()}
+        return {"error": str(e)}
 
 @app.get("/api/debug/db-url")
 def debug_db_url():
     url = os.getenv("DATABASE_URL", "NOT_SET")
-    return {"url_prefix": url[:15] if url else "Empty"}
+    return {"url_prefix": url[:15] if url else "Empty", "full_len": len(url) if url else 0}
 
 @app.get("/api/health")
 @app.get("/health")
@@ -75,16 +84,24 @@ def ping():
 @app.post("/api/auth/login")
 @app.post("/auth/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    # Ensure demo users exist in the DB on every login attempt (safe check)
+    # Ensure demo users exist
     ensure_demo_users(db)
     
     user = db.query(models.User).filter(models.User.email == form_data.username).first()
-    if not user or not auth.verify_password(form_data.password, user.hashed_password):
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Noto'g'ri login yoki parol",
+            detail=f"Login topilmadi: {form_data.username}. Seedlash uchun /api/debug/seed manziliga o'ting.",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    
+    if not auth.verify_password(form_data.password, user.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Parol noto'g'ri",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
     if not user.active:
         raise HTTPException(status_code=400, detail="Foydalanuvchi faol emas")
         
