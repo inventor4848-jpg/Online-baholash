@@ -8,6 +8,9 @@ load_dotenv()
 # Default to a local SQLite if DATABASE_URL is not set for initial testing, 
 # but expect PostgreSQL URL from Neon.
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+if SQLALCHEMY_DATABASE_URL and SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
+    SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 if not SQLALCHEMY_DATABASE_URL:
     print("WARNING: DATABASE_URL not found in .env. Falling back to local SQLite.")
     SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
