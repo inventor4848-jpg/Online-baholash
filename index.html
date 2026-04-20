@@ -3428,6 +3428,7 @@
         localStorage.setItem("token", token);
         currentUser = data.user;
         currentUser.email = data.user.username; // Compat
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
 
         await fetchDB();
 
@@ -3447,23 +3448,37 @@
     doLogout = function () {
       token = null;
       localStorage.removeItem("token");
+      localStorage.removeItem("currentUser");
       origLogout();
     };
 
-    // Check Auth on Init
+    // Check Auth on Init — restore session on page refresh
     let origOnload = window.onload;
     window.onload = async () => {
       if (origOnload) origOnload();
-      if (token) {
-        // Attempt auto-login if token exists (Needs an endpoint, but we can decode JWT client-side or just fetch data)
-        let res = await fetch("/api/data", { headers: { "Authorization": `Bearer ${token}` } });
-        if (res.ok) {
-          DB = await res.json();
-          // Restore currentUser from logic (mock basic info for now based on previous role if we don't have it)
-          // Or force them to login again for simplicity in this demo.
-          token = null; localStorage.removeItem("token");
-        } else {
-          token = null; localStorage.removeItem("token");
+      const savedUser = localStorage.getItem("currentUser");
+      if (token && savedUser) {
+        try {
+          let res = await fetch("/api/data", { headers: { "Authorization": `Bearer ${token}` } });
+          if (res.ok) {
+            DB = await res.json();
+            currentUser = JSON.parse(savedUser);
+            currentUser.email = currentUser.username;
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            buildSidebar();
+            const homePage = { admin: 'page-admin-dash', teacher: 'page-teacher-dash', student: 'page-student-dash' };
+            nav(homePage[currentUser.role]);
+          } else {
+            // Token expired — clear and show login
+            token = null;
+            localStorage.removeItem("token");
+            localStorage.removeItem("currentUser");
+          }
+        } catch (e) {
+          token = null;
+          localStorage.removeItem("token");
+          localStorage.removeItem("currentUser");
         }
       }
     }
