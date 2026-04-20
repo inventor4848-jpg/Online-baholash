@@ -6,8 +6,8 @@ from sqlalchemy.orm import Session
 from contextlib import asynccontextmanager
 from typing import List, Dict, Any
 
-from api.database import engine, get_db
-from api import models, schemas, auth
+from .database import engine, get_db
+from . import models, schemas, auth
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -61,8 +61,19 @@ def debug_db_url():
     url = os.getenv("DATABASE_URL", "NOT_SET")
     return {"url_prefix": url[:15] if url else "Empty"}
 
+@app.get("/api/health")
+@app.get("/health")
+def health_check():
+    return {"status": "ok", "message": "Backend is running!"}
+
+@app.get("/api/debug/ping")
+@app.get("/debug/ping")
+def ping():
+    return {"ping": "pong"}
+
 # --- AUTH ROUTES ---
 @app.post("/api/auth/login")
+@app.post("/auth/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     # Ensure demo users exist in the DB on every login attempt (safe check)
     ensure_demo_users(db)
