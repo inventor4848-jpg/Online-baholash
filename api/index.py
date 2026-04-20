@@ -305,6 +305,16 @@ else:
                 assignment_id=d["assignmentId"], student_id=current_user.id,
                 file_name=d["fileName"], comment=d.get("comment", "")
             )); db.commit()
+        elif action == "updateProfile":
+            u = db.query(models.User).filter(models.User.id == d["id"]).first()
+            if not u:
+                raise HTTPException(status_code=404, detail="Foydalanuvchi topilmadi")
+            u.fname = d.get("fname", u.fname)
+            u.lname = d.get("lname", u.lname)
+            u.username = d.get("username", u.username)
+            if d.get("pass"):
+                u.hashed_password = auth.get_password_hash(d["pass"])
+            db.commit()
         elif action == "submitTest":
             import datetime
             r = models.TestResult(

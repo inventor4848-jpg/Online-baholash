@@ -2186,6 +2186,17 @@
           </div>
         </div>
 
+        <!-- Profile Page -->
+        <div class="page" id="page-profile">
+          <div class="page-header">
+            <div>
+              <div class="page-title">👤 Mening profilim</div>
+              <div class="page-subtitle">Shaxsiy ma'lumotlar va xavfsizlik</div>
+            </div>
+          </div>
+          <div id="profile-content"></div>
+        </div>
+
       </div><!-- /main-content -->
     </div><!-- /app-inner -->
   </div><!-- /app -->
@@ -2606,14 +2617,17 @@
         { section: 'Asosiy' }, { id: 'page-admin-dash', icon: '📊', label: 'Dashboard' },
         { section: 'Boshqaruv' }, { id: 'page-admin-users', icon: '👥', label: 'Foydalanuvchilar' },
         { id: 'page-admin-structure', icon: '🏛️', label: 'Tuzilma' },
-        { section: 'Kontent' }, { id: 'page-admin-subjects', icon: '📚', label: 'Fanlar' }
+        { section: 'Kontent' }, { id: 'page-admin-subjects', icon: '📚', label: 'Fanlar' },
+        { section: '' }, { id: 'page-profile', icon: '👤', label: 'Mening profilim' }
       ],
       teacher: [
-        { section: 'O\'qituvchi' }, { id: 'page-teacher-dash', icon: '📚', label: 'Mening fanlarim' }
+        { section: 'O\'qituvchi' }, { id: 'page-teacher-dash', icon: '📚', label: 'Mening fanlarim' },
+        { section: '' }, { id: 'page-profile', icon: '👤', label: 'Mening profilim' }
       ],
       student: [
         { section: 'Talaba' }, { id: 'page-student-dash', icon: '🏠', label: 'Dashboard' },
-        { id: 'page-student-results', icon: '🏆', label: 'Natijalarim' }
+        { id: 'page-student-results', icon: '🏆', label: 'Natijalarim' },
+        { section: '' }, { id: 'page-profile', icon: '👤', label: 'Mening profilim' }
       ]
     };
     const sbColors = { admin: 'admin-sb', teacher: 'teacher-sb', student: 'student-sb' };
@@ -2628,9 +2642,14 @@
       }).join('');
       const av = currentUser.fname[0] + (currentUser.lname ? currentUser.lname[0] : '');
       const roleLabel = { admin: "Superadmin", teacher: "O'qituvchi", student: "Talaba" }[currentUser.role];
+      const photoKey = `profile_photo_${currentUser.id}`;
+      const savedPhoto = localStorage.getItem(photoKey);
+      const avHtml = savedPhoto
+        ? `<img src="${savedPhoto}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;cursor:pointer" onclick="nav('page-profile')">`
+        : `<div class="user-av" style="background:${currentUser.color};color:#fff;cursor:pointer" onclick="nav('page-profile')">${av}</div>`;
       document.getElementById('sidebar-user').innerHTML = `
-    <div class="user-av" style="background:${currentUser.color};color:#fff">${av}</div>
-    <div><div class="user-n">${currentUser.fname}</div><div class="user-r">${roleLabel}</div></div>`;
+    ${avHtml}
+    <div style="cursor:pointer" onclick="nav('page-profile')"><div class="user-n">${currentUser.fname}</div><div class="user-r">${roleLabel}</div></div>`;
     }
 
     // ========== NAVIGATION ==========
@@ -2650,6 +2669,7 @@
       else if (id === 'page-teacher-dash') renderTeacherDash();
       else if (id === 'page-student-dash') renderStudentDash();
       else if (id === 'page-student-results') renderStudentResults();
+      else if (id === 'page-profile') renderProfilePage();
     }
 
     // ========== HELPERS ==========
@@ -2946,10 +2966,43 @@
     // ========== TEACHER: ASSIGNMENTS ==========
     function renderAssignmentsList() {
       const assigns = DB.assignments.filter(a => a.subjectId === currentSubjectId);
+      const subj = DB.subjects.find(s => s.id === currentSubjectId);
+      const groupStudents = DB.users.filter(u => u.role === 'student' && subj?.groupIds?.includes(u.groupId));
+      const now = new Date();
+
       document.getElementById('assignments-list').innerHTML = assigns.length ? assigns.map(a => {
         const submissions = DB.submissions.filter(s => s.assignmentId === a.id);
         const graded = submissions.filter(s => s.status === 'graded').length;
-        const total = DB.users.filter(u => u.role === 'student' && DB.subjects.find(sub => sub.id === currentSubjectId)?.groupIds.includes(u.groupId)).length;
+        const total = groupStudents.length;
+        const deadlinePassed = a.deadline && new Date(a.deadline) < now;
+
+        const studentRows = groupStudents.map(st => {
+          const sub = submissions.find(s => s.studentId === st.id);
+          const av = st.fname[0] + (st.lname ? st.lname[0] : '');
+          let badge, action;
+          if (sub && sub.status === 'graded') {
+            badge = `<span class="badge b-green">✅ Baholandi</span>`;
+            action = `<span style="font-weight:700;color:#10b981">${sub.score}/${a.maxScore}</span>`;
+          } else if (sub) {
+            badge = `<span class="badge b-blue">📤 Topshirdi</span>`;
+            action = `<button class="btn btn-sm btn-green" onclick="openGrade(${sub.id},${a.maxScore})">Baholash</button>`;
+          } else if (deadlinePassed) {
+            badge = `<span class="badge b-red">⏰ Muddati o'tdi</span>`;
+            action = '';
+          } else {
+            badge = `<span class="badge b-amber">⏳ Topshirilmadi</span>`;
+            action = '';
+          }
+          return `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:var(--bg);margin-bottom:6px">
+            <div style="width:32px;height:32px;border-radius:50%;background:${st.color||'#6366f1'};color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${av}</div>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:13px">${st.fname} ${st.lname || ''}</div>
+              ${sub ? `<div style="font-size:11px;color:var(--muted)">📄 ${sub.fileName} • ${formatDate(sub.submittedAt)}${sub.comment ? ` • "${sub.comment}"` : ''}</div>` : ''}
+            </div>
+            ${badge}${action ? `<span style="flex-shrink:0">${action}</span>` : ''}
+          </div>`;
+        }).join('');
+
         return `<div class="card" style="margin-bottom:14px">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
         <div style="flex:1">
@@ -2963,23 +3016,13 @@
         </div>
         <div style="text-align:right;flex-shrink:0">
           <div style="font-size:22px;font-weight:800;color:#10b981">${graded}/${total}</div>
-          <div style="font-size:11px;color:var(--muted)">baholangdi</div>
+          <div style="font-size:11px;color:var(--muted)">baholandi</div>
         </div>
       </div>
-      ${submissions.length ? `<div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
-        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px">KELIB TUSHGAN ISHLAR</div>
-        ${submissions.map(sub => {
-          const st = DB.users.find(u => u.id === sub.studentId);
-          return `<div style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;background:var(--bg);margin-bottom:6px">
-            <div style="flex:1"><div style="font-weight:600;font-size:13px">${st ? st.fname + ' ' + st.lname : '—'}</div>
-              <div style="font-size:11px;color:var(--muted)">📄 ${sub.fileName} • ${formatDate(sub.submittedAt)}</div>
-              ${sub.comment ? `<div style="font-size:11px;color:var(--muted);font-style:italic">"${sub.comment}"</div>` : ''}
-            </div>
-            ${statusBadge(sub.status)}
-            ${sub.status === 'graded' ? `<span style="font-weight:700;color:#10b981">${sub.score}/${a.maxScore}</span>` : `<button class="btn btn-sm btn-green" onclick="openGrade(${sub.id},${a.maxScore})">Baholash</button>`}
-          </div>`;
-        }).join('')}
-      </div>`: ''}
+      <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px">GURUH TALABALARI (${total} nafar)</div>
+        ${total ? studentRows : '<div style="color:var(--muted);font-size:13px">Bu fanda talaba yo\'q</div>'}
+      </div>
     </div>`;
       }).join('') : `<div class="alert alert-info">Hali topshiriq yaratilmagan. Yuqoridagi "+" tugmasini bosing.</div>`;
     }
@@ -3211,6 +3254,94 @@
         labels: ['1', '2', '3', '4', '5', '6'],
         datasets: [{ label: 'Ball dinamikasi', data: [0, ...DB.results.filter(r => r.studentId === currentUser.id).slice(-5).map(r => r.score)], borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,.1)', tension: .4, fill: true }]
       }, { legend: false });
+    }
+
+    // ========== PROFILE PAGE ==========
+    function renderProfilePage() {
+      const u = currentUser;
+      const photoKey = `profile_photo_${u.id}`;
+      const savedPhoto = localStorage.getItem(photoKey);
+      const av = u.fname[0] + (u.lname ? u.lname[0] : '');
+      const roleLabel = { admin: 'Superadmin', teacher: "O'qituvchi", student: 'Talaba' }[u.role];
+      document.getElementById('profile-content').innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:860px">
+          <!-- Photo card -->
+          <div class="card" style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:32px">
+            <div id="profile-av-wrap" style="position:relative;cursor:pointer" onclick="document.getElementById('profile-photo-input').click()">
+              ${savedPhoto
+                ? `<img id="profile-av-img" src="${savedPhoto}" style="width:110px;height:110px;border-radius:50%;object-fit:cover;border:4px solid var(--blue)">`
+                : `<div id="profile-av-img" style="width:110px;height:110px;border-radius:50%;background:${u.color};color:#fff;font-size:38px;font-weight:800;display:flex;align-items:center;justify-content:center;border:4px solid var(--blue)">${av}</div>`}
+              <div style="position:absolute;bottom:4px;right:4px;background:var(--blue);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px">📷</div>
+            </div>
+            <input type="file" id="profile-photo-input" accept="image/*" style="display:none" onchange="handleProfilePhoto(event)">
+            <div style="text-align:center">
+              <div style="font-size:20px;font-weight:800">${u.fname} ${u.lname || ''}</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px">${roleLabel}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px">@${u.username}</div>
+            </div>
+            ${savedPhoto ? `<button class="btn btn-sm" style="color:var(--red);border:1px solid var(--red);background:transparent" onclick="removeProfilePhoto()">🗑️ Rasmni o'chirish</button>` : ''}
+          </div>
+          <!-- Edit card -->
+          <div class="card" style="padding:28px">
+            <div style="font-size:16px;font-weight:700;margin-bottom:20px">✏️ Ma'lumotlarni tahrirlash</div>
+            <div class="form-group"><label class="form-label">Ism</label>
+              <input class="form-control" id="prof-fname" value="${u.fname}" placeholder="Ism"></div>
+            <div class="form-group"><label class="form-label">Familiya</label>
+              <input class="form-control" id="prof-lname" value="${u.lname || ''}" placeholder="Familiya"></div>
+            <div class="form-group"><label class="form-label">Login (email)</label>
+              <input class="form-control" id="prof-username" value="${u.username}" placeholder="login@edu.uz"></div>
+            <div style="font-size:14px;font-weight:600;margin:16px 0 10px;color:var(--muted)">🔒 Parolni o'zgartirish (ixtiyoriy)</div>
+            <div class="form-group"><label class="form-label">Yangi parol</label>
+              <input class="form-control" id="prof-pass" type="password" placeholder="Yangi parol (bo'sh qoldirsangiz o'zgarmaydi)"></div>
+            <div class="form-group"><label class="form-label">Parolni tasdiqlash</label>
+              <input class="form-control" id="prof-pass2" type="password" placeholder="Parolni qayta kiriting"></div>
+            <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="saveProfile()">💾 Saqlash</button>
+          </div>
+        </div>`;
+    }
+
+    function handleProfilePhoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) return alert("Rasm hajmi 2 MB dan oshmasin!");
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64 = e.target.result;
+        localStorage.setItem(`profile_photo_${currentUser.id}`, base64);
+        renderProfilePage();
+        buildSidebar();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeProfilePhoto() {
+      localStorage.removeItem(`profile_photo_${currentUser.id}`);
+      renderProfilePage();
+      buildSidebar();
+    }
+
+    async function saveProfile() {
+      const fname = document.getElementById('prof-fname').value.trim();
+      const lname = document.getElementById('prof-lname').value.trim();
+      const username = document.getElementById('prof-username').value.trim();
+      const pass = document.getElementById('prof-pass').value;
+      const pass2 = document.getElementById('prof-pass2').value;
+      if (!fname || !username) return alert("Ism va login majburiy!");
+      if (pass && pass !== pass2) return alert("Parollar mos kelmadi!");
+      const payload = { id: currentUser.id, fname, lname, username };
+      if (pass) payload.pass = pass;
+      try {
+        await apiAction('updateProfile', payload);
+        currentUser.fname = fname; currentUser.lname = lname; currentUser.username = username;
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        const u = DB.users.find(x => x.id === currentUser.id);
+        if (u) { u.fname = fname; u.lname = lname; u.username = username; }
+        buildSidebar();
+        renderProfilePage();
+        alert("✅ Profil muvaffaqiyatli saqlandi!");
+      } catch(e) {
+        alert("Xatolik: " + e.message);
+      }
     }
 
     // ========== QUIZ ENGINE ==========
