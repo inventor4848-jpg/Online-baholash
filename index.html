@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EduAssess — Aqlli Baholash Platformasi</title>
-  <meta name="description" content="3-rollik aqlli baholash platformasi: Admin, O'qituvchi va Talaba panellari">
+  <meta name="description" content="Aqlli baholash platformasi: adaptive testing, anti-cheat nazorat va real-vaqt monitoring">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
@@ -685,7 +685,7 @@
     }
 
     .land-logo {
-      font-size: 22px;
+      font-size: 28px;
       font-weight: 800;
       color: var(--blue);
       letter-spacing: -.5px;
@@ -694,16 +694,16 @@
 
     .land-nav-links {
       display: flex;
-      gap: 28px;
+      gap: 32px;
       align-items: center
     }
 
     .land-nav-links a {
       text-decoration: none;
       color: var(--muted);
-      font-weight: 500;
+      font-weight: 600;
       transition: color .2s;
-      font-size: 14px
+      font-size: 17px
     }
 
     .land-nav-links a:hover {
@@ -1709,22 +1709,16 @@
       <div class="land-nav-links">
         <a href="#"
           onclick="event.preventDefault();document.getElementById('features-section').scrollIntoView({behavior:'smooth'})">Imkoniyatlar</a>
-        <a href="#"
-          onclick="event.preventDefault();document.getElementById('role-demos').scrollIntoView({behavior:'smooth'})">Rollar</a>
-        <button class="btn btn-primary btn-sm shine-eff" onclick="showLogin()">Kirish →</button>
+        <button class="btn btn-primary shine-eff" style="font-size:16px;padding:12px 28px" onclick="showLogin()">Kirish →</button>
       </div>
     </nav>
     <div class="hero">
       <div class="hero-content">
-        <div class="hero-badge">✨ 3-Rollik Zamonaviy Baholash Platformasi</div>
+        <div class="hero-badge">✨ Zamonaviy Raqamli Baholash Platformasi</div>
         <h1>Talabalarni baholash <span class="highlight">aqlli va samarali</span></h1>
-        <p>Admin, O'qituvchi va Talaba uchun alohida panellar — adaptive testing, anti-cheat nazorat, real-vaqt
-          monitoring va batafsil hisobotlar.</p>
+        <p>Adaptive testing, anti-cheat nazorat, real-vaqt monitoring va sun'iy intellekt yordamida zamonaviy ta'lim muhiti.</p>
         <div class="hero-btns">
           <button class="btn btn-primary btn-lg shine-eff" onclick="showLogin()">Platformaga kirish →</button>
-          <button class="btn btn-lg" style="background:rgba(255,255,255,.8);backdrop-filter:blur(4px)"
-            onclick="document.getElementById('role-demos').scrollIntoView({behavior:'smooth'})">Rollarni
-            ko'rish</button>
         </div>
       </div>
       <div class="hero-visual">
@@ -1798,7 +1792,44 @@
       </div>
     </div>
 
-    <footer class="land-footer">© 2025 EduAssess — Zamonaviy ta'lim baholash platformasi</footer>
+    <footer class="land-footer">© EduAssess — Zamonaviy ta'lim baholash platformasi</footer>
+  </div>
+
+  <!-- ===== AI CHAT WIDGET ===== -->
+  <div id="ai-chat-widget" style="position:fixed;bottom:24px;right:24px;z-index:9999;font-family:'Inter',sans-serif">
+    <!-- Bubble button -->
+    <button id="ai-chat-toggle" onclick="toggleAiChat()"
+      style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(37,99,235,.4);display:flex;align-items:center;justify-content:center;font-size:26px;transition:transform .2s">
+      🤖
+    </button>
+    <!-- Chat panel -->
+    <div id="ai-chat-panel"
+      style="display:none;position:absolute;bottom:70px;right:0;width:340px;background:#fff;border-radius:20px;box-shadow:0 12px 40px rgba(0,0,0,.18);overflow:hidden;flex-direction:column">
+      <div style="background:linear-gradient(135deg,#2563eb,#7c3aed);padding:16px 20px;display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px">🤖</span>
+        <div>
+          <div style="color:#fff;font-weight:700;font-size:15px">AI Yordamchi</div>
+          <div style="color:rgba(255,255,255,.75);font-size:12px">EduAssess bo'yicha savol bering</div>
+        </div>
+        <button onclick="toggleAiChat()" style="margin-left:auto;background:none;border:none;color:#fff;font-size:18px;cursor:pointer">✕</button>
+      </div>
+      <div id="ai-chat-messages"
+        style="height:280px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#f8fafc">
+        <div style="background:#e0e7ff;padding:10px 14px;border-radius:12px 12px 12px 0;font-size:13px;max-width:85%">
+          Salom! Men EduAssess AI yordamchisiman. Platforma, testlar, baholash tizimi yoki boshqa savollaringizga javob beraman 😊
+        </div>
+      </div>
+      <div style="padding:12px;border-top:1px solid #e2e8f0;display:flex;gap:8px">
+        <input id="ai-chat-input" type="text" placeholder="Savol yozing..." onkeydown="if(event.key==='Enter')sendAiMessage()"
+          style="flex:1;border:1px solid #e2e8f0;border-radius:10px;padding:9px 12px;font-size:13px;outline:none">
+        <button onclick="sendAiMessage()"
+          style="background:#2563eb;color:#fff;border:none;border-radius:10px;padding:9px 14px;cursor:pointer;font-size:16px">➤</button>
+      </div>
+      <div style="padding:4px 12px 10px;font-size:10px;color:#94a3b8;text-align:center">
+        Groq API · <span id="ai-key-status">Kalit sozlanmagan</span>
+        <span style="margin-left:6px;cursor:pointer;color:#2563eb" onclick="setGroqKey()">⚙️ Sozlash</span>
+      </div>
+    </div>
   </div>
 
   <!-- ===== LOGIN PAGE ===== -->
@@ -2330,6 +2361,40 @@
     <div class="modal" style="max-width:600px">
       <button class="modal-close" onclick="closeModal('modal-add-quiz')">✕</button>
       <div class="modal-title">Test yaratish</div>
+      <!-- AI / Qo'lda tab -->
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button id="quiz-tab-manual" onclick="switchQuizTab('manual')"
+          style="flex:1;padding:9px;border-radius:10px;border:2px solid #2563eb;background:#2563eb;color:#fff;font-weight:600;cursor:pointer;font-size:13px">✏️ Qo'lda yaratish</button>
+        <button id="quiz-tab-ai" onclick="switchQuizTab('ai')"
+          style="flex:1;padding:9px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;color:#64748b;font-weight:600;cursor:pointer;font-size:13px">🤖 AI orqali yaratish</button>
+      </div>
+      <!-- AI panel -->
+      <div id="quiz-ai-panel" style="display:none;background:#f0f4ff;border-radius:14px;padding:18px;margin-bottom:16px">
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px;color:#1e40af">🤖 AI yordamida test yaratish</div>
+        <div class="form-group"><label class="form-label">Mavzu *</label>
+          <input class="form-control" id="ai-topic" placeholder="Masalan: Python dasturlash tili asoslari"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Savollar soni</label>
+            <select class="form-control" id="ai-count">
+              <option value="5">5 ta</option>
+              <option value="10" selected>10 ta</option>
+              <option value="15">15 ta</option>
+              <option value="20">20 ta</option>
+            </select></div>
+          <div class="form-group"><label class="form-label">Qiyinchilik</label>
+            <select class="form-control" id="ai-difficulty">
+              <option value="aralash" selected>Aralash</option>
+              <option value="oson">Faqat oson</option>
+              <option value="o'rta">Faqat o'rta</option>
+              <option value="qiyin">Faqat qiyin</option>
+            </select></div>
+        </div>
+        <button onclick="generateAiQuiz()"
+          style="width:100%;padding:11px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px" id="ai-gen-btn">
+          🚀 AI bilan test tuzish
+        </button>
+        <div id="ai-gen-status" style="margin-top:10px;font-size:13px;color:#64748b;text-align:center;display:none"></div>
+      </div>
       <div class="form-group"><label class="form-label">Test nomi *</label><input class="form-control" id="quiz-title"
           placeholder="Test sarlavhasi"></div>
       <div class="form-row3">
@@ -3626,6 +3691,194 @@
       alert(`Test yakunlandi! Sizning natijangiz: ${score}%`);
     };
 
+  </script>
+
+  <!-- ===== AI FUNCTIONS ===== -->
+  <script>
+    // ---- Groq API Key ----
+    let groqApiKey = localStorage.getItem('groqApiKey') || '';
+    function setGroqKey() {
+      const k = prompt('Groq API kalitini kiriting (https://console.groq.com):', groqApiKey);
+      if (k !== null) {
+        groqApiKey = k.trim();
+        localStorage.setItem('groqApiKey', groqApiKey);
+        document.getElementById('ai-key-status').textContent = groqApiKey ? 'Kalit sozlangan ✓' : 'Kalit sozlanmagan';
+      }
+    }
+    if (groqApiKey) document.getElementById('ai-key-status').textContent = 'Kalit sozlangan ✓';
+
+    async function callGroq(messages) {
+      if (!groqApiKey) {
+        setGroqKey();
+        if (!groqApiKey) throw new Error('Groq API kaliti kiritilmadi');
+      }
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqApiKey}` },
+        body: JSON.stringify({ model: 'llama3-8b-8192', messages, temperature: 0.7, max_tokens: 2048 })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error?.message || 'API xatosi');
+      }
+      const d = await res.json();
+      return d.choices[0].message.content;
+    }
+
+    // ---- AI Chat Widget ----
+    function toggleAiChat() {
+      const panel = document.getElementById('ai-chat-panel');
+      const btn = document.getElementById('ai-chat-toggle');
+      const open = panel.style.display === 'flex';
+      panel.style.display = open ? 'none' : 'flex';
+      panel.style.flexDirection = 'column';
+      btn.style.transform = open ? 'scale(1)' : 'scale(0.9)';
+    }
+
+    function addChatMessage(text, isUser) {
+      const box = document.getElementById('ai-chat-messages');
+      const div = document.createElement('div');
+      div.style.cssText = isUser
+        ? 'background:#2563eb;color:#fff;padding:10px 14px;border-radius:12px 12px 0 12px;font-size:13px;max-width:85%;align-self:flex-end'
+        : 'background:#e0e7ff;padding:10px 14px;border-radius:12px 12px 12px 0;font-size:13px;max-width:85%';
+      div.textContent = text;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    async function sendAiMessage() {
+      const input = document.getElementById('ai-chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      addChatMessage(text, true);
+      const thinking = document.createElement('div');
+      thinking.style.cssText = 'background:#e0e7ff;padding:10px 14px;border-radius:12px 12px 12px 0;font-size:13px;color:#64748b';
+      thinking.textContent = '⏳ Javob tayyorlanmoqda...';
+      document.getElementById('ai-chat-messages').appendChild(thinking);
+      try {
+        const reply = await callGroq([
+          { role: 'system', content: "Siz EduAssess ta'lim platformasining AI yordamchisisiz. O'zbek tilida qisqa va aniq javob bering." },
+          { role: 'user', content: text }
+        ]);
+        thinking.remove();
+        addChatMessage(reply, false);
+      } catch (e) {
+        thinking.remove();
+        addChatMessage('❌ Xato: ' + e.message, false);
+      }
+    }
+
+    // ---- Quiz Tab Switch ----
+    function switchQuizTab(tab) {
+      const isAi = tab === 'ai';
+      document.getElementById('quiz-ai-panel').style.display = isAi ? 'block' : 'none';
+      document.getElementById('quiz-tab-ai').style.cssText = isAi
+        ? 'flex:1;padding:9px;border-radius:10px;border:2px solid #7c3aed;background:#7c3aed;color:#fff;font-weight:600;cursor:pointer;font-size:13px'
+        : 'flex:1;padding:9px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;color:#64748b;font-weight:600;cursor:pointer;font-size:13px';
+      document.getElementById('quiz-tab-manual').style.cssText = !isAi
+        ? 'flex:1;padding:9px;border-radius:10px;border:2px solid #2563eb;background:#2563eb;color:#fff;font-weight:600;cursor:pointer;font-size:13px'
+        : 'flex:1;padding:9px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;color:#64748b;font-weight:600;cursor:pointer;font-size:13px';
+    }
+
+    // ---- AI Quiz Generation ----
+    async function generateAiQuiz() {
+      const topic = document.getElementById('ai-topic').value.trim();
+      const count = document.getElementById('ai-count').value;
+      const diff = document.getElementById('ai-difficulty').value;
+      if (!topic) return alert('Mavzuni kiriting!');
+
+      const btn = document.getElementById('ai-gen-btn');
+      const status = document.getElementById('ai-gen-status');
+      btn.disabled = true; btn.textContent = '⏳ AI test tuzmoqda...';
+      status.style.display = 'block'; status.textContent = 'Groq AI dan savollar so\'ralmoqda...';
+
+      const prompt = `Quyidagi mavzu bo'yicha ${count} ta test savoli tuz: "${topic}"
+Qiyinchilik darajasi: ${diff}
+Har bir savol uchun JSON formatida qay:
+[
+  {
+    "text": "Savol matni",
+    "opts": ["A) ...", "B) ...", "C) ...", "D) ..."],
+    "correct": "A",
+    "diff": "easy|medium|hard",
+    "time": 45
+  }
+]
+FAQAT JSON massiv qaytargin, boshqa hech narsa yozma.`;
+
+      try {
+        const raw = await callGroq([{ role: 'user', content: prompt }]);
+        const jsonStr = raw.match(/\[[\s\S]*\]/)?.[0];
+        if (!jsonStr) throw new Error('AI noto\'g\'ri format qaytardi');
+        const questions = JSON.parse(jsonStr);
+
+        // Clear existing questions and load AI ones
+        window._quizQuestions = window._quizQuestions || [];
+        window._quizQuestions = [];
+
+        // Set title from topic
+        if (!document.getElementById('quiz-title').value.trim()) {
+          document.getElementById('quiz-title').value = topic + ' — Test';
+        }
+
+        questions.forEach(q => {
+          window._quizQuestions.push(q);
+        });
+
+        renderAiQuestions();
+        status.textContent = `✅ ${questions.length} ta savol muvaffaqiyatli yaratildi!`;
+        status.style.color = '#16a34a';
+        switchQuizTab('manual');
+      } catch (e) {
+        status.textContent = '❌ Xato: ' + e.message;
+        status.style.color = '#dc2626';
+      } finally {
+        btn.disabled = false; btn.textContent = '🚀 AI bilan test tuzish';
+      }
+    }
+
+    function renderAiQuestions() {
+      const qs = window._quizQuestions || [];
+      const list = document.getElementById('quiz-questions-list');
+      list.innerHTML = qs.map((q, i) => `
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;margin-bottom:8px;font-size:13px">
+          <div style="font-weight:600;margin-bottom:4px">${i+1}. ${q.text}</div>
+          <div style="color:#64748b">${q.opts.join(' | ')}</div>
+          <div style="margin-top:4px">To'g'ri: <b>${q.correct}</b> · ${q.diff} · ${q.time}s
+          <button onclick="removeAiQ(${i})" style="float:right;background:none;border:none;cursor:pointer;color:#dc2626">🗑</button></div>
+        </div>`).join('');
+      document.getElementById('qq-count').textContent = qs.length;
+      const pts = qs.reduce((s,q) => s + (q.diff==='easy'?1:q.diff==='medium'?2:3), 0);
+      document.getElementById('qq-maxpts').textContent = pts;
+    }
+
+    function removeAiQ(i) {
+      window._quizQuestions.splice(i, 1);
+      renderAiQuestions();
+    }
+
+    // Patch saveQuiz to also include AI-generated questions
+    const _origSaveQuiz = saveQuiz;
+    saveQuiz = async function() {
+      if (window._quizQuestions && window._quizQuestions.length > 0) {
+        const title = document.getElementById('quiz-title').value.trim();
+        const attempts = parseInt(document.getElementById('quiz-attempts').value);
+        const days = parseInt(document.getElementById('quiz-days').value);
+        const passingScore = parseInt(document.getElementById('quiz-pass').value);
+        if (!title) return alert('Test nomini kiriting!');
+        await apiAction("saveQuiz", {
+          title, attempts, days, passingScore,
+          subjectId: currentSubjectId,
+          questions: window._quizQuestions
+        });
+        window._quizQuestions = [];
+        document.getElementById('quiz-title').value = '';
+        closeModal('modal-add-quiz');
+        return;
+      }
+      await _origSaveQuiz();
+    };
   </script>
 </body>
 
