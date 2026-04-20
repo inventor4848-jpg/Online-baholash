@@ -11,22 +11,22 @@ from api import models, schemas, auth
 
 models.Base.metadata.create_all(bind=engine)
 
-try:
-    db = next(get_db())
-    def seed_user(email, password, fname, lname, role, color):
-        u = db.query(models.User).filter(models.User.email == email).first()
-        if not u:
-            db.add(models.User(
-                email=email, hashed_password=auth.get_password_hash(password),
-                fname=fname, lname=lname, role=role, color=color
-            ))
-            db.commit()
+def ensure_demo_users(db: Session):
+    try:
+        def seed_user(email, password, fname, lname, role, color):
+            u = db.query(models.User).filter(models.User.email == email).first()
+            if not u:
+                db.add(models.User(
+                    email=email, hashed_password=auth.get_password_hash(password),
+                    fname=fname, lname=lname, role=role, color=color
+                ))
+                db.commit()
 
-    seed_user("admin@edu.uz", "admin123", "Super", "Admin", "admin", "#3b82f6")
-    seed_user("teacher@edu.uz", "teach123", "O'qituvchi", "Demo", "teacher", "#10b981")
-    seed_user("student@edu.uz", "stud123", "Talaba", "Demo", "student", "#8b5cf6")
-except Exception as e:
-    print("Seed error:", e)
+        seed_user("admin@edu.uz", "admin123", "Super", "Admin", "admin", "#3b82f6")
+        seed_user("teacher@edu.uz", "teach123", "O'qituvchi", "Demo", "teacher", "#10b981")
+        seed_user("student@edu.uz", "stud123", "Talaba", "Demo", "student", "#8b5cf6")
+    except Exception as e:
+        print("Seed error:", e)
 
 app = FastAPI(title="EduAssess Full-Stack API")
 
@@ -41,6 +41,9 @@ app.add_middleware(
 # --- AUTH ROUTES ---
 @app.post("/api/auth/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    # Ensure demo users exist in the DB on every login attempt (safe check)
+    ensure_demo_users(db)
+    
     user = db.query(models.User).filter(models.User.email == form_data.username).first()
     if not user or not auth.verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
