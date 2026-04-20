@@ -2252,8 +2252,8 @@
           <select class="form-control" id="u-group"></select>
         </div>
       </div>
-      <input type="hidden" id="u-username">
-      <div class="alert alert-info" style="font-size:12px">🔑 Login va vaqtinchalik parol tizim tomonidan avtomatik yaratiladi va saqlashdan keyin ko'rsatiladi.</div>
+      <div class="form-group"><label class="form-label">Login *</label><input class="form-control" id="u-username" type="text" placeholder="masalan: aziz@edu.uz"></div>
+      <div class="form-group"><label class="form-label">Parol *</label><input class="form-control" id="u-pass" type="text" placeholder="parol kiriting"></div>
       <button class="btn btn-primary" style="width:100%" onclick="saveUser()">💾 Saqlash va credential ko'rish</button>
     </div>
   </div>
@@ -3462,38 +3462,20 @@
       }
     }
 
-    function autoFillUsername() {
-      const editId = document.getElementById('edit-user-id').value;
-      if (editId) return; // tahrirlashda o'zgartirma
-      const fname = document.getElementById('u-fname').value.trim().toLowerCase().replace(/\s+/g, '');
-      const lname = document.getElementById('u-lname').value.trim().toLowerCase().replace(/\s+/g, '');
-      if (fname) {
-        const suffix = lname ? '.' + lname : '';
-        document.getElementById('u-username').value = fname + suffix + '@edu.uz';
-      }
-    }
-
     // Overriding API modifying functions to sync
     const _saveUser = saveUser;
     saveUser = async function () {
       const fname = document.getElementById('u-fname').value.trim();
       const lname = document.getElementById('u-lname').value.trim();
+      const username = document.getElementById('u-username').value.trim();
+      const pass = document.getElementById('u-pass').value.trim();
       const role = document.getElementById('u-role').value;
       const groupId = role === 'student' ? parseInt(document.getElementById('u-group').value) : null;
       if (!fname) { alert('Ism majburiy!'); return; }
-
-      // Auto-generate username if empty
-      let username = document.getElementById('u-username').value.trim();
-      if (!username) {
-        const f = fname.toLowerCase().replace(/\s+/g, '');
-        const l = lname.toLowerCase().replace(/\s+/g, '');
-        username = f + (l ? '.' + l : '') + '@edu.uz';
-      }
+      if (!username) { alert('Login majburiy!'); return; }
+      if (!pass) { alert('Parol majburiy!'); return; }
 
       const editId = document.getElementById('edit-user-id').value;
-      // Auto-generate password: ism + 4 raqam
-      const pass = fname.toLowerCase().replace(/\s+/g, '') + Math.floor(1000 + Math.random() * 9000);
-
       await apiAction("saveUser", {
         id: editId ? parseInt(editId) : null,
         fname, lname, username, role, groupId, pass
