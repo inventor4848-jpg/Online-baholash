@@ -11,9 +11,7 @@ from api import models, schemas, auth
 
 models.Base.metadata.create_all(bind=engine)
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Setup default admin
+try:
     db = next(get_db())
     admin_exists = db.query(models.User).filter(models.User.email == "admin@edu.uz").first()
     if not admin_exists:
@@ -28,9 +26,10 @@ async def lifespan(app: FastAPI):
         )
         db.add(admin)
         db.commit()
-    yield
+except Exception as e:
+    print("Seed error:", e)
 
-app = FastAPI(title="EduAssess Full-Stack API", lifespan=lifespan)
+app = FastAPI(title="EduAssess Full-Stack API")
 
 app.add_middleware(
     CORSMiddleware,
