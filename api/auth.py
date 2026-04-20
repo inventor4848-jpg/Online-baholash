@@ -6,12 +6,8 @@ from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-try:
-    from .database import get_db
-    from .models import User
-except ImportError:
-    from database import get_db
-    from models import User
+from database import get_db
+from models import User
 
 # Configuration
 SECRET_KEY = os.getenv("SECRET_KEY", "my-super-secret-jwt-key")
