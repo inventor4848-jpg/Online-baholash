@@ -3397,9 +3397,11 @@
         if (!res.ok) {
           try {
             let errData = await res.json();
-            err.style.display = 'flex'; err.textContent = '❌ Xato: ' + (errData.detail || "Noma'lum xato");
+            let detail = errData.detail;
+            if (typeof detail === 'object') detail = JSON.stringify(detail);
+            err.style.display = 'flex'; err.textContent = '❌ Xato: ' + (detail || "Noma'lum xato");
           } catch (e) {
-            err.style.display = 'flex'; err.textContent = "❌ Login yoki parol noto'g'ri!";
+            err.style.display = 'flex'; err.textContent = "❌ Login muvaffaqiyatsiz tugadi!";
           }
           return;
         }
@@ -3407,7 +3409,7 @@
         token = data.access_token;
         localStorage.setItem("token", token);
         currentUser = data.user;
-        currentUser.email = data.user.username; // Maintain backward compat if needed in some templates
+        currentUser.email = data.user.username; // Compat
 
         await fetchDB();
 
