@@ -13,19 +13,18 @@ models.Base.metadata.create_all(bind=engine)
 
 try:
     db = next(get_db())
-    admin_exists = db.query(models.User).filter(models.User.email == "admin@edu.uz").first()
-    if not admin_exists:
-        hashed = auth.get_password_hash("admin123")
-        admin = models.User(
-            email="admin@edu.uz",
-            hashed_password=hashed,
-            fname="Super",
-            lname="Admin",
-            role="admin",
-            color="#3b82f6"
-        )
-        db.add(admin)
-        db.commit()
+    def seed_user(email, password, fname, lname, role, color):
+        u = db.query(models.User).filter(models.User.email == email).first()
+        if not u:
+            db.add(models.User(
+                email=email, hashed_password=auth.get_password_hash(password),
+                fname=fname, lname=lname, role=role, color=color
+            ))
+            db.commit()
+
+    seed_user("admin@edu.uz", "admin123", "Super", "Admin", "admin", "#3b82f6")
+    seed_user("teacher@edu.uz", "teach123", "O'qituvchi", "Demo", "teacher", "#10b981")
+    seed_user("student@edu.uz", "stud123", "Talaba", "Demo", "student", "#8b5cf6")
 except Exception as e:
     print("Seed error:", e)
 
