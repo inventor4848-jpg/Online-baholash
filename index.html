@@ -2991,25 +2991,25 @@
     function saveUser() {
       const fname = document.getElementById('u-fname').value.trim();
       const lname = document.getElementById('u-lname').value.trim();
-      const email = document.getElementById('u-email').value.trim();
+      const username = document.getElementById('u-username').value.trim();
+      const pass = document.getElementById('u-pass').value.trim();
       const role = document.getElementById('u-role').value;
       const groupId = role === 'student' ? parseInt(document.getElementById('u-group').value) : null;
-      if (!fname || !email) { alert('Ism va email majburiy!'); return; }
+      if (!fname || !username || !pass) { alert('Ism, login va parol majburiy!'); return; }
       const editId = document.getElementById('edit-user-id').value;
       if (editId) {
         const u = DB.users.find(x => x.id === parseInt(editId));
-        if (u) { u.fname = fname; u.lname = lname; u.email = email; u.role = role; if (groupId) u.groupId = groupId; }
+        if (u) { u.fname = fname; u.lname = lname; u.username = username; if (pass) u.pass = pass; u.role = role; if (groupId) u.groupId = groupId; }
         closeModal('modal-add-user');
         renderUsersTable();
         return;
       }
-      const pass = fname.toLowerCase() + Math.floor(1000 + Math.random() * 9000);
       const color = role === 'teacher' ? '#10b981' : '#a855f7';
-      const u = { id: nextId('user'), fname, lname, email, pass, role, groupId, active: true, color };
+      const u = { id: nextId('user'), fname, lname, username, pass, role, groupId, active: true, color };
       DB.users.push(u);
       closeModal('modal-add-user');
       document.getElementById('cred-name').textContent = `${fname} ${lname}`;
-      document.getElementById('cred-login').textContent = email;
+      document.getElementById('cred-login').textContent = username;
       document.getElementById('cred-pass').textContent = pass;
       openModal('modal-credentials');
       renderUsersTable();
@@ -3965,6 +3965,10 @@
 
   <!-- ===== SESSION HELPERS ===== -->
   <script>
+    // No-op stubs — backend not available on this deployment
+    async function fetchDB() {}
+    async function apiAction() {}
+
     // Persist session across page refreshes using localStorage
     const origLogout = doLogout;
     doLogout = function () {
@@ -4151,24 +4155,25 @@ FAQAT JSON massiv qaytargin, boshqa hech narsa yozma.`;
 
     // Patch saveQuiz to also include AI-generated questions
     const _origSaveQuiz = saveQuiz;
-    saveQuiz = async function() {
+    saveQuiz = function() {
       if (window._quizQuestions && window._quizQuestions.length > 0) {
         const title = document.getElementById('quiz-title').value.trim();
-        const attempts = parseInt(document.getElementById('quiz-attempts').value);
-        const days = parseInt(document.getElementById('quiz-days').value);
-        const passingScore = parseInt(document.getElementById('quiz-pass').value);
+        const attempts = parseInt(document.getElementById('quiz-attempts').value) || 1;
+        const days = parseInt(document.getElementById('quiz-days').value) || 7;
+        const passingScore = parseInt(document.getElementById('quiz-pass').value) || 60;
         if (!title) return alert('Test nomini kiriting!');
-        await apiAction("saveQuiz", {
-          title, attempts, days, passingScore,
-          subjectId: currentSubjectId,
-          questions: window._quizQuestions
+        DB.tests.push({
+          id: nextId('test'), subjectId: currentSubjectId, title, attempts, days, passingScore,
+          createdAt: new Date().toISOString().slice(0, 10),
+          questions: [...window._quizQuestions]
         });
         window._quizQuestions = [];
         document.getElementById('quiz-title').value = '';
         closeModal('modal-add-quiz');
+        renderQuizzesList();
         return;
       }
-      await _origSaveQuiz();
+      _origSaveQuiz();
     };
   </script>
 </body>
