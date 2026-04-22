@@ -2706,7 +2706,28 @@
       schedules: [], messages: [], polls: [], pollResponses: []
     };
     let _nextId = { user: 8, subject: 4, assignment: 3, submission: 3, test: 3, result: 3, faculty: 3, dept: 4, group: 5 };
-    function nextId(k) { return _nextId[k]++; }
+    function nextId(k) { if (!_nextId[k]) _nextId[k] = 1; return _nextId[k]++; }
+
+    // ========== PERSISTENCE ==========
+    const DB_KEY = 'eduassess_db';
+    const ID_KEY = 'eduassess_nextid';
+    (function loadFromStorage() {
+      try {
+        const savedDB = localStorage.getItem(DB_KEY);
+        if (savedDB) DB = JSON.parse(savedDB);
+        const savedId = localStorage.getItem(ID_KEY);
+        if (savedId) _nextId = JSON.parse(savedId);
+      } catch(e) { console.warn('DB tiklashda xato:', e); }
+    })();
+    function saveDB() {
+      try {
+        localStorage.setItem(DB_KEY, JSON.stringify(DB));
+        localStorage.setItem(ID_KEY, JSON.stringify(_nextId));
+      } catch(e) {}
+    }
+    // Auto-save every 3 seconds + on page close
+    setInterval(saveDB, 3000);
+    window.addEventListener('beforeunload', saveDB);
 
     // ========== STATE ==========
     let currentUser = null, currentPage = '', currentSubjectId = null;
@@ -2986,6 +3007,13 @@
     function toggleUser(id) {
       const u = DB.users.find(x => x.id === id);
       if (u) u.active = !u.active;
+      saveDB();
+      renderUsersTable();
+    }
+    function deleteUser(id) {
+      if (!confirm("Foydalanuvchini o'chirmoqchimisiz?")) return;
+      DB.users = DB.users.filter(u => u.id !== id);
+      saveDB();
       renderUsersTable();
     }
     function saveUser() {
@@ -3000,13 +3028,14 @@
       if (editId) {
         const u = DB.users.find(x => x.id === parseInt(editId));
         if (u) { u.fname = fname; u.lname = lname; u.username = username; if (pass) u.pass = pass; u.role = role; if (groupId) u.groupId = groupId; }
-        closeModal('modal-add-user');
+        saveDB(); closeModal('modal-add-user');
         renderUsersTable();
         return;
       }
       const color = role === 'teacher' ? '#10b981' : '#a855f7';
       const u = { id: nextId('user'), fname, lname, username, pass, role, groupId, active: true, color };
       DB.users.push(u);
+      saveDB();
       closeModal('modal-add-user');
       document.getElementById('cred-name').textContent = `${fname} ${lname}`;
       document.getElementById('cred-login').textContent = username;
@@ -3054,7 +3083,7 @@
       DB.faculties.push({ id: nextId('faculty'), name, code });
       document.getElementById('fac-name').value = '';
       document.getElementById('fac-code').value = '';
-      closeModal('modal-add-faculty');
+      saveDB(); closeModal('modal-add-faculty');
       renderStructurePage();
     }
     function saveDept() {
@@ -3063,7 +3092,7 @@
       if (!name) return alert('Nom majburiy!');
       DB.departments.push({ id: nextId('dept'), name, facultyId });
       document.getElementById('dept-name').value = '';
-      closeModal('modal-add-dept');
+      saveDB(); closeModal('modal-add-dept');
       renderStructurePage();
     }
     function saveGroup() {
@@ -3073,12 +3102,12 @@
       if (!name) return alert('Nom majburiy!');
       DB.groups.push({ id: nextId('group'), name, deptId, course });
       document.getElementById('grp-name').value = '';
-      closeModal('modal-add-group');
+      saveDB(); closeModal('modal-add-group');
       renderStructurePage();
     }
-    function deleteFaculty(id) { if (confirm('O\'chirmoqchimisiz?')) { DB.faculties = DB.faculties.filter(f => f.id !== id); renderFacultyList(); } }
-    function deleteDept(id) { if (confirm('O\'chirmoqchimisiz?')) { DB.departments = DB.departments.filter(d => d.id !== id); renderDeptList(); } }
-    function deleteGroup(id) { if (confirm('O\'chirmoqchimisiz?')) { DB.groups = DB.groups.filter(g => g.id !== id); renderGroupListAdmin(); } }
+    function deleteFaculty(id) { if (confirm('O\'chirmoqchimisiz?')) { DB.faculties = DB.faculties.filter(f => f.id !== id); saveDB(); renderFacultyList(); } }
+    function deleteDept(id) { if (confirm('O\'chirmoqchimisiz?')) { DB.departments = DB.departments.filter(d => d.id !== id); saveDB(); renderDeptList(); } }
+    function deleteGroup(id) { if (confirm('O\'chirmoqchimisiz?')) { DB.groups = DB.groups.filter(g => g.id !== id); saveDB(); renderGroupListAdmin(); } }
 
     // ========== ADMIN: SUBJECTS ==========
     function renderSubjectsPage() {
@@ -3111,10 +3140,10 @@
       if (!name || !groupIds.length) return alert('Nom va kamida bitta guruh majburiy!');
       DB.subjects.push({ id: nextId('subject'), name, teacherId, groupIds, credits });
       document.getElementById('sub-name').value = '';
-      closeModal('modal-add-subject');
+      saveDB(); closeModal('modal-add-subject');
       renderSubjectsPage();
     }
-    function deleteSubject(id) { if (confirm('O\'chirmoqchimisiz?')) { DB.subjects = DB.subjects.filter(s => s.id !== id); renderSubjectsPage(); } }
+    function deleteSubject(id) { if (confirm('O\'chirmoqchimisiz?')) { DB.subjects = DB.subjects.filter(s => s.id !== id); saveDB(); renderSubjectsPage(); } }
 
     // ========== TEACHER: DASHBOARD ==========
     function renderTeacherDash() {
@@ -3220,7 +3249,7 @@
       const types = document.getElementById('assign-types').value.trim();
       if (!title || !deadline) return alert('Sarlavha va deadline majburiy!');
       DB.assignments.push({ id: nextId('assignment'), subjectId: currentSubjectId, title, desc, maxScore, deadline, types, createdAt: new Date().toISOString() });
-      closeModal('modal-add-assignment');
+      saveDB(); closeModal('modal-add-assignment');
       renderAssignmentsList();
     }
     function openGrade(subId, maxScore) {
@@ -3241,7 +3270,7 @@
       const sub = DB.submissions.find(s => s.id === subId);
       if (!sub || isNaN(score)) return alert('Ball kiriting!');
       sub.score = score; sub.status = 'graded'; sub.teacherComment = comment;
-      closeModal('modal-grade');
+      saveDB(); closeModal('modal-grade');
       renderAssignmentsList();
     }
     // ========== TEACHER: QUIZZES ==========
@@ -3305,7 +3334,7 @@
       document.getElementById('quiz-questions-list').innerHTML = '';
       document.getElementById('qq-count').textContent = '0';
       document.getElementById('qq-maxpts').textContent = '0';
-      closeModal('modal-add-quiz');
+      saveDB(); closeModal('modal-add-quiz');
       renderQuizzesList();
     }
     function renderMonitor() {
@@ -3409,8 +3438,8 @@
       const fileName = document.getElementById('upload-fname').value.trim();
       const comment = document.getElementById('upload-comment').value.trim();
       if (!fileName) return alert('Fayl nomi kiriting!');
-      DB.submissions.push({ id: nextId('submission'), assignmentId, studentId: currentUser.id, fileName, comment, submittedAt: new Date().toISOString(), status: 'submitted', score: null, teacherComment: '' });
-      closeModal('modal-upload-assign');
+      DB.submissions.push({ id: nextId('submission'), assignmentId: assignId, studentId: currentUser.id, fileName, comment, submittedAt: new Date().toISOString(), status: 'submitted', score: null, teacherComment: '' });
+      saveDB(); closeModal('modal-upload-assign');
       renderStudentUpcomingAssignments();
     }
     // ========== STUDENT: RESULTS ==========
@@ -3932,6 +3961,7 @@
         grade: gradeShort(score), cheatCount
       };
       DB.results.push(result);
+      saveDB();
 
       document.getElementById('test-fullscreen').classList.remove('show');
       nav('page-student-results');
@@ -4169,7 +4199,7 @@ FAQAT JSON massiv qaytargin, boshqa hech narsa yozma.`;
         });
         window._quizQuestions = [];
         document.getElementById('quiz-title').value = '';
-        closeModal('modal-add-quiz');
+        saveDB(); closeModal('modal-add-quiz');
         renderQuizzesList();
         return;
       }
