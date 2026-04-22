@@ -631,7 +631,7 @@
       position: absolute;
       border-radius: 50%;
       filter: blur(90px);
-      opacity: .35;
+      opacity: .2;
       animation: float 12s ease-in-out infinite alternate
     }
 
@@ -640,25 +640,28 @@
       height: 400px;
       background: #2563eb;
       top: -120px;
-      left: -80px
+      left: -80px;
+      opacity: .18
     }
 
     .shape.s2 {
       width: 500px;
       height: 500px;
-      background: #7c3aed;
+      background: #1e3a5f;
       bottom: -150px;
       right: -100px;
-      animation-delay: -6s
+      animation-delay: -6s;
+      opacity: .15
     }
 
     .shape.s3 {
       width: 300px;
       height: 300px;
-      background: #0d9488;
+      background: #3b82f6;
       top: 40%;
       left: 45%;
-      animation-duration: 18s
+      animation-duration: 18s;
+      opacity: .12
     }
 
     @keyframes float {
@@ -685,11 +688,26 @@
     }
 
     .land-logo {
-      font-size: 28px;
-      font-weight: 800;
-      color: var(--blue);
-      letter-spacing: -.5px;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
       font-family: 'Outfit', sans-serif
+    }
+
+    .land-logo-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1e3a5f;
+      letter-spacing: -.5px;
+      line-height: 1
+    }
+
+    .land-logo-sub {
+      font-size: 10px;
+      font-weight: 500;
+      color: #64748b;
+      letter-spacing: .6px;
+      text-transform: uppercase
     }
 
     .land-nav-links {
@@ -733,8 +751,8 @@
       gap: 8px;
       padding: 8px 18px;
       background: rgba(255, 255, 255, .9);
-      border: 1px solid var(--border);
-      color: var(--purple);
+      border: 1px solid #c5d3e0;
+      color: #1e3a5f;
       border-radius: 30px;
       font-size: 13px;
       font-weight: 600;
@@ -752,9 +770,7 @@
     }
 
     .hero h1 .highlight {
-      background: linear-gradient(135deg, var(--blue), var(--purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent
+      color: #1e3a5f
     }
 
     .hero p {
@@ -1027,12 +1043,12 @@
       width: 56px;
       height: 56px;
       border-radius: 16px;
-      background: var(--bg);
+      background: #eef2f7;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 20px;
-      font-size: 26px;
+      color: #1e3a5f;
       box-shadow: var(--shadow-sm)
     }
 
@@ -1354,7 +1370,7 @@
     }
 
     .sf-btn {
-      w: 100%;
+      width: 100%;
       padding: 9px 12px;
       border: none;
       border-radius: 10px;
@@ -1705,7 +1721,10 @@
       <div class="shape s3"></div>
     </div>
     <nav class="land-nav">
-      <div class="land-logo">🎓 EduAssess</div>
+      <div class="land-logo">
+        <span class="land-logo-name">EduAssess</span>
+        <span class="land-logo-sub">Online Assessment Platform</span>
+      </div>
       <div class="land-nav-links">
         <a href="#"
           onclick="event.preventDefault();document.getElementById('features-section').scrollIntoView({behavior:'smooth'})">Imkoniyatlar</a>
@@ -1714,7 +1733,7 @@
     </nav>
     <div class="hero">
       <div class="hero-content">
-        <div class="hero-badge">✨ Zamonaviy Raqamli Baholash Platformasi</div>
+        <div class="hero-badge">Zamonaviy Raqamli Baholash Platformasi</div>
         <h1>Talabalarni baholash <span class="highlight">aqlli va samarali</span></h1>
         <p>Adaptive testing, anti-cheat nazorat, real-vaqt monitoring va sun'iy intellekt yordamida zamonaviy ta'lim muhiti.</p>
         <div class="hero-btns">
@@ -1759,34 +1778,44 @@
     <!-- Features section -->
     <div id="features-section" class="features-grid">
       <div class="feat-card">
-        <div class="feat-icon-wrap">🎯</div>
+        <div class="feat-icon-wrap">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        </div>
         <div class="feat-title">Adaptive Testing</div>
-        <div class="feat-desc">Oson (1×), O'rta (2×), Qiyin (3×) og'irlik formulasi: Σ(To'g'ri × Og'irlik) / Jami × 100%
-        </div>
+        <div class="feat-desc">Oson (1×), O'rta (2×), Qiyin (3×) og'irlik formulasi: Σ(To'g'ri × Og'irlik) / Jami × 100%</div>
       </div>
       <div class="feat-card">
-        <div class="feat-icon-wrap">🛡️</div>
+        <div class="feat-icon-wrap">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
         <div class="feat-title">Anti-Cheat Tizim</div>
-        <div class="feat-desc">3 marta oyna almashtirish — test avtomatik yakunlanadi va o'qituvchiga xabar ketadi.
-        </div>
+        <div class="feat-desc">3 marta oyna almashtirish — test avtomatik yakunlanadi va o'qituvchiga xabar ketadi.</div>
       </div>
       <div class="feat-card">
-        <div class="feat-icon-wrap">📋</div>
+        <div class="feat-icon-wrap">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+        </div>
         <div class="feat-title">Topshiriqlar</div>
         <div class="feat-desc">Fayl yuklash, deadline, holat kuzatish va tizim ichida toʻgʻridan-toʻgʻri baholash.</div>
       </div>
       <div class="feat-card">
-        <div class="feat-icon-wrap">📊</div>
+        <div class="feat-icon-wrap">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
         <div class="feat-title">Real-vaqt Monitoring</div>
         <div class="feat-desc">O'qituvchi talabaning testni yechish jarayonini jonli kuzatishi mumkin.</div>
       </div>
       <div class="feat-card">
-        <div class="feat-icon-wrap">📈</div>
+        <div class="feat-icon-wrap">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+        </div>
         <div class="feat-title">Tahliliy Dashboard</div>
         <div class="feat-desc">Guruh bo'yicha dinamika, reytinglar, radar diagrammalar va o'sish grafiklari.</div>
       </div>
       <div class="feat-card">
-        <div class="feat-icon-wrap">📤</div>
+        <div class="feat-icon-wrap">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
         <div class="feat-title">Excel Eksport</div>
         <div class="feat-desc">Vedomost ko'rinishida natijalarni CSV/Excel formatida yuklab olish imkoniyati.</div>
       </div>
@@ -3831,8 +3860,8 @@
       ${activeTest.questions.map((_, i) => `<div class="q-nav-dot ${i === currentQ ? 'current' : userAnswers[i] ? 'answered' : ''}" onclick="goToQuestion(${i})">${i + 1}</div>`).join('')}
     </div>
     <div style="margin-top:24px">
-      ${q.opts.map(opt => `
-        <div class="answer-opt ${userAnswers[currentQ] === opt ? 'selected' : ''}" onclick="selectAnswer('${opt}')">
+      ${q.opts.map((opt, idx) => `
+        <div class="answer-opt ${userAnswers[currentQ] === opt ? 'selected' : ''}" onclick="selectAnswer(${idx})">
           <div class="opt-circle">${opt[0]}</div>
           <div style="font-weight:500">${opt}</div>
         </div>
@@ -3845,8 +3874,8 @@
   `;
     }
 
-    function selectAnswer(opt) {
-      userAnswers[currentQ] = opt;
+    function selectAnswer(idx) {
+      userAnswers[currentQ] = activeTest.questions[currentQ].opts[idx];
       renderQuestion();
     }
     function goToQuestion(i) { currentQ = i; renderQuestion(); }
