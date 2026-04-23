@@ -2126,6 +2126,37 @@
         </div>
 
         <!-- ==================== STUDENT PAGES ==================== -->
+
+        <!-- Student: Mening fanlarim -->
+        <div class="page" id="page-student-subjects">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Mening fanlarim</div>
+              <div class="page-subtitle" id="st-sub-lbl"></div>
+            </div>
+          </div>
+          <div id="st-subjects-list"></div>
+        </div>
+
+        <!-- Student: Fan detail -->
+        <div class="page" id="page-student-subject-detail">
+          <div class="page-header">
+            <div>
+              <div class="page-title" id="st-subject-title">Fan</div>
+              <div class="page-subtitle" id="st-subject-sub"></div>
+            </div>
+            <div class="page-actions">
+              <button class="btn btn-sm" onclick="nav('page-student-subjects')">← Orqaga</button>
+            </div>
+          </div>
+          <div class="tabs">
+            <div class="tab active" onclick="switchTab(this,'stp-assigns')">Topshiriqlar</div>
+            <div class="tab" onclick="switchTab(this,'stp-tests')">Testlar</div>
+          </div>
+          <div class="tab-pane active" id="stp-assigns" style="margin-top:16px"></div>
+          <div class="tab-pane" id="stp-tests" style="margin-top:16px"></div>
+        </div>
+
         <div class="page" id="page-student-dash">
           <div class="page-header">
             <div>
@@ -2823,6 +2854,7 @@
       ],
       student: [
         { section: 'Talaba' }, { id: 'page-student-dash', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', label: 'Dashboard' },
+        { id: 'page-student-subjects', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>', label: 'Mening fanlarim' },
         { id: 'page-student-results', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>', label: 'Natijalarim' },
         { id: 'page-schedule', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>', label: 'Dars jadvali' },
         { id: 'page-tasks', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>', label: 'Vazifalar' },
@@ -2869,6 +2901,8 @@
       else if (id === 'page-admin-subjects') renderSubjectsPage();
       else if (id === 'page-teacher-dash') renderTeacherDash();
       else if (id === 'page-student-dash') renderStudentDash();
+      else if (id === 'page-student-subjects') renderStudentSubjects();
+      else if (id === 'page-student-subject-detail') { /* rendered by openStudentSubject */ }
       else if (id === 'page-student-results') renderStudentResults();
       else if (id === 'page-profile') renderProfilePage();
       else if (id === 'page-admin-schedule') renderAdminSchedulePage();
@@ -3395,7 +3429,74 @@
       renderStudentAvailableTests();
     }
     function getMySubjects() {
-      return DB.subjects.filter(s => s.groupIds.includes(currentUser.groupId));
+      return DB.subjects.filter(s => s.groupIds && s.groupIds.includes(currentUser.groupId));
+    }
+
+    // ========== STUDENT: MENING FANLARIM ==========
+    let currentStudentSubjectId = null;
+    function renderStudentSubjects() {
+      const subs = getMySubjects();
+      document.getElementById('st-sub-lbl').textContent = subs.length + ' ta fan';
+      document.getElementById('st-subjects-list').innerHTML = subs.length ? `<div class="grid-3">` + subs.map(s => {
+        const teacher = DB.users.find(u => u.id === s.teacherId);
+        const assigns = DB.assignments.filter(a => a.subjectId === s.id);
+        const tests = DB.tests.filter(t => t.subjectId === s.id);
+        const doneAssigns = assigns.filter(a => DB.submissions.find(sub => sub.assignmentId === a.id && sub.studentId === currentUser.id)).length;
+        const doneTests = tests.filter(t => DB.results.find(r => r.testId === t.id && r.studentId === currentUser.id)).length;
+        return `<div class="card" style="cursor:pointer;transition:all .2s;border:2px solid transparent" onmouseenter="this.style.borderColor='var(--student-accent)'" onmouseleave="this.style.borderColor='transparent'" onclick="openStudentSubject(${s.id})">
+          <div style="margin-bottom:12px;color:var(--student-accent)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+          <div style="font-size:17px;font-weight:700;margin-bottom:4px">${s.name}</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:14px">${teacher ? teacher.fname + ' ' + teacher.lname : '—'}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span class="badge b-purple">${assigns.length} topshiriq</span>
+            <span class="badge b-blue">${tests.length} test</span>
+            ${doneAssigns > 0 ? `<span class="badge b-green">${doneAssigns} bajarildi</span>` : ''}
+          </div>
+        </div>`;
+      }).join('') + `</div>` : `<div class="alert alert-warning">Sizga hali fan biriktirilmagan. Guruhingizga fan biriktirish uchun adminga murojat qiling.</div>`;
+    }
+    function openStudentSubject(subjectId) {
+      currentStudentSubjectId = subjectId;
+      const s = DB.subjects.find(x => x.id === subjectId);
+      const teacher = DB.users.find(u => u.id === s.teacherId);
+      document.getElementById('st-subject-title').textContent = s.name;
+      document.getElementById('st-subject-sub').textContent = teacher ? teacher.fname + ' ' + teacher.lname : '';
+      // reset tabs
+      document.querySelectorAll('#page-student-subject-detail .tab').forEach((t, i) => { t.classList.toggle('active', i === 0); });
+      document.getElementById('stp-assigns').classList.add('active');
+      document.getElementById('stp-tests').classList.remove('active');
+      renderStudentSubjectAssigns();
+      renderStudentSubjectTests();
+      nav('page-student-subject-detail');
+    }
+    function renderStudentSubjectAssigns() {
+      const assigns = DB.assignments.filter(a => a.subjectId === currentStudentSubjectId);
+      document.getElementById('stp-assigns').innerHTML = assigns.length ? assigns.map(a => {
+        const sub = DB.submissions.find(s => s.assignmentId === a.id && s.studentId === currentUser.id);
+        return `<div class="card" style="margin-bottom:10px;padding:16px;display:flex;align-items:center;gap:12px">
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:14px">${a.title}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:3px">${a.desc ? a.desc + ' • ' : ''}Deadline: ${formatDate(a.deadline)} • Maks: ${a.maxScore} ball</div>
+            ${sub && sub.score !== null ? `<div style="font-size:12px;color:var(--green);margin-top:3px">Baholandi: ${sub.score}/${a.maxScore}</div>` : ''}
+          </div>
+          ${sub ? statusBadge(sub.status) : `<button class="btn btn-sm btn-purple" onclick="openUpload(${a.id})">Topshirish</button>`}
+        </div>`;
+      }).join('') : `<div class="alert alert-info">Bu fanda hali topshiriq yo'q</div>`;
+    }
+    function renderStudentSubjectTests() {
+      const tests = DB.tests.filter(t => t.subjectId === currentStudentSubjectId);
+      document.getElementById('stp-tests').innerHTML = tests.length ? tests.map(t => {
+        const done = DB.results.find(r => r.testId === t.id && r.studentId === currentUser.id);
+        const passed = done && done.score >= t.passingScore;
+        return `<div class="card" style="margin-bottom:10px;padding:16px;display:flex;align-items:center;gap:12px">
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:14px">${t.title}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:3px">${t.questions.length} savol • O'tish bali: ${t.passingScore}%</div>
+            ${done ? `<div style="font-size:12px;margin-top:3px;color:${passed ? 'var(--green)' : 'var(--red)'}">Natija: ${done.score}% — ${passed ? 'O\'tdi' : 'O\'tmadi'}</div>` : ''}
+          </div>
+          ${done ? `<span class="badge ${passed ? 'b-green' : 'b-red'}">${done.score}%</span>` : `<button class="btn btn-sm btn-purple" onclick="startTest(${t.id})">Boshlash</button>`}
+        </div>`;
+      }).join('') : `<div class="alert alert-info">Bu fanda hali test yo'q</div>`;
     }
     function getMyAssignments() {
       return DB.assignments.filter(a => getMySubjects().some(s => s.id === a.subjectId));
