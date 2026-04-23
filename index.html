@@ -1112,9 +1112,11 @@
     }
 
     .login-logo-icon {
-      font-size: 44px;
-      display: block;
-      margin-bottom: 12px
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      color: var(--blue)
     }
 
     .login-logo h2 {
@@ -1358,9 +1360,11 @@
     }
 
     .nav-item-icon {
-      font-size: 17px;
       width: 22px;
-      text-align: center;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0
     }
 
@@ -1455,8 +1459,10 @@
     }
 
     .cheat-icon-big {
-      font-size: 72px;
-      animation: pulse 1.2s ease-in-out infinite
+      animation: pulse 1.2s ease-in-out infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center
     }
 
     @keyframes pulse {
@@ -1828,14 +1834,14 @@
   <div id="ai-chat-widget" style="position:fixed;bottom:24px;right:24px;z-index:9999;font-family:'Inter',sans-serif">
     <!-- Bubble button -->
     <button id="ai-chat-toggle" onclick="toggleAiChat()"
-      style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(37,99,235,.4);display:flex;align-items:center;justify-content:center;font-size:26px;transition:transform .2s">
-      🤖
+      style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(37,99,235,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
     </button>
     <!-- Chat panel -->
     <div id="ai-chat-panel"
       style="display:none;position:absolute;bottom:70px;right:0;width:340px;background:#fff;border-radius:20px;box-shadow:0 12px 40px rgba(0,0,0,.18);overflow:hidden;flex-direction:column">
       <div style="background:linear-gradient(135deg,#2563eb,#7c3aed);padding:16px 20px;display:flex;align-items:center;gap:10px">
-        <span style="font-size:22px">🤖</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <div>
           <div style="color:#fff;font-weight:700;font-size:15px">AI Yordamchi</div>
           <div style="color:rgba(255,255,255,.75);font-size:12px">EduAssess bo'yicha savol bering</div>
@@ -1845,7 +1851,7 @@
       <div id="ai-chat-messages"
         style="height:280px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#f8fafc">
         <div style="background:#e0e7ff;padding:10px 14px;border-radius:12px 12px 12px 0;font-size:13px;max-width:85%">
-          Salom! Men EduAssess AI yordamchisiman. Platforma, testlar, baholash tizimi yoki boshqa savollaringizga javob beraman 😊
+          Salom! Men EduAssess yordamchisiman. Platforma, testlar, baholash tizimi yoki boshqa savollaringizga javob beraman.
         </div>
       </div>
       <div style="padding:12px;border-top:1px solid #e2e8f0;display:flex;gap:8px">
@@ -1864,7 +1870,7 @@
     <div class="login-bg"></div>
     <div class="login-box">
       <div class="login-logo">
-        <span class="login-logo-icon">🎓</span>
+        <span class="login-logo-icon"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
         <h2>EduAssess</h2>
         <p>Aqlli baholash platformasi</p>
       </div>
@@ -1886,13 +1892,13 @@
       <!-- SIDEBAR -->
       <div class="sidebar" id="app-sidebar">
         <div class="sidebar-logo">
-          <div class="sidebar-logo-title" id="sb-logo-title">🎓 EduAssess</div>
+          <div class="sidebar-logo-title" id="sb-logo-title">EduAssess</div>
           <div class="sidebar-logo-sub" id="sb-logo-sub">Baholash platformasi</div>
           <div class="sidebar-user" id="sidebar-user"></div>
         </div>
         <nav class="sidebar-nav" id="sidebar-nav"></nav>
         <div class="sidebar-footer">
-          <button class="sf-btn" onclick="doLogout()">🚪 <span>Chiqish</span></button>
+          <button class="sf-btn" onclick="doLogout()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;flex-shrink:0"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Chiqish</span></button>
         </div>
       </div>
 
@@ -1903,10 +1909,10 @@
         <div class="page" id="page-admin-dash">
           <div class="page-header">
             <div>
-              <div class="page-title">🛡️ Admin Dashboard</div>
+              <div class="page-title">Admin Dashboard</div>
               <div class="page-subtitle" id="admin-date"></div>
             </div>
-            <div class="page-actions"><button class="btn btn-sm" onclick="renderAdminDash()">🔄 Yangilash</button></div>
+            <div class="page-actions"><button class="btn btn-sm" onclick="renderAdminDash()">Yangilash</button></div>
           </div>
           <div class="stats-grid" id="admin-stats-grid"></div>
           <div class="grid-2" style="margin-bottom:16px">
@@ -1943,7 +1949,7 @@
         <div class="page" id="page-admin-users">
           <div class="page-header">
             <div>
-              <div class="page-title">👥 Foydalanuvchilar</div>
+              <div class="page-title">Foydalanuvchilar</div>
               <div class="page-subtitle" id="users-count-lbl"></div>
             </div>
             <div class="page-actions">
@@ -1953,7 +1959,7 @@
           </div>
           <div class="card" style="margin-bottom:14px">
             <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <input class="form-control" id="u-search" placeholder="🔍 Ism yoki login..."
+              <input class="form-control" id="u-search" placeholder="Ism yoki login..."
                 style="flex:1;min-width:180px" oninput="renderUsersTable()">
               <select class="form-control" id="u-role-filter" style="width:160px" onchange="renderUsersTable()">
                 <option value="">Barcha rollar</option>
@@ -1988,7 +1994,7 @@
         <div class="page" id="page-admin-structure">
           <div class="page-header">
             <div>
-              <div class="page-title">🏛️ Tuzilma boshqaruvi</div>
+              <div class="page-title">Tuzilma boshqaruvi</div>
               <div class="page-subtitle">Fakultet → Kafedra → Guruh</div>
             </div>
           </div>
@@ -2020,7 +2026,7 @@
         <div class="page" id="page-admin-subjects">
           <div class="page-header">
             <div>
-              <div class="page-title">📚 Fanlar</div>
+              <div class="page-title">Fanlar</div>
               <div class="page-subtitle">O'qituvchilarga fan biriktirish</div>
             </div>
             <div class="page-actions"><button class="btn btn-sm btn-primary" onclick="openAddSubject()">+
@@ -2050,7 +2056,7 @@
         <div class="page" id="page-teacher-dash">
           <div class="page-header">
             <div>
-              <div class="page-title">👨‍🏫 Mening fanlarim</div>
+              <div class="page-title">Mening fanlarim</div>
               <div class="page-subtitle" id="teacher-sub-lbl"></div>
             </div>
           </div>
@@ -2066,13 +2072,13 @@
             </div>
             <div class="page-actions">
               <button class="btn btn-sm" onclick="nav('page-teacher-dash')">← Orqaga</button>
-              <button class="btn btn-sm" onclick="exportSubjectCSV()">📤 CSV eksport</button>
+              <button class="btn btn-sm" onclick="exportSubjectCSV()">CSV eksport</button>
             </div>
           </div>
           <div class="tabs">
-            <div class="tab active" onclick="switchTab(this,'tp-assignments')">📋 Topshiriqlar</div>
-            <div class="tab" onclick="switchTab(this,'tp-quizzes')">📝 Testlar</div>
-            <div class="tab" onclick="switchTab(this,'tp-monitor')">👁️ Monitoring</div>
+            <div class="tab active" onclick="switchTab(this,'tp-assignments')">Topshiriqlar</div>
+            <div class="tab" onclick="switchTab(this,'tp-quizzes')">Testlar</div>
+            <div class="tab" onclick="switchTab(this,'tp-monitor')">Monitoring</div>
           </div>
           <!-- Assignments tab -->
           <div class="tab-pane active" id="tp-assignments">
@@ -2088,7 +2094,7 @@
           </div>
           <!-- Monitor tab -->
           <div class="tab-pane" id="tp-monitor">
-            <div class="alert alert-info">👁️ Real-vaqt monitoring — talabalar bu fandagi testlarni ochganda shu yerda
+            <div class="alert alert-info">Real-vaqt monitoring — talabalar bu fandagi testlarni ochganda shu yerda
               ko'rinadi.</div>
             <div class="card">
               <div class="card-header">
@@ -2098,8 +2104,7 @@
             </div>
             <div class="card" style="margin-top:16px">
               <div class="card-header">
-                <div class="card-title">Barcha natijalar</div><button class="btn btn-sm" onclick="exportSubjectCSV()">📥
-                  CSV</button>
+                <div class="card-title">Barcha natijalar</div><button class="btn btn-sm" onclick="exportSubjectCSV()">CSV yuklab olish</button>
               </div>
               <div class="tbl-wrap">
                 <table>
@@ -2124,7 +2129,7 @@
         <div class="page" id="page-student-dash">
           <div class="page-header">
             <div>
-              <div class="page-title" id="st-greeting">Xush kelibsiz! 👋</div>
+              <div class="page-title" id="st-greeting">Xush kelibsiz!</div>
               <div class="page-subtitle">Shaxsiy o'quv dashboardingiz</div>
             </div>
           </div>
@@ -2146,13 +2151,13 @@
           <div class="grid-2">
             <div class="card">
               <div class="card-header">
-                <div class="card-title">📋 Yaqin topshiriqlar</div>
+                <div class="card-title">Yaqin topshiriqlar</div>
               </div>
               <div id="st-upcoming-assignments"></div>
             </div>
             <div class="card">
               <div class="card-header">
-                <div class="card-title">📝 Mavjud testlar</div>
+                <div class="card-title">Mavjud testlar</div>
               </div>
               <div id="st-available-tests"></div>
             </div>
@@ -2162,15 +2167,15 @@
         <div class="page" id="page-student-results">
           <div class="page-header">
             <div>
-              <div class="page-title">🏆 Natijalarim</div>
+              <div class="page-title">Natijalarim</div>
               <div class="page-subtitle">Test va topshiriqlar tarixi</div>
             </div>
           </div>
           <div class="tabs">
-            <div class="tab active" onclick="switchTab(this,'tp-res-tests')">📝 Testlar</div>
-            <div class="tab" onclick="switchTab(this,'tp-res-assign')">📋 Topshiriqlar</div>
-            <div class="tab" onclick="switchTab(this,'tp-mistakes')">❌ Xatolar tahlili</div>
-            <div class="tab" onclick="switchTab(this,'tp-progress-chart')">📈 O'sish grafigi</div>
+            <div class="tab active" onclick="switchTab(this,'tp-res-tests')">Testlar</div>
+            <div class="tab" onclick="switchTab(this,'tp-res-assign')">Topshiriqlar</div>
+            <div class="tab" onclick="switchTab(this,'tp-mistakes')">Xatolar tahlili</div>
+            <div class="tab" onclick="switchTab(this,'tp-progress-chart')">O'sish grafigi</div>
           </div>
           <div class="tab-pane active card" id="tp-res-tests">
             <div class="tbl-wrap">
@@ -2218,7 +2223,7 @@
         <!-- Admin: Schedule Management -->
         <div class="page" id="page-admin-schedule">
           <div class="page-header">
-            <div><div class="page-title">🗓️ Dars jadvali boshqaruvi</div><div class="page-subtitle">Guruhlar bo'yicha haftalik jadval</div></div>
+            <div><div class="page-title">Dars jadvali boshqaruvi</div><div class="page-subtitle">Guruhlar bo'yicha haftalik jadval</div></div>
             <div class="page-actions">
               <select class="form-control" id="sched-group-sel" onchange="renderAdminSchedule()" style="min-width:160px"></select>
               <button class="btn btn-primary" onclick="openAddScheduleModal()">+ Dars qo'shish</button>
@@ -2229,14 +2234,14 @@
 
         <!-- Admin: Messages -->
         <div class="page" id="page-admin-messages">
-          <div class="page-header"><div><div class="page-title">📩 Murojaatlar</div><div class="page-subtitle">Foydalanuvchilardan kelgan xabarlar</div></div></div>
+          <div class="page-header"><div><div class="page-title">Murojaatlar</div><div class="page-subtitle">Foydalanuvchilardan kelgan xabarlar</div></div></div>
           <div id="admin-messages-list"></div>
         </div>
 
         <!-- Admin: Polls -->
         <div class="page" id="page-admin-polls">
           <div class="page-header">
-            <div><div class="page-title">📊 So'rovnomalar</div><div class="page-subtitle">Yaratish va natijalarni ko'rish</div></div>
+            <div><div class="page-title">So'rovnomalar</div><div class="page-subtitle">Yaratish va natijalarni ko'rish</div></div>
             <div class="page-actions"><button class="btn btn-primary" onclick="openModal('modal-create-poll')">+ So'rovnoma</button></div>
           </div>
           <div id="admin-polls-list"></div>
@@ -2244,28 +2249,28 @@
 
         <!-- Shared: Schedule view (teacher/student) -->
         <div class="page" id="page-schedule">
-          <div class="page-header"><div><div class="page-title">🗓️ Dars jadvali</div><div class="page-subtitle">Haftalik dars programma</div></div></div>
+          <div class="page-header"><div><div class="page-title">Dars jadvali</div><div class="page-subtitle">Haftalik dars programma</div></div></div>
           <div id="schedule-view"></div>
         </div>
 
         <!-- Shared: Tasks -->
         <div class="page" id="page-tasks">
-          <div class="page-header"><div><div class="page-title">📋 Vazifalar</div><div class="page-subtitle">Barcha topshiriqlar</div></div></div>
+          <div class="page-header"><div><div class="page-title">Vazifalar</div><div class="page-subtitle">Barcha topshiriqlar</div></div></div>
           <div id="tasks-list"></div>
         </div>
 
         <!-- Shared: Contact admin -->
         <div class="page" id="page-contact">
-          <div class="page-header"><div><div class="page-title">📩 Adminga murojat</div><div class="page-subtitle">Savol yoki muammo yuboring</div></div></div>
+          <div class="page-header"><div><div class="page-title">Adminga murojat</div><div class="page-subtitle">Savol yoki muammo yuboring</div></div></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px">
             <div class="card" style="padding:24px">
-              <div style="font-size:15px;font-weight:700;margin-bottom:16px">✉️ Yangi xabar yuborish</div>
+              <div style="font-size:15px;font-weight:700;margin-bottom:16px">Yangi xabar yuborish</div>
               <div class="form-group"><label class="form-label">Mavzu *</label><input class="form-control" id="msg-title" placeholder="Masalan: Jadval haqida savol"></div>
               <div class="form-group"><label class="form-label">Xabar *</label><textarea class="form-control" id="msg-body" rows="5" placeholder="Xabaringizni yozing..." style="resize:vertical"></textarea></div>
-              <button class="btn btn-primary" style="width:100%" onclick="sendMessage()">📤 Yuborish</button>
+              <button class="btn btn-primary" style="width:100%" onclick="sendMessage()">Yuborish</button>
             </div>
             <div class="card" style="padding:24px">
-              <div style="font-size:15px;font-weight:700;margin-bottom:16px">📬 Mening xabarlarim</div>
+              <div style="font-size:15px;font-weight:700;margin-bottom:16px">Mening xabarlarim</div>
               <div id="my-messages-list"></div>
             </div>
           </div>
@@ -2273,7 +2278,7 @@
 
         <!-- Shared: Polls -->
         <div class="page" id="page-polls">
-          <div class="page-header"><div><div class="page-title">📊 So'rovnomalar</div><div class="page-subtitle">Faol so'rovnomalar</div></div></div>
+          <div class="page-header"><div><div class="page-title">So'rovnomalar</div><div class="page-subtitle">Faol so'rovnomalar</div></div></div>
           <div id="polls-list"></div>
         </div>
 
@@ -2281,7 +2286,7 @@
         <div class="page" id="page-profile">
           <div class="page-header">
             <div>
-              <div class="page-title">👤 Mening profilim</div>
+              <div class="page-title">Mening profilim</div>
               <div class="page-subtitle">Shaxsiy ma'lumotlar va xavfsizlik</div>
             </div>
           </div>
@@ -2304,7 +2309,7 @@
 
   <!-- ===== CHEAT OVERLAY ===== -->
   <div class="cheat-overlay" id="cheat-overlay">
-    <div class="cheat-icon-big">⚠️</div>
+    <div class="cheat-icon-big"><svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
     <div style="font-size:26px;font-weight:800;font-family:'Outfit',sans-serif">Test to'xtatildi!</div>
     <div style="font-size:16px;opacity:.9" id="cheat-msg">Siz boshqa oynaga o'tdingiz</div>
     <div style="font-size:13px;opacity:.7">3 marta qoidabuzarlik — test avtomatik yakunlanadi</div>
@@ -2317,7 +2322,7 @@
   <div class="modal-backdrop" id="modal-add-schedule">
     <div class="modal" style="max-width:420px">
       <button class="modal-close" onclick="closeModal('modal-add-schedule')">✕</button>
-      <div class="modal-title">📅 Dars qo'shish</div>
+      <div class="modal-title">Dars qo'shish</div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Guruh *</label><select class="form-control" id="sch-group"></select></div>
         <div class="form-group"><label class="form-label">Fan *</label><select class="form-control" id="sch-subject"></select></div>
@@ -2346,7 +2351,7 @@
           </select>
         </div>
       </div>
-      <button class="btn btn-primary" style="width:100%" onclick="saveSchedule()">💾 Saqlash</button>
+      <button class="btn btn-primary" style="width:100%" onclick="saveSchedule()">Saqlash</button>
     </div>
   </div>
 
@@ -2354,7 +2359,7 @@
   <div class="modal-backdrop" id="modal-create-poll">
     <div class="modal" style="max-width:440px">
       <button class="modal-close" onclick="closeModal('modal-create-poll')">✕</button>
-      <div class="modal-title">📊 So'rovnoma yaratish</div>
+      <div class="modal-title">So'rovnoma yaratish</div>
       <div class="form-group"><label class="form-label">Savol *</label><input class="form-control" id="poll-title" placeholder="So'rovnoma savoli"></div>
       <div class="form-group"><label class="form-label">Kimga</label>
         <select class="form-control" id="poll-target">
@@ -2368,7 +2373,7 @@
         </div>
         <button class="btn btn-sm" style="margin-top:4px" onclick="addPollOption()">+ Variant qo'shish</button>
       </div>
-      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="createPoll()">✅ Yaratish</button>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="createPoll()">Yaratish</button>
     </div>
   </div>
 
@@ -2380,7 +2385,7 @@
       <input type="hidden" id="reply-msg-id">
       <div id="reply-msg-preview" style="background:var(--bg);border-radius:10px;padding:14px;margin-bottom:14px;font-size:13px"></div>
       <div class="form-group"><label class="form-label">Javob *</label><textarea class="form-control" id="reply-msg-text" rows="4" placeholder="Javobingizni yozing..."></textarea></div>
-      <button class="btn btn-primary" style="width:100%" onclick="replyMessage()">📤 Yuborish</button>
+      <button class="btn btn-primary" style="width:100%" onclick="replyMessage()">Yuborish</button>
     </div>
   </div>
 
@@ -2411,14 +2416,14 @@
       </div>
       <div class="form-group"><label class="form-label">Login *</label><input class="form-control" id="u-username" type="text" placeholder="masalan: aziz@edu.uz"></div>
       <div class="form-group"><label class="form-label">Parol *</label><input class="form-control" id="u-pass" type="text" placeholder="parol kiriting"></div>
-      <button class="btn btn-primary" style="width:100%" onclick="saveUser()">💾 Saqlash va credential ko'rish</button>
+      <button class="btn btn-primary" style="width:100%" onclick="saveUser()">Saqlash va credential ko'rish</button>
     </div>
   </div>
 
   <!-- Generated Credentials -->
   <div class="modal-backdrop" id="modal-credentials">
     <div class="modal" style="max-width:400px;text-align:center">
-      <div class="modal-title">🔑 Kirish ma'lumotlari</div>
+      <div class="modal-title">Kirish ma'lumotlari</div>
       <div
         style="background:var(--green-l);border:1px solid #6ee7b7;border-radius:14px;padding:20px;margin-bottom:20px">
         <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Foydalanuvchi uchun</div>
@@ -2432,7 +2437,7 @@
               style="font-weight:700"></span></div>
         </div>
       </div>
-      <div class="alert alert-warning" style="font-size:12px;text-align:left">⚠️ Ushbu ma'lumotlarni
+      <div class="alert alert-warning" style="font-size:12px;text-align:left">Ushbu ma'lumotlarni
         talabaga/o'qituvchiga yetkazing. Birinchi kirishda parolni o'zgartirsin.</div>
       <button class="btn btn-primary" style="width:100%" onclick="closeModal('modal-credentials')">Tushunarli ✓</button>
     </div>
@@ -2534,13 +2539,13 @@
       <!-- AI / Qo'lda tab -->
       <div style="display:flex;gap:8px;margin-bottom:16px">
         <button id="quiz-tab-manual" onclick="switchQuizTab('manual')"
-          style="flex:1;padding:9px;border-radius:10px;border:2px solid #2563eb;background:#2563eb;color:#fff;font-weight:600;cursor:pointer;font-size:13px">✏️ Qo'lda yaratish</button>
+          style="flex:1;padding:9px;border-radius:10px;border:2px solid #2563eb;background:#2563eb;color:#fff;font-weight:600;cursor:pointer;font-size:13px">Qo'lda yaratish</button>
         <button id="quiz-tab-ai" onclick="switchQuizTab('ai')"
-          style="flex:1;padding:9px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;color:#64748b;font-weight:600;cursor:pointer;font-size:13px">🤖 AI orqali yaratish</button>
+          style="flex:1;padding:9px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;color:#64748b;font-weight:600;cursor:pointer;font-size:13px">AI orqali yaratish</button>
       </div>
       <!-- AI panel -->
       <div id="quiz-ai-panel" style="display:none;background:#f0f4ff;border-radius:14px;padding:18px;margin-bottom:16px">
-        <div style="font-weight:700;font-size:14px;margin-bottom:12px;color:#1e40af">🤖 AI yordamida test yaratish</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px;color:#1e40af">AI yordamida test yaratish</div>
         <div class="form-group"><label class="form-label">Mavzu *</label>
           <input class="form-control" id="ai-topic" placeholder="Masalan: Python dasturlash tili asoslari"></div>
         <div class="form-row">
@@ -2561,7 +2566,7 @@
         </div>
         <button onclick="generateAiQuiz()"
           style="width:100%;padding:11px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px" id="ai-gen-btn">
-          🚀 AI bilan test tuzish
+          AI bilan test tuzish
         </button>
         <div id="ai-gen-status" style="margin-top:10px;font-size:13px;color:#64748b;text-align:center;display:none"></div>
       </div>
@@ -2582,9 +2587,9 @@
         <div class="form-row">
           <div class="form-group"><label class="form-label">Qiyinchilik</label><select class="form-control"
               id="qq-diff">
-              <option value="easy">🟢 Oson (1×)</option>
-              <option value="medium" selected>🟡 O'rta (2×)</option>
-              <option value="hard">🔴 Qiyin (3×)</option>
+              <option value="easy">Oson (1×)</option>
+              <option value="medium" selected>O'rta (2×)</option>
+              <option value="hard">Qiyin (3×)</option>
             </select></div>
           <div class="form-group"><label class="form-label">Taymer (soniya)</label><input class="form-control"
               type="number" id="qq-time" value="45" min="10" max="300"></div>
@@ -2602,7 +2607,7 @@
         Savollar: <span id="qq-count" style="font-weight:700;color:var(--text)">0</span> ta&nbsp;|&nbsp;Maks. ball:
         <span id="qq-maxpts" style="font-weight:700;color:var(--text)">0</span>
       </div>
-      <button class="btn btn-primary" style="width:100%" onclick="saveQuiz()">🚀 Testni nashr qilish</button>
+      <button class="btn btn-primary" style="width:100%" onclick="saveQuiz()">Testni nashr qilish</button>
     </div>
   </div>
 
@@ -2618,7 +2623,7 @@
       <div class="form-group"><label class="form-label">Izoh (ixtiyoriy)</label><textarea class="form-control"
           id="grade-comment" placeholder="O'qituvchi izohi..."></textarea></div>
       <input type="hidden" id="grade-sub-id">
-      <button class="btn btn-green" style="width:100%" onclick="submitGrade()">✅ Bahoni saqlash</button>
+      <button class="btn btn-green" style="width:100%" onclick="submitGrade()">Bahoni saqlash</button>
     </div>
   </div>
 
@@ -2634,7 +2639,7 @@
       <div class="form-group"><label class="form-label">Izoh (ixtiyoriy)</label><textarea class="form-control"
           id="upload-comment" placeholder="Qo'shimcha izoh..."></textarea></div>
       <input type="hidden" id="upload-assign-id">
-      <button class="btn btn-purple" style="width:100%" onclick="submitAssignmentUpload()">📤 Yuklash</button>
+      <button class="btn btn-purple" style="width:100%" onclick="submitAssignmentUpload()">Yuklash</button>
     </div>
   </div>
 
@@ -2752,9 +2757,9 @@
         if (x === r) b.classList.add('active-' + x);
       });
       const hints = {
-        admin: '👤 Login: admin@edu.uz\n🔑 Parol: admin123',
-        teacher: '👤 Login: teacher@edu.uz\n🔑 Parol: teach123',
-        student: '👤 Login: student@edu.uz\n🔑 Parol: stud123'
+        admin: 'Login: admin@edu.uz\nParol: admin123',
+        teacher: 'Login: teacher@edu.uz\nParol: teach123',
+        student: 'Login: student@edu.uz\nParol: stud123'
       };
       document.getElementById('demo-hint').innerText = hints[r];
       const creds = { admin: ['admin@edu.uz', 'admin123'], teacher: ['teacher@edu.uz', 'teach123'], student: ['student@edu.uz', 'stud123'] };
@@ -2770,7 +2775,7 @@
       const pass = document.getElementById('login-password').value.trim();
       const err = document.getElementById('login-error');
       const user = DB.users.find(u => u.username === username && u.pass === pass && u.active);
-      if (!user) { err.style.display = 'flex'; err.textContent = '❌ Login yoki parol noto\'g\'ri!'; return; }
+      if (!user) { err.style.display = 'flex'; err.textContent = 'Login yoki parol noto\'g\'ri!'; return; }
       err.style.display = 'none';
       currentUser = user;
       localStorage.setItem('currentUser', JSON.stringify(user));
@@ -2799,31 +2804,31 @@
     // ========== SIDEBAR ==========
     const menus = {
       admin: [
-        { section: 'Asosiy' }, { id: 'page-admin-dash', icon: '📊', label: 'Dashboard' },
-        { section: 'Boshqaruv' }, { id: 'page-admin-users', icon: '👥', label: 'Foydalanuvchilar' },
-        { id: 'page-admin-structure', icon: '🏛️', label: 'Tuzilma' },
-        { section: 'Kontent' }, { id: 'page-admin-subjects', icon: '📚', label: 'Fanlar' },
-        { id: 'page-admin-schedule', icon: '🗓️', label: 'Dars jadvali' },
-        { section: 'Boshqaruv' }, { id: 'page-admin-messages', icon: '📩', label: 'Murojaatlar' },
-        { id: 'page-admin-polls', icon: '📊', label: "So'rovnoma" },
-        { section: 'Hisob' }, { id: 'page-profile', icon: '👤', label: 'Mening profilim' }
+        { section: 'Asosiy' }, { id: 'page-admin-dash', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>', label: 'Dashboard' },
+        { section: 'Boshqaruv' }, { id: 'page-admin-users', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>', label: 'Foydalanuvchilar' },
+        { id: 'page-admin-structure', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>', label: 'Tuzilma' },
+        { section: 'Kontent' }, { id: 'page-admin-subjects', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>', label: 'Fanlar' },
+        { id: 'page-admin-schedule', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>', label: 'Dars jadvali' },
+        { section: 'Boshqaruv' }, { id: 'page-admin-messages', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>', label: 'Murojaatlar' },
+        { id: 'page-admin-polls', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>', label: "So'rovnoma" },
+        { section: 'Hisob' }, { id: 'page-profile', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>', label: 'Mening profilim' }
       ],
       teacher: [
-        { section: 'O\'qituvchi' }, { id: 'page-teacher-dash', icon: '📚', label: 'Mening fanlarim' },
-        { id: 'page-schedule', icon: '🗓️', label: 'Dars jadvali' },
-        { id: 'page-tasks', icon: '📋', label: 'Vazifalar' },
-        { section: 'Muloqot' }, { id: 'page-contact', icon: '📩', label: 'Adminga murojat' },
-        { id: 'page-polls', icon: '📊', label: "So'rovnoma" },
-        { section: 'Hisob' }, { id: 'page-profile', icon: '👤', label: 'Mening profilim' }
+        { section: 'O\'qituvchi' }, { id: 'page-teacher-dash', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>', label: 'Mening fanlarim' },
+        { id: 'page-schedule', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>', label: 'Dars jadvali' },
+        { id: 'page-tasks', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>', label: 'Vazifalar' },
+        { section: 'Muloqot' }, { id: 'page-contact', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>', label: 'Adminga murojat' },
+        { id: 'page-polls', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>', label: "So'rovnoma" },
+        { section: 'Hisob' }, { id: 'page-profile', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>', label: 'Mening profilim' }
       ],
       student: [
-        { section: 'Talaba' }, { id: 'page-student-dash', icon: '🏠', label: 'Dashboard' },
-        { id: 'page-student-results', icon: '🏆', label: 'Natijalarim' },
-        { id: 'page-schedule', icon: '🗓️', label: 'Dars jadvali' },
-        { id: 'page-tasks', icon: '📋', label: 'Vazifalar' },
-        { section: 'Muloqot' }, { id: 'page-contact', icon: '📩', label: 'Adminga murojat' },
-        { id: 'page-polls', icon: '📊', label: "So'rovnoma" },
-        { section: 'Hisob' }, { id: 'page-profile', icon: '👤', label: 'Mening profilim' }
+        { section: 'Talaba' }, { id: 'page-student-dash', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', label: 'Dashboard' },
+        { id: 'page-student-results', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>', label: 'Natijalarim' },
+        { id: 'page-schedule', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>', label: 'Dars jadvali' },
+        { id: 'page-tasks', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>', label: 'Vazifalar' },
+        { section: 'Muloqot' }, { id: 'page-contact', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>', label: 'Adminga murojat' },
+        { id: 'page-polls', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>', label: "So'rovnoma" },
+        { section: 'Hisob' }, { id: 'page-profile', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>', label: 'Mening profilim' }
       ]
     };
     const sbColors = { admin: 'admin-sb', teacher: 'teacher-sb', student: 'student-sb' };
@@ -2893,7 +2898,7 @@
     }
     function gradeShort(s) { return s >= 90 ? 'A' : s >= 75 ? 'B' : s >= 60 ? 'C' : 'F'; }
     function statusBadge(st) {
-      const m = { submitted: '<span class="badge b-blue">📤 Topshirildi</span>', graded: '<span class="badge b-green">✅ Baholandi</span>', overdue: '<span class="badge b-red">⏰ Muddat o\'tdi</span>', pending: '<span class="badge b-amber">⏳ Kutilmoqda</span>' };
+      const m = { submitted: '<span class="badge b-blue">Topshirildi</span>', graded: '<span class="badge b-green">Baholandi</span>', overdue: '<span class="badge b-red">Muddat o\'tdi</span>', pending: '<span class="badge b-amber">Kutilmoqda</span>' };
       return m[st] || '<span class="badge b-muted">—</span>';
     }
     function formatDate(d) { return d ? new Date(d).toLocaleDateString('uz-UZ', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—'; }
@@ -2931,10 +2936,10 @@
     </div>`).join('');
       document.getElementById('admin-system-status').innerHTML = `
     <div style="display:flex;flex-direction:column;gap:10px">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg);border-radius:10px"><span>📁 Fakultetlar</span><strong>${DB.faculties.length}</strong></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg);border-radius:10px"><span>🏫 Guruhlar</span><strong>${DB.groups.length}</strong></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg);border-radius:10px"><span>📝 Testlar</span><strong>${DB.tests.length}</strong></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg);border-radius:10px"><span>📋 Topshiriqlar</span><strong>${DB.assignments.length}</strong></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg);border-radius:10px"><span>Fakultetlar</span><strong>${DB.faculties.length}</strong></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg);border-radius:10px"><span>Guruhlar</span><strong>${DB.groups.length}</strong></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg);border-radius:10px"><span>Testlar</span><strong>${DB.tests.length}</strong></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg);border-radius:10px"><span>Topshiriqlar</span><strong>${DB.assignments.length}</strong></div>
     </div>`;
     }
 
@@ -2967,7 +2972,7 @@
       <td>${grp}</td>
       <td style="font-family:monospace;font-size:12px">${login(u)}</td>
       <td><span class="badge b-green">Faol</span></td>
-      <td><button class="btn btn-sm" onclick="editUser(${u.id})">✏️</button> <button class="btn btn-sm btn-danger" onclick="deleteUser(${u.id})">🗑️</button></td>
+      <td><button class="btn btn-sm" onclick="editUser(${u.id})">Tahrir</button> <button class="btn btn-sm btn-danger" onclick="deleteUser(${u.id})">O'chirish</button></td>
     </tr>`;
       }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">Foydalanuvchi topilmadi</td></tr>';
     }
@@ -3054,7 +3059,7 @@
       document.getElementById('faculty-list').innerHTML = DB.faculties.map(f => `
     <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:var(--bg);margin-bottom:6px">
       <div><div style="font-weight:600">${f.name}</div><div style="font-size:11px;color:var(--muted)">${f.code}</div></div>
-      <button class="btn btn-sm btn-danger" onclick="deleteFaculty(${f.id})">🗑</button>
+      <button class="btn btn-sm btn-danger" onclick="deleteFaculty(${f.id})">O'chirish</button>
     </div>`).join('') || '<div style="color:var(--muted);font-size:13px;padding:10px">Fakultet yo\'q</div>';
     }
     function renderDeptList() {
@@ -3062,7 +3067,7 @@
         const fac = DB.faculties.find(f => f.id === d.facultyId);
         return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:var(--bg);margin-bottom:6px">
       <div><div style="font-weight:600">${d.name}</div><div style="font-size:11px;color:var(--muted)">${fac?.name || '—'}</div></div>
-      <button class="btn btn-sm btn-danger" onclick="deleteDept(${d.id})">🗑</button>
+      <button class="btn btn-sm btn-danger" onclick="deleteDept(${d.id})">O'chirish</button>
     </div>`;
       }).join('') || '<div style="color:var(--muted);font-size:13px;padding:10px">Kafedra yo\'q</div>';
     }
@@ -3072,7 +3077,7 @@
         const cnt = DB.users.filter(u => u.groupId === g.id).length;
         return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:var(--bg);margin-bottom:6px">
       <div><div style="font-weight:600">${g.name} <span class="badge b-muted">${cnt} ta</span></div><div style="font-size:11px;color:var(--muted)">${dept?.name || '—'} • ${g.course}-kurs</div></div>
-      <button class="btn btn-sm btn-danger" onclick="deleteGroup(${g.id})">🗑</button>
+      <button class="btn btn-sm btn-danger" onclick="deleteGroup(${g.id})">O'chirish</button>
     </div>`;
       }).join('') || '<div style="color:var(--muted);font-size:13px;padding:10px">Guruh yo\'q</div>';
     }
@@ -3123,7 +3128,7 @@
       <td style="font-size:12px">${groups}</td>
       <td><span class="badge b-blue">${tests}</span></td>
       <td><span class="badge b-green">${assigns}</span></td>
-      <td><button class="btn btn-sm btn-danger" onclick="deleteSubject(${s.id})">🗑</button></td>
+      <td><button class="btn btn-sm btn-danger" onclick="deleteSubject(${s.id})">O'chirish</button></td>
     </tr>`;
       }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">Fan topilmadi</td></tr>';
     }
@@ -3155,7 +3160,7 @@
         const tests = DB.tests.filter(t => t.subjectId === s.id).length;
         const assigns = DB.assignments.filter(a => a.subjectId === s.id).length;
         return `<div class="card" style="cursor:pointer;transition:all .3s;border:2px solid transparent" onmouseenter="this.style.borderColor='#10b981'" onmouseleave="this.style.borderColor='transparent'" onclick="openSubject(${s.id})">
-      <div style="font-size:28px;margin-bottom:12px">📚</div>
+      <div style="margin-bottom:12px;color:var(--teacher-accent)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
       <div style="font-size:18px;font-weight:700;margin-bottom:6px">${s.name}</div>
       <div style="font-size:13px;color:var(--muted);margin-bottom:14px">${groups} • ${s.credits} kredit</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding-top:12px;border-top:1px solid var(--border)">
@@ -3165,12 +3170,12 @@
       </div>
       <button class="btn btn-green" style="width:100%;margin-top:14px;justify-content:center">Fanga kirish →</button>
     </div>`;
-      }).join('') : `<div class="alert alert-warning">⚠️ Sizga hali fan biriktirilmagan. Admin panel orqali fan biriktirishni so'rang.</div>`;
+      }).join('') : `<div class="alert alert-warning">Sizga hali fan biriktirilmagan. Admin panel orqali fan biriktirishni so'rang.</div>`;
     }
     function openSubject(subjectId) {
       currentSubjectId = subjectId;
       const s = DB.subjects.find(x => x.id === subjectId);
-      document.getElementById('t-subject-title').textContent = '📚 ' + s.name;
+      document.getElementById('t-subject-title').textContent = s.name;
       const groups = s.groupIds.map(gid => DB.groups.find(g => g.id === gid)?.name || '').join(', ');
       document.getElementById('t-subject-sub').textContent = groups;
       nav('page-teacher-subject');
@@ -3196,10 +3201,10 @@
           const av = st.fname[0] + (st.lname ? st.lname[0] : '');
           let badge, action;
           if (sub && sub.status === 'graded') {
-            badge = `<span class="badge b-green">✅ Baholandi</span>`;
+            badge = `<span class="badge b-green">Baholandi</span>`;
             action = `<span style="font-weight:700;color:#10b981">${sub.score}/${a.maxScore}</span>`;
           } else if (sub) {
-            badge = `<span class="badge b-blue">📤 Topshirdi</span>`;
+            badge = `<span class="badge b-blue">Topshirdi</span>`;
             action = `<button class="btn btn-sm btn-green" onclick="openGrade(${sub.id},${a.maxScore})">Baholash</button>`;
           } else if (deadlinePassed) {
             badge = `<span class="badge b-red">⏰ Muddati o'tdi</span>`;
@@ -3212,7 +3217,7 @@
             <div style="width:32px;height:32px;border-radius:50%;background:${st.color||'#6366f1'};color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${av}</div>
             <div style="flex:1">
               <div style="font-weight:600;font-size:13px">${st.fname} ${st.lname || ''}</div>
-              ${sub ? `<div style="font-size:11px;color:var(--muted)">📄 ${sub.fileName} • ${formatDate(sub.submittedAt)}${sub.comment ? ` • "${sub.comment}"` : ''}</div>` : ''}
+              ${sub ? `<div style="font-size:11px;color:var(--muted)">${sub.fileName} • ${formatDate(sub.submittedAt)}${sub.comment ? ` • "${sub.comment}"` : ''}</div>` : ''}
             </div>
             ${badge}${action ? `<span style="flex-shrink:0">${action}</span>` : ''}
           </div>`;
@@ -3225,8 +3230,8 @@
           <div style="font-size:13px;color:var(--muted);margin-bottom:8px">${a.desc}</div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:12px">
             <span>⏰ Deadline: <strong>${formatDate(a.deadline)}</strong></span>
-            <span>💯 Maks: <strong>${a.maxScore}</strong></span>
-            <span>📁 ${a.types}</span>
+            <span>Maks: <strong>${a.maxScore}</strong></span>
+            <span>${a.types}</span>
           </div>
         </div>
         <div style="text-align:right;flex-shrink:0">
@@ -3256,7 +3261,7 @@
       const sub = DB.submissions.find(s => s.id === subId);
       const st = DB.users.find(u => u.id === sub.studentId);
       const a = DB.assignments.find(x => x.id === sub.assignmentId);
-      document.getElementById('grade-info').innerHTML = `<strong>${st.fname} ${st.lname}</strong> — ${a.title}<br><span style="color:var(--muted);font-size:12px">📄 ${sub.fileName}</span>`;
+      document.getElementById('grade-info').innerHTML = `<strong>${st.fname} ${st.lname}</strong> — ${a.title}<br><span style="color:var(--muted);font-size:12px">${sub.fileName}</span>`;
       document.getElementById('grade-max').textContent = maxScore;
       document.getElementById('grade-score').value = '';
       document.getElementById('grade-comment').value = '';
@@ -3284,9 +3289,9 @@
         <div><div style="font-size:16px;font-weight:700">${t.title}</div>
           <div style="font-size:13px;color:var(--muted);margin-top:4px">${t.questions.length} savol • ${t.attempts} urinish • ${t.passingScore}% o'tish bali</div>
           <div style="display:flex;gap:8px;margin-top:8px">
-            ${t.questions.filter(q => q.diff === 'easy').length ? `<span class="badge b-green">🟢 ${t.questions.filter(q => q.diff === 'easy').length} oson</span>` : ''}
-            ${t.questions.filter(q => q.diff === 'medium').length ? `<span class="badge b-amber">🟡 ${t.questions.filter(q => q.diff === 'medium').length} o'rta</span>` : ''}
-            ${t.questions.filter(q => q.diff === 'hard').length ? `<span class="badge b-red">🔴 ${t.questions.filter(q => q.diff === 'hard').length} qiyin</span>` : ''}
+            ${t.questions.filter(q => q.diff === 'easy').length ? `<span class="badge b-green">${t.questions.filter(q => q.diff === 'easy').length} oson</span>` : ''}
+            ${t.questions.filter(q => q.diff === 'medium').length ? `<span class="badge b-amber">${t.questions.filter(q => q.diff === 'medium').length} o'rta</span>` : ''}
+            ${t.questions.filter(q => q.diff === 'hard').length ? `<span class="badge b-red">${t.questions.filter(q => q.diff === 'hard').length} qiyin</span>` : ''}
           </div>
         </div>
         <div style="text-align:right">
@@ -3339,12 +3344,12 @@
     }
     function renderMonitor() {
       const myTests = DB.tests.filter(t => t.subjectId === currentSubjectId);
-      document.getElementById('monitor-live').innerHTML = `<div class="alert alert-success">✅ Hozir hech kim test topshirmayapti</div>`;
+      document.getElementById('monitor-live').innerHTML = `<div class="alert alert-success">Hozir hech kim test topshirmayapti</div>`;
       const results = DB.results.filter(r => myTests.some(t => t.id === r.testId));
       document.getElementById('t-monitor-results').innerHTML = results.map(r => {
         const st = DB.users.find(u => u.id === r.studentId);
         const t = DB.tests.find(x => x.id === r.testId);
-        return `<tr><td>${st ? st.fname + ' ' + st.lname : '—'}</td><td>${t?.title || '—'}</td><td>${r.score}%</td><td>${gradeBadge(r.score)}</td><td>${formatDate(r.date)}</td><td>${r.cheatCount > 0 ? `<span class="badge b-red">⚠️ ${r.cheatCount}</span>` : '<span class="badge b-green">✓ 0</span>'}</td></tr>`;
+        return `<tr><td>${st ? st.fname + ' ' + st.lname : '—'}</td><td>${t?.title || '—'}</td><td>${r.score}%</td><td>${gradeBadge(r.score)}</td><td>${formatDate(r.date)}</td><td>${r.cheatCount > 0 ? `<span class="badge b-red">${r.cheatCount} xato</span>` : '<span class="badge b-green">✓ 0</span>'}</td></tr>`;
       }).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px">Natija topilmadi</td></tr>';
     }
     function exportSubjectCSV() {
@@ -3366,7 +3371,7 @@
 
     // ========== STUDENT: DASHBOARD ==========
     function renderStudentDash() {
-      document.getElementById('st-greeting').textContent = `Salom, ${currentUser.fname}! 👋`;
+      document.getElementById('st-greeting').textContent = `Salom, ${currentUser.fname}!`;
       const myResults = DB.results.filter(r => r.studentId === currentUser.id);
       const avg = myResults.length ? Math.round(myResults.reduce((s, r) => s + r.score, 0) / myResults.length) : 0;
       const myAssigns = getMyAssignments();
@@ -3405,7 +3410,7 @@
         <div style="font-weight:600;font-size:13px">${a.title}</div>
         <div style="font-size:11px;color:var(--muted)">${subj?.name || ''} • ⏰ ${formatDate(a.deadline)}</div>
       </div>
-      ${sub ? statusBadge(sub.status) : `<button class="btn btn-sm btn-purple" onclick="openUpload(${a.id})">📤 Yuklash</button>`}
+      ${sub ? statusBadge(sub.status) : `<button class="btn btn-sm btn-purple" onclick="openUpload(${a.id})">Yuklash</button>`}
     </div>`;
       }).join('') : `<div style="color:var(--muted);font-size:13px;padding:10px;text-align:center">Hozircha topshiriq yo'q</div>`;
     }
@@ -3420,14 +3425,14 @@
         <div style="font-weight:600;font-size:13px">${t.title}</div>
         <div style="font-size:11px;color:var(--muted)">${subj?.name || ''} • ${t.questions.length} savol</div>
       </div>
-      ${done ? `<span class="badge b-green">✅ ${done.score}%</span>` : `<button class="btn btn-sm btn-purple" onclick="startTest(${t.id})">▶ Boshlash</button>`}
+      ${done ? `<span class="badge b-green">${done.score}%</span>` : `<button class="btn btn-sm btn-purple" onclick="startTest(${t.id})">Boshlash</button>`}
     </div>`;
       }).join('') : `<div style="color:var(--muted);font-size:13px;padding:10px;text-align:center">Mavjud test yo'q</div>`;
     }
     function openUpload(assignId) {
       const a = DB.assignments.find(x => x.id === assignId);
-      document.getElementById('upload-assign-title').textContent = '📤 ' + a.title;
-      document.getElementById('upload-assign-info').innerHTML = `<strong>${a.title}</strong><br><span style="color:var(--muted)">${a.desc}</span><br><div style="margin-top:8px">💯 Maks: ${a.maxScore} | ⏰ Deadline: ${formatDate(a.deadline)} | 📁 ${a.types}</div>`;
+      document.getElementById('upload-assign-title').textContent = a.title;
+      document.getElementById('upload-assign-info').innerHTML = `<strong>${a.title}</strong><br><span style="color:var(--muted)">${a.desc}</span><br><div style="margin-top:8px">Maks: ${a.maxScore} | Deadline: ${formatDate(a.deadline)} | ${a.types}</div>`;
       document.getElementById('upload-fname').value = '';
       document.getElementById('upload-comment').value = '';
       document.getElementById('upload-assign-id').value = assignId;
@@ -3458,13 +3463,13 @@
       const mistakes = DB.mistakes.filter(m => m.studentId === currentUser.id);
       document.getElementById('mistakes-container').innerHTML = mistakes.length ? mistakes.map(m => `
     <div class="card" style="margin-bottom:12px;border-left:4px solid var(--red)">
-      <div style="font-weight:700;margin-bottom:8px">❓ ${m.q}</div>
+      <div style="font-weight:700;margin-bottom:8px">${m.q}</div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:13px">
         <div><span style="color:var(--red)">✗ Sizning javobingiz:</span> ${m.userAns}</div>
         <div><span style="color:var(--green)">✓ To'g'ri javob:</span> ${m.correct}</div>
       </div>
-      ${m.explanation ? `<div style="margin-top:10px;padding:10px;background:var(--blue-l);border-radius:8px;font-size:13px;color:var(--blue)">💡 ${m.explanation}</div>` : ''}
-    </div>`).join('') : `<div class="alert alert-success">🎉 Hozircha tahlil qilingan xato yo'q!</div>`;
+      ${m.explanation ? `<div style="margin-top:10px;padding:10px;background:var(--blue-l);border-radius:8px;font-size:13px;color:var(--blue)">${m.explanation}</div>` : ''}
+    </div>`).join('') : `<div class="alert alert-success">Hozircha tahlil qilingan xato yo'q!</div>`;
       makeChart('c-progress', 'line', {
         labels: ['1', '2', '3', '4', '5', '6'],
         datasets: [{ label: 'Ball dinamikasi', data: [0, ...DB.results.filter(r => r.studentId === currentUser.id).slice(-5).map(r => r.score)], borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,.1)', tension: .4, fill: true }]
@@ -3490,7 +3495,7 @@
             html += `<div style="background:var(--blue-l);border-left:3px solid var(--blue);border-radius:6px;padding:5px 7px;margin-bottom:3px;font-size:12px">
               <div style="font-weight:700;color:var(--blue)">${subj?.name||'—'}</div>
               ${grp ? `<div style="color:var(--muted)">${grp.name}</div>` : ''}
-              ${e.room ? `<div style="color:var(--muted)">🚪 ${e.room}</div>` : ''}
+              ${e.room ? `<div style="color:var(--muted)">${e.room}</div>` : ''}
               ${e.weekType!=='har'?`<div style="font-size:10px;color:#f59e0b">${e.weekType} hafta</div>`:''}
               ${canDelete ? `<button onclick="deleteScheduleEntry(${e.id})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;padding:0;margin-top:2px">✕ O'chirish</button>` : ''}
             </div>`;
@@ -3590,13 +3595,13 @@
           const subj = DB.subjects.find(s => s.id === a.subjectId);
           const sub = DB.submissions.find(s => s.assignmentId === a.id && s.studentId === currentUser.id);
           const overdue = a.deadline && new Date(a.deadline) < now && !sub;
-          let badge = sub ? (sub.status === 'graded' ? `<span class="badge b-green">✅ Baholandi: ${sub.score}/${a.maxScore}</span>` : `<span class="badge b-blue">📤 Topshirildi</span>`)
+          let badge = sub ? (sub.status === 'graded' ? `<span class="badge b-green">Baholandi: ${sub.score}/${a.maxScore}</span>` : `<span class="badge b-blue">Topshirildi</span>`)
                           : (overdue ? `<span class="badge b-red">⏰ Muddati o'tdi</span>` : `<span class="badge b-amber">⏳ Kutilmoqda</span>`);
           return `<div class="card" style="margin-bottom:12px;padding:16px">
             <div style="display:flex;align-items:center;gap:12px">
               <div style="flex:1">
                 <div style="font-weight:700">${a.title}</div>
-                <div style="font-size:12px;color:var(--muted)">${subj?.name||'—'} • ⏰ ${formatDate(a.deadline)} • 💯 ${a.maxScore}</div>
+                <div style="font-size:12px;color:var(--muted)">${subj?.name||'—'} • ${formatDate(a.deadline)} • ${a.maxScore} ball</div>
                 ${a.desc ? `<div style="font-size:12px;color:var(--muted);margin-top:4px">${a.desc}</div>` : ''}
               </div>
               ${badge}
@@ -3615,7 +3620,7 @@
       document.getElementById('msg-title').value = '';
       document.getElementById('msg-body').value = '';
       renderContactPage();
-      alert('✅ Xabar yuborildi!');
+      alert('Xabar yuborildi!');
     }
 
     function renderContactPage() {
@@ -3636,12 +3641,12 @@
       const msgs = DB.messages || [];
       el.innerHTML = msgs.length ? msgs.slice().reverse().map(m => {
         const user = DB.users.find(u => u.id === m.fromUserId);
-        const statusBadges = { new: '<span class="badge b-red">🆕 Yangi</span>', read: '<span class="badge b-amber">👁 Ko\'rildi</span>', replied: '<span class="badge b-green">✅ Javob berildi</span>' };
+        const statusBadges = { new: '<span class="badge b-red">Yangi</span>', read: '<span class="badge b-amber">Ko\'rildi</span>', replied: '<span class="badge b-green">Javob berildi</span>' };
         return `<div class="card" style="margin-bottom:12px;padding:16px">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
             <div style="flex:1">
               <div style="font-weight:700;margin-bottom:4px">${m.title} ${statusBadges[m.status]||''}</div>
-              <div style="font-size:12px;color:var(--muted);margin-bottom:6px">👤 ${user ? user.fname+' '+user.lname : '—'} • ${formatDate(m.createdAt)}</div>
+              <div style="font-size:12px;color:var(--muted);margin-bottom:6px">${user ? user.fname+' '+user.lname : '—'} • ${formatDate(m.createdAt)}</div>
               <div style="font-size:13px">${m.body}</div>
               ${m.reply ? `<div style="background:var(--green-l);border-left:3px solid #10b981;padding:8px;border-radius:6px;margin-top:8px;font-size:13px"><strong>Javob:</strong> ${m.reply}</div>` : ''}
             </div>
@@ -3720,12 +3725,12 @@
       return `<div class="card" style="margin-bottom:14px;padding:18px">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px">
           <div><div style="font-weight:700;font-size:15px">${p.title}</div>
-            <div style="font-size:12px;color:var(--muted);margin-top:3px">📅 ${formatDate(p.createdAt)} • 👤 ${creator ? creator.fname : 'Admin'} • 🗳 ${total} javob</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:3px">${formatDate(p.createdAt)} • ${creator ? creator.fname : 'Admin'} • ${total} javob</div>
           </div>
-          ${isAdmin ? `<button onclick="deletePoll(${p.id})" class="btn btn-sm" style="color:var(--red);border:1px solid var(--red);background:transparent">🗑</button>` : ''}
+          ${isAdmin ? `<button onclick="deletePoll(${p.id})" class="btn btn-sm" style="color:var(--red);border:1px solid var(--red);background:transparent">O'chirish</button>` : ''}
         </div>
         ${optHtml}
-        ${myResp && !isAdmin ? `<div style="font-size:12px;color:#10b981;margin-top:8px">✅ Siz "${p.options[myResp.answerIdx]}" deb javob berdingiz</div>` : ''}
+        ${myResp && !isAdmin ? `<div style="font-size:12px;color:#10b981;margin-top:8px">Siz "${p.options[myResp.answerIdx]}" deb javob berdingiz</div>` : ''}
       </div>`;
     }
 
@@ -3755,7 +3760,7 @@
               ${savedPhoto
                 ? `<img id="profile-av-img" src="${savedPhoto}" style="width:110px;height:110px;border-radius:50%;object-fit:cover;border:4px solid var(--blue)">`
                 : `<div id="profile-av-img" style="width:110px;height:110px;border-radius:50%;background:${u.color};color:#fff;font-size:38px;font-weight:800;display:flex;align-items:center;justify-content:center;border:4px solid var(--blue)">${av}</div>`}
-              <div style="position:absolute;bottom:4px;right:4px;background:var(--blue);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px">📷</div>
+              <div style="position:absolute;bottom:4px;right:4px;background:var(--blue);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
             </div>
             <input type="file" id="profile-photo-input" accept="image/*" style="display:none" onchange="handleProfilePhoto(event)">
             <div style="text-align:center">
@@ -3763,23 +3768,23 @@
               <div style="font-size:13px;color:var(--muted);margin-top:4px">${roleLabel}</div>
               <div style="font-size:12px;color:var(--muted);margin-top:2px">@${u.username}</div>
             </div>
-            ${savedPhoto ? `<button class="btn btn-sm" style="color:var(--red);border:1px solid var(--red);background:transparent" onclick="removeProfilePhoto()">🗑️ Rasmni o'chirish</button>` : ''}
+            ${savedPhoto ? `<button class="btn btn-sm" style="color:var(--red);border:1px solid var(--red);background:transparent" onclick="removeProfilePhoto()">Rasmni o'chirish</button>` : ''}
           </div>
           <!-- Edit card -->
           <div class="card" style="padding:28px">
-            <div style="font-size:16px;font-weight:700;margin-bottom:20px">✏️ Ma'lumotlarni tahrirlash</div>
+            <div style="font-size:16px;font-weight:700;margin-bottom:20px">Ma'lumotlarni tahrirlash</div>
             <div class="form-group"><label class="form-label">Ism</label>
               <input class="form-control" id="prof-fname" value="${u.fname}" placeholder="Ism"></div>
             <div class="form-group"><label class="form-label">Familiya</label>
               <input class="form-control" id="prof-lname" value="${u.lname || ''}" placeholder="Familiya"></div>
             <div class="form-group"><label class="form-label">Login (email)</label>
               <input class="form-control" id="prof-username" value="${u.username}" placeholder="login@edu.uz"></div>
-            <div style="font-size:14px;font-weight:600;margin:16px 0 10px;color:var(--muted)">🔒 Parolni o'zgartirish (ixtiyoriy)</div>
+            <div style="font-size:14px;font-weight:600;margin:16px 0 10px;color:var(--muted)">Parolni o'zgartirish (ixtiyoriy)</div>
             <div class="form-group"><label class="form-label">Yangi parol</label>
               <input class="form-control" id="prof-pass" type="password" placeholder="Yangi parol (bo'sh qoldirsangiz o'zgarmaydi)"></div>
             <div class="form-group"><label class="form-label">Parolni tasdiqlash</label>
               <input class="form-control" id="prof-pass2" type="password" placeholder="Parolni qayta kiriting"></div>
-            <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="saveProfile()">💾 Saqlash</button>
+            <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="saveProfile()">Saqlash</button>
           </div>
         </div>`;
     }
@@ -3822,7 +3827,7 @@
         if (u) { u.fname = fname; u.lname = lname; u.username = username; }
         buildSidebar();
         renderProfilePage();
-        alert("✅ Profil muvaffaqiyatli saqlandi!");
+        alert("Profil muvaffaqiyatli saqlandi!");
       } catch(e) {
         alert("Xatolik: " + e.message);
       }
@@ -4090,7 +4095,7 @@
         addChatMessage(reply, false);
       } catch (e) {
         thinking.remove();
-        addChatMessage('❌ Xato: ' + e.message, false);
+        addChatMessage('Xato: ' + e.message, false);
       }
     }
 
@@ -4152,14 +4157,14 @@ FAQAT JSON massiv qaytargin, boshqa hech narsa yozma.`;
         });
 
         renderAiQuestions();
-        status.textContent = `✅ ${questions.length} ta savol muvaffaqiyatli yaratildi!`;
+        status.textContent = `${questions.length} ta savol muvaffaqiyatli yaratildi!`;
         status.style.color = '#16a34a';
         switchQuizTab('manual');
       } catch (e) {
-        status.textContent = '❌ Xato: ' + e.message;
+        status.textContent = 'Xato: ' + e.message;
         status.style.color = '#dc2626';
       } finally {
-        btn.disabled = false; btn.textContent = '🚀 AI bilan test tuzish';
+        btn.disabled = false; btn.textContent = 'AI bilan test tuzish';
       }
     }
 
@@ -4171,7 +4176,7 @@ FAQAT JSON massiv qaytargin, boshqa hech narsa yozma.`;
           <div style="font-weight:600;margin-bottom:4px">${i+1}. ${q.text}</div>
           <div style="color:#64748b">${q.opts.join(' | ')}</div>
           <div style="margin-top:4px">To'g'ri: <b>${q.correct}</b> · ${q.diff} · ${q.time}s
-          <button onclick="removeAiQ(${i})" style="float:right;background:none;border:none;cursor:pointer;color:#dc2626">🗑</button></div>
+          <button onclick="removeAiQ(${i})" style="float:right;background:none;border:none;cursor:pointer;color:#dc2626;font-size:12px">O'chirish</button></div>
         </div>`).join('');
       document.getElementById('qq-count').textContent = qs.length;
       const pts = qs.reduce((s,q) => s + (q.diff==='easy'?1:q.diff==='medium'?2:3), 0);
