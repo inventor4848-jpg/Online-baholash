@@ -1912,7 +1912,11 @@
               <div class="page-title">Admin Dashboard</div>
               <div class="page-subtitle" id="admin-date"></div>
             </div>
-            <div class="page-actions"><button class="btn btn-sm" onclick="renderAdminDash()">Yangilash</button></div>
+            <div class="page-actions" style="display:flex;gap:8px">
+              <button class="btn btn-sm" onclick="exportData()" title="Ma'lumotlarni .json faylga yuklab olish">Eksport</button>
+              <label class="btn btn-sm" style="cursor:pointer;margin:0" title="Avval saqlangan .json faylni tiklash">Import<input type="file" accept=".json" onchange="importData(event)" style="display:none"></label>
+              <button class="btn btn-sm" onclick="renderAdminDash()">Yangilash</button>
+            </div>
           </div>
           <div class="stats-grid" id="admin-stats-grid"></div>
           <div class="grid-2" style="margin-bottom:16px">
@@ -2764,6 +2768,34 @@
     // Auto-save every 3 seconds + on page close
     setInterval(saveDB, 3000);
     window.addEventListener('beforeunload', saveDB);
+
+    function exportData() {
+      const payload = { db: DB, nextId: _nextId, exportedAt: new Date().toISOString() };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'eduassess-backup-' + new Date().toISOString().slice(0,10) + '.json';
+      a.click();
+    }
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const payload = JSON.parse(e.target.result);
+          if (!payload.db || !payload.nextId) { alert('Noto\'g\'ri fayl formati!'); return; }
+          if (!confirm('Mavjud barcha ma\'lumotlar almashtiriladi. Davom etilsinmi?')) return;
+          DB = payload.db;
+          _nextId = payload.nextId;
+          saveDB();
+          alert('Ma\'lumotlar muvaffaqiyatli tiklandi!');
+          renderAdminDash();
+        } catch(err) { alert('Faylni o\'qishda xatolik: ' + err.message); }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
 
     // ========== STATE ==========
     let currentUser = null, currentPage = '', currentSubjectId = null;
