@@ -2710,7 +2710,7 @@
       ],
       schedules: [], messages: [], polls: [], pollResponses: []
     };
-    let _nextId = { user: 8, subject: 4, assignment: 3, submission: 3, test: 3, result: 3, faculty: 3, dept: 4, group: 5 };
+    let _nextId = { user: 8, subject: 4, assignment: 3, submission: 3, test: 3, result: 3, faculty: 3, dept: 4, group: 5, schedule: 1 };
     function nextId(k) { if (!_nextId[k]) _nextId[k] = 1; return _nextId[k]++; }
 
     // ========== PERSISTENCE ==========
@@ -3534,7 +3534,7 @@
       openModal('modal-add-schedule');
     }
 
-    async function saveSchedule() {
+    function saveSchedule() {
       const groupId = parseInt(document.getElementById('sch-group').value);
       const subjectId = parseInt(document.getElementById('sch-subject').value);
       const day = document.getElementById('sch-day').value;
@@ -3542,14 +3542,17 @@
       const room = document.getElementById('sch-room').value.trim();
       const weekType = document.getElementById('sch-week').value;
       if (!groupId || !subjectId) return alert('Guruh va fanni tanlang!');
-      await apiAction('saveSchedule', { groupId, subjectId, day, period, room, weekType });
+      if (!DB.schedules) DB.schedules = [];
+      DB.schedules.push({ id: nextId('schedule'), groupId, subjectId, day, period, room, weekType });
+      saveDB();
       closeModal('modal-add-schedule');
       renderAdminSchedule();
     }
 
-    async function deleteScheduleEntry(id) {
+    function deleteScheduleEntry(id) {
       if (!confirm('Ushbu darsni o\'chirmoqchimisiz?')) return;
-      await apiAction('deleteSchedule', { id });
+      DB.schedules = (DB.schedules || []).filter(e => e.id !== id);
+      saveDB();
       renderAdminSchedule();
     }
 
@@ -3819,18 +3822,15 @@
       if (pass && pass !== pass2) return alert("Parollar mos kelmadi!");
       const payload = { id: currentUser.id, fname, lname, username };
       if (pass) payload.pass = pass;
-      try {
-        await apiAction('updateProfile', payload);
-        currentUser.fname = fname; currentUser.lname = lname; currentUser.username = username;
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        const u = DB.users.find(x => x.id === currentUser.id);
-        if (u) { u.fname = fname; u.lname = lname; u.username = username; }
-        buildSidebar();
-        renderProfilePage();
-        alert("Profil muvaffaqiyatli saqlandi!");
-      } catch(e) {
-        alert("Xatolik: " + e.message);
-      }
+      currentUser.fname = fname; currentUser.lname = lname; currentUser.username = username;
+      if (pass) currentUser.pass = pass;
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      const u = DB.users.find(x => x.id === currentUser.id);
+      if (u) { u.fname = fname; u.lname = lname; u.username = username; if (pass) u.pass = pass; }
+      saveDB();
+      buildSidebar();
+      renderProfilePage();
+      alert("Profil muvaffaqiyatli saqlandi!");
     }
 
     // ========== QUIZ ENGINE ==========
