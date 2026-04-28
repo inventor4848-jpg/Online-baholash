@@ -252,7 +252,13 @@ else:
                 u.active = not u.active
                 db.commit()
         elif action == "deleteUser":
-            u = db.query(models.User).filter(models.User.id == d["id"]).first()
+            uid = d["id"]
+            db.query(models.Mistake).filter(models.Mistake.student_id == uid).delete()
+            db.query(models.PollResponse).filter(models.PollResponse.user_id == uid).delete()
+            db.query(models.Message).filter(models.Message.from_user_id == uid).delete()
+            db.query(models.TestResult).filter(models.TestResult.student_id == uid).delete()
+            db.query(models.Submission).filter(models.Submission.student_id == uid).delete()
+            u = db.query(models.User).filter(models.User.id == uid).first()
             if u:
                 db.delete(u)
                 db.commit()
