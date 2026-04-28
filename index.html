@@ -4048,8 +4048,7 @@
       return res.json();
     }
 
-    async function loadDataFromAPI() {
-      const data = await apiGet('/api/data');
+    function applyData(data) {
       DB.faculties = data.faculties || [];
       DB.departments = data.departments || [];
       DB.groups = data.groups || [];
@@ -4066,6 +4065,11 @@
       DB.mistakes = data.mistakes || [];
     }
 
+    async function loadDataFromAPI() {
+      const data = await apiGet('/api/data');
+      applyData(data);
+    }
+
     async function fetchDB() {
       try { await loadDataFromAPI(); } catch(e) { console.warn('fetchDB:', e); }
     }
@@ -4073,11 +4077,20 @@
     async function apiAction(action, data) {
       try {
         await apiPost('/api/action', { action, data });
-        await loadDataFromAPI();
+        // Reload data in background — don't block UI
+        loadDataFromAPI().then(() => onPageLoad(currentPage)).catch(console.error);
       } catch(e) {
         alert('Xatolik: ' + e.message);
         throw e;
       }
+    }
+
+    function showApp() {
+      document.getElementById('login-page').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      buildSidebar();
+      const homePage = { admin: 'page-admin-dash', teacher: 'page-teacher-dash', student: 'page-student-dash' };
+      nav(homePage[currentUser.role]);
     }
 
     // ========== LOGIN via API ==========
@@ -4086,7 +4099,9 @@
       const username = document.getElementById('login-username').value.trim();
       const pass = document.getElementById('login-password').value.trim();
       const err = document.getElementById('login-error');
+      const btn = document.querySelector('#login-page button[onclick="doLogin()"]');
       err.style.display = 'none';
+      if (btn) { btn.disabled = true; btn.textContent = 'Kirish...'; }
       try {
         const result = await apiPost('/api/auth/login', { username, password: pass }, false);
         authToken = result.access_token;
@@ -4098,13 +4113,11 @@
           color: u.color || '#3b82f6', groupId: u.groupId, active: true
         };
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        await loadDataFromAPI();
-        document.getElementById('login-page').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-        buildSidebar();
-        const homePage = { admin: 'page-admin-dash', teacher: 'page-teacher-dash', student: 'page-student-dash' };
-        nav(homePage[currentUser.role]);
+        // Show UI immediately — load data in background
+        showApp();
+        loadDataFromAPI().then(() => onPageLoad(currentPage)).catch(console.error);
       } catch(e) {
+        if (btn) { btn.disabled = false; btn.textContent = 'Kirish'; }
         err.style.display = 'flex';
         const msg = e.message;
         err.textContent = (msg.includes('topilmadi') || msg.includes('noto') || msg.includes('401'))
@@ -4124,19 +4137,22 @@
 
     // ========== SESSION RESTORE ==========
     window.onload = async function() {
+      // Pre-warm Vercel serverless function in background
+      fetch('/api/health').catch(() => {});
       const savedUser = localStorage.getItem('currentUser');
       const savedToken = localStorage.getItem('auth_token');
       if (savedUser && savedToken) {
         try {
           authToken = savedToken;
           currentUser = JSON.parse(savedUser);
-          await loadDataFromAPI();
+          // Show UI immediately with cached user, load data in background
           document.getElementById('landing').style.display = 'none';
           document.getElementById('login-page').style.display = 'none';
           document.getElementById('app').style.display = 'block';
           buildSidebar();
           const homePage = { admin: 'page-admin-dash', teacher: 'page-teacher-dash', student: 'page-student-dash' };
           nav(homePage[currentUser.role]);
+          loadDataFromAPI().then(() => onPageLoad(currentPage)).catch(console.error);
         } catch(e) {
           authToken = '';
           localStorage.removeItem('auth_token');
