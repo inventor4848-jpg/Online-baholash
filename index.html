@@ -2046,40 +2046,59 @@
               <div class="page-subtitle" id="users-count-lbl"></div>
             </div>
             <div class="page-actions">
-              <button class="btn btn-sm btn-primary" onclick="openAddUser()">+ Yangi
-                foydalanuvchi</button>
+              <button class="btn btn-sm btn-primary" onclick="openAddUser()">+ Yangi foydalanuvchi</button>
             </div>
           </div>
-          <div class="card" style="margin-bottom:14px">
+          <!-- Search & filter -->
+          <div class="card" style="margin-bottom:16px">
             <div style="display:flex;gap:10px;flex-wrap:wrap">
               <input class="form-control" id="u-search" placeholder="Ism yoki login..."
                 style="flex:1;min-width:180px" oninput="renderUsersTable()">
-              <select class="form-control" id="u-role-filter" style="width:160px" onchange="renderUsersTable()">
-                <option value="">Barcha rollar</option>
-                <option value="teacher">O'qituvchi</option>
-                <option value="student">Talaba</option>
-              </select>
-              <select class="form-control" id="u-group-filter" style="width:160px" onchange="renderUsersTable()">
+              <select class="form-control" id="u-group-filter" style="width:170px" onchange="renderUsersTable()">
                 <option value="">Barcha guruhlar</option>
               </select>
             </div>
           </div>
-          <div class="card">
-            <div class="tbl-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Ism</th>
-                    <th>Rol</th>
-                    <th>Guruh/Bo'lim</th>
-                    <th>Login</th>
-                    <th>Holat</th>
-                    <th>Amal</th>
-                  </tr>
-                </thead>
-                <tbody id="t-users"></tbody>
-              </table>
+
+          <!-- Teachers section -->
+          <div id="section-teachers" style="margin-bottom:20px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <div style="width:4px;height:22px;background:#10b981;border-radius:4px"></div>
+              <div style="font-size:15px;font-weight:700">O'qituvchilar</div>
+              <span class="badge b-green" id="teacher-count-badge">0</span>
+            </div>
+            <div class="card">
+              <div class="tbl-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>#</th><th>Ism</th><th>Login</th><th>Holat</th><th>Amal</th>
+                    </tr>
+                  </thead>
+                  <tbody id="t-teachers"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Students section -->
+          <div id="section-students">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <div style="width:4px;height:22px;background:#a855f7;border-radius:4px"></div>
+              <div style="font-size:15px;font-weight:700">Talabalar</div>
+              <span class="badge b-purple" id="student-count-badge">0</span>
+            </div>
+            <div class="card">
+              <div class="tbl-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>#</th><th>Ism</th><th>Guruh</th><th>Login</th><th>Holat</th><th>Amal</th>
+                    </tr>
+                  </thead>
+                  <tbody id="t-students"></tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -3042,35 +3061,50 @@
     // ========== ADMIN: USERS ==========
     function renderUsersPage() {
       const cnt = DB.users.filter(u => u.role !== 'admin');
-      document.getElementById('users-count-lbl').textContent = `${cnt.length} ta foydalanuvchi`;
-      // populate group filter
+      const tCnt = cnt.filter(u => u.role === 'teacher').length;
+      const sCnt = cnt.filter(u => u.role === 'student').length;
+      document.getElementById('users-count-lbl').textContent = `${tCnt} o'qituvchi, ${sCnt} talaba`;
       const gf = document.getElementById('u-group-filter');
       gf.innerHTML = '<option value="">Barcha guruhlar</option>' + DB.groups.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
       renderUsersTable();
     }
     function renderUsersTable() {
       const srch = (document.getElementById('u-search')?.value || '').toLowerCase();
-      const roleF = document.getElementById('u-role-filter')?.value || '';
       const grpF = document.getElementById('u-group-filter')?.value || '';
-      let users = DB.users.filter(u => u.role !== 'admin');
-      if (roleF) users = users.filter(u => u.role === roleF);
-      if (grpF) users = users.filter(u => String(u.groupId) === grpF);
-      const login = u => u.username || u.email || '';
-      if (srch) users = users.filter(u => (u.fname + ' ' + u.lname + login(u)).toLowerCase().includes(srch));
-      const roleLabel = r => r === 'teacher' ? "O'qituvchi" : r === 'admin' ? 'Admin' : 'Talaba';
-      const roleBadge = r => r === 'teacher' ? 'b-green' : r === 'admin' ? 'b-blue' : 'b-purple';
-      document.getElementById('t-users').innerHTML = users.map((u, i) => {
-        const grp = u.groupId ? DB.groups.find(g => g.id === u.groupId)?.name : '—';
+      const login = u => u.username || '';
+      const holat = u => u.active !== false
+        ? '<span class="badge b-green">Faol</span>'
+        : '<span class="badge b-red">Nofaol</span>';
+      const actions = u => `<button class="btn btn-sm" onclick="editUser(${u.id})">Tahrir</button> <button class="btn btn-sm btn-danger" onclick="deleteUser(${u.id})">O'chirish</button>`;
+
+      // Filter teachers
+      let teachers = DB.users.filter(u => u.role === 'teacher');
+      if (srch) teachers = teachers.filter(u => (u.fname+' '+u.lname+login(u)).toLowerCase().includes(srch));
+      document.getElementById('teacher-count-badge').textContent = teachers.length;
+      document.getElementById('t-teachers').innerHTML = teachers.map((u, i) => `<tr>
+        <td>${i+1}</td>
+        <td><div style="font-weight:600">${u.fname} ${u.lname||''}</div><div style="font-size:11px;color:var(--muted)">${login(u)}</div></td>
+        <td style="font-family:monospace;font-size:12px">${login(u)}</td>
+        <td>${holat(u)}</td>
+        <td>${actions(u)}</td>
+      </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px">O\'qituvchi topilmadi</td></tr>';
+
+      // Filter students
+      let students = DB.users.filter(u => u.role === 'student');
+      if (grpF) students = students.filter(u => String(u.groupId) === grpF);
+      if (srch) students = students.filter(u => (u.fname+' '+u.lname+login(u)).toLowerCase().includes(srch));
+      document.getElementById('student-count-badge').textContent = students.length;
+      document.getElementById('t-students').innerHTML = students.map((u, i) => {
+        const grp = u.groupId ? (DB.groups.find(g => g.id === u.groupId)?.name || '—') : '—';
         return `<tr>
-      <td>${i + 1}</td>
-      <td><div style="font-weight:600">${u.fname} ${u.lname}</div><div style="font-size:11px;color:var(--muted)">${login(u)}</div></td>
-      <td><span class="badge ${roleBadge(u.role)}">${roleLabel(u.role)}</span></td>
-      <td>${grp}</td>
-      <td style="font-family:monospace;font-size:12px">${login(u)}</td>
-      <td><span class="badge b-green">Faol</span></td>
-      <td><button class="btn btn-sm" onclick="editUser(${u.id})">Tahrir</button> <button class="btn btn-sm btn-danger" onclick="deleteUser(${u.id})">O'chirish</button></td>
-    </tr>`;
-      }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">Foydalanuvchi topilmadi</td></tr>';
+          <td>${i+1}</td>
+          <td><div style="font-weight:600">${u.fname} ${u.lname||''}</div><div style="font-size:11px;color:var(--muted)">${login(u)}</div></td>
+          <td><span style="font-size:12px;font-weight:600;color:var(--purple)">${grp}</span></td>
+          <td style="font-family:monospace;font-size:12px">${login(u)}</td>
+          <td>${holat(u)}</td>
+          <td>${actions(u)}</td>
+        </tr>`;
+      }).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px">Talaba topilmadi</td></tr>';
     }
     function updateUserFormFields() {
       const r = document.getElementById('u-role').value;
