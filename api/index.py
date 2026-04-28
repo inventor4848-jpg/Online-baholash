@@ -70,8 +70,6 @@ else:
                 db.commit()
 
         seed_user("admin@edu.uz", "admin123", "Super", "Admin", "admin", "#3b82f6")
-        seed_user("teacher@edu.uz", "teach123", "O'qituvchi", "Demo", "teacher", "#10b981")
-        seed_user("student@edu.uz", "stud123", "Talaba", "Demo", "student", "#8b5cf6")
 
     @app.get("/api/debug/seed")
     def manual_seed(db=Depends(get_db)):
