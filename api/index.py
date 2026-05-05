@@ -64,7 +64,7 @@ else:
                 except Exception:
                     db.rollback()
 
-            db.execute(__import__('sqlalchemy').text("SELECT username, hashed_password FROM users LIMIT 1"))
+            db.execute(__import__('sqlalchemy').text("SELECT username, hashed_password, fname, lname, role, color FROM users LIMIT 1"))
         except Exception:
             db.rollback()
             models.Base.metadata.drop_all(bind=engine)
