@@ -4901,13 +4901,39 @@ FAQAT JSON massiv qaytargin, boshqa hech narsa yozma.`;
     }
 
     // Utility: trigger base64 file download
+    // Utility: trigger base64 file download (Blob method for mobile support)
     function downloadB64File(fileName, base64) {
-      const a = document.createElement('a');
-      a.href = base64;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      try {
+        const parts = base64.split(';');
+        const mime = parts[0].split(':')[1];
+        const b64Data = parts[1].split(',')[1];
+        const byteCharacters = atob(b64Data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: mime });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      } catch (e) {
+        console.error('Download xatosi:', e);
+        // Fallback
+        const a = document.createElement('a');
+        a.href = base64;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
     }
 
     // ---- Teacher Assignment File (create modal) ----
