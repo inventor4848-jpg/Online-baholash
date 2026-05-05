@@ -53,8 +53,18 @@ else:
     def ensure_demo_users(db):
         try:
             models.Base.metadata.create_all(bind=engine)
-            # Quick schema check — if users table has wrong columns, reset
-            db.execute(__import__('sqlalchemy').text("SELECT username FROM users LIMIT 1"))
+            # Quick schema check — if users table lacks new columns, we try to alter it
+            try:
+                db.execute(__import__('sqlalchemy').text("SELECT hashed_password FROM users LIMIT 1"))
+            except Exception:
+                db.rollback()
+                try:
+                    db.execute(__import__('sqlalchemy').text("ALTER TABLE users ADD COLUMN hashed_password VARCHAR"))
+                    db.commit()
+                except Exception:
+                    db.rollback()
+
+            db.execute(__import__('sqlalchemy').text("SELECT username, hashed_password FROM users LIMIT 1"))
         except Exception:
             db.rollback()
             models.Base.metadata.drop_all(bind=engine)
@@ -67,6 +77,9 @@ else:
                     username=username, hashed_password=auth.get_password_hash(password),
                     fname=fname, lname=lname, role=role, color=color
                 ))
+                db.commit()
+            elif not u.hashed_password:
+                u.hashed_password = auth.get_password_hash(password)
                 db.commit()
 
         seed_user("admin@edu.uz", "admin123", "Super", "Admin", "admin", "#3b82f6")
