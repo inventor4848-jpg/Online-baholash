@@ -50,39 +50,59 @@ else:
         print(error_msg)
         return JSONResponse(status_code=500, content={"detail": error_msg})
 
-_DB_INITIALIZED = False
+    _DB_INITIALIZED = False
 
     def ensure_demo_users(db):
-        global _DB_INITIALIZED
-        if _DB_INITIALIZED:
-            return
-            
+        """fast check to ensure tables exist and demo users are present"""
         try:
-            # Fast check if schema is already up-to-date
-            db.execute(__import__('sqlalchemy').text("SELECT username, hashed_password, fname, lname, role, color FROM users LIMIT 1"))
-            _DB_INITIALIZED = True
-        except Exception:
-            try:
-                db.rollback()
-                models.Base.metadata.drop_all(bind=engine)
-                models.Base.metadata.create_all(bind=engine)
-                _DB_INITIALIZED = True
-            except Exception:
-                db.rollback()
-
-        def seed_user(username, password, fname, lname, role, color):
-            u = db.query(models.User).filter(models.User.username == username).first()
-            if not u:
-                db.add(models.User(
-                    username=username, hashed_password=auth.get_password_hash(password),
-                    fname=fname, lname=lname, role=role, color=color
-                ))
+            # Check for missing columns in 'users' table
+            check_query = text("""
+                SELECT column_name 
+                FROM information_schema.columns 
+                WHERE table_name = 'users' AND column_name IN ('fname', 'lname', 'role', 'color', 'hashed_password')
+            """)
+            existing_columns = [row[0] for row in db.execute(check_query).fetchall()]
+            
+            # If any required columns are missing, reset the schema
+            if len(existing_columns) < 5:
+                print("Schema mismatch detected, resetting database...")
+                Base.metadata.drop_all(bind=engine)
+                Base.metadata.create_all(bind=engine)
                 db.commit()
-            elif not u.hashed_password:
-                u.hashed_password = auth.get_password_hash(password)
-                db.commit()
+            else:
+                # Tables exist with correct columns, now check for demo admin
+                admin = db.query(User).filter(User.username == "admin@edu.uz").first()
+                if admin:
+                    return
 
-        seed_user("admin@edu.uz", "admin123", "Super", "Admin", "admin", "#3b82f6")
+            # Seed demo data if missing or reset
+            admin_user = User(
+                username="admin@edu.uz",
+                fname="Admin",
+                lname="Edu",
+                hashed_password=pwd_context.hash("admin123"),
+                role="admin",
+                color="#3b82f6",
+                active=True
+            )
+            db.add(admin_user)
+            
+            # Add sample teacher
+            teacher_user = User(
+                username="teacher@edu.uz",
+                fname="Jamshid",
+                lname="Karimov",
+                hashed_password=pwd_context.hash("teacher123"),
+                role="teacher",
+                color="#10b981",
+                active=True
+            )
+            db.add(teacher_user)
+            
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            print(f"Error in ensure_demo_users: {e}")
 
     @app.get("/api/debug/seed")
     def manual_seed(db=Depends(get_db)):
@@ -122,6 +142,10 @@ _DB_INITIALIZED = False
     @app.post("/api/auth/login")
     @app.post("/auth/login")
     async def login(request: Request, db=Depends(get_db)):
+        global _DB_INITIALIZED
+        if not _DB_INITIALIZED:
+            ensure_demo_users(db)
+            _DB_INITIALIZED = True
         try:
             content_type = request.headers.get("content-type", "")
             if "application/json" in content_type:
