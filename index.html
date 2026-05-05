@@ -4904,35 +4904,45 @@ FAQAT JSON massiv qaytargin, boshqa hech narsa yozma.`;
     // Utility: trigger base64 file download (Blob method for mobile support)
     function downloadB64File(fileName, base64) {
       try {
-        const parts = base64.split(';');
-        const mime = parts[0].split(':')[1];
-        const b64Data = parts[1].split(',')[1];
-        const byteCharacters = atob(b64Data);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        // Safe parsing of Data URI
+        // Format is data:[<mediatype>][;base64],<data>
+        const commaIdx = base64.indexOf(',');
+        const b64Data = base64.substring(commaIdx + 1);
+
+        // Convert to array buffer
+        const byteString = atob(b64Data);
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
         }
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: mime });
+
+        // Force octet-stream so mobile browsers don't try to open the file inside the tab
+        const blob = new Blob([ab], { type: 'application/octet-stream' });
         const url = URL.createObjectURL(blob);
 
         const a = document.createElement('a');
+        a.style.display = 'none';
         a.href = url;
         a.download = fileName;
         document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
 
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        // Cleanup after enough time for mobile to catch the download intent
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 3000);
       } catch (e) {
         console.error('Download xatosi:', e);
-        // Fallback
+        // Extreme fallback
         const a = document.createElement('a');
+        a.style.display = 'none';
         a.href = base64;
         a.download = fileName;
         document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
+        setTimeout(() => document.body.removeChild(a), 1000);
       }
     }
 
