@@ -52,8 +52,37 @@ else:
 
     _DB_INITIALIZED = False
 
+    def run_migrations(db):
+        """Add new columns if they don't exist (safe to run multiple times)"""
+        from sqlalchemy import text as _text
+        db_url = str(engine.url)
+        is_sqlite = 'sqlite' in db_url
+        try:
+            if is_sqlite:
+                # SQLite: use PRAGMA to check columns then ALTER TABLE
+                def sqlite_add_col(table, col, col_type):
+                    cols = [row[1] for row in db.execute(_text(f"PRAGMA table_info({table})")).fetchall()]
+                    if col not in cols:
+                        db.execute(_text(f"ALTER TABLE {table} ADD COLUMN {col} {col_type}"))
+                        db.commit()
+                sqlite_add_col("assignments", "file_name", "VARCHAR")
+                sqlite_add_col("assignments", "file_data", "TEXT")
+                sqlite_add_col("submissions", "file_data", "TEXT")
+            else:
+                # PostgreSQL
+                def pg_add_col(table, col, col_type):
+                    db.execute(_text(f"ALTER TABLE {table} ADD COLUMN IF NOT EXISTS {col} {col_type}"))
+                    db.commit()
+                pg_add_col("assignments", "file_name", "VARCHAR")
+                pg_add_col("assignments", "file_data", "TEXT")
+                pg_add_col("submissions", "file_data", "TEXT")
+        except Exception as em:
+            db.rollback()
+            print(f"Migration warning: {em}")
+
     def ensure_demo_users(db):
         """fast check to ensure tables exist and demo users are present"""
+        run_migrations(db)
         try:
             # Check for missing columns in 'users' table
             check_query = text("""
@@ -243,8 +272,8 @@ else:
             "groups": [{"id": x.id, "name": x.name, "deptId": x.dept_id, "course": x.course} for x in groups],
             "users": out_users,
             "subjects": [transform_subject(x) for x in subjects],
-            "assignments": [{"id": x.id, "subjectId": x.subject_id, "title": x.title, "desc": x.description, "maxScore": x.max_score, "deadline": x.deadline.isoformat() if x.deadline else None, "types": x.types, "createdAt": x.created_at.isoformat()} for x in assignments],
-            "submissions": [{"id": x.id, "assignmentId": x.assignment_id, "studentId": x.student_id, "fileName": x.file_name, "comment": x.comment, "status": x.status, "score": x.score, "teacherComment": x.teacher_comment, "submittedAt": x.submitted_at.isoformat()} for x in submissions],
+            "assignments": [{"id": x.id, "subjectId": x.subject_id, "title": x.title, "desc": x.description, "maxScore": x.max_score, "deadline": x.deadline.isoformat() if x.deadline else None, "types": x.types, "fileName": x.file_name, "fileData": x.file_data, "createdAt": x.created_at.isoformat()} for x in assignments],
+            "submissions": [{"id": x.id, "assignmentId": x.assignment_id, "studentId": x.student_id, "fileName": x.file_name, "fileData": x.file_data, "comment": x.comment, "status": x.status, "score": x.score, "teacherComment": x.teacher_comment, "submittedAt": x.submitted_at.isoformat()} for x in submissions],
             "tests": out_tests,
             "results": [{"id": x.id, "testId": x.test_id, "studentId": x.student_id, "score": x.score, "easy": x.easy_stats, "mid": x.mid_stats, "hard": x.hard_stats, "cheatCount": x.cheat_count, "date": x.date.isoformat()} for x in results],
             "schedules": [{"id": x.id, "groupId": x.group_id, "subjectId": x.subject_id, "day": x.day, "period": x.period, "room": x.room, "weekType": x.week_type} for x in schedules],
@@ -327,7 +356,8 @@ else:
             import datetime
             a = models.Assignment(
                 title=d["title"], description=d.get("desc", ""), max_score=d["maxScore"],
-                types=d.get("types", ""), subject_id=d["subjectId"]
+                types=d.get("types", ""), subject_id=d["subjectId"],
+                file_name=d.get("fileName"), file_data=d.get("fileData")
             )
             if "deadline" in d:
                 a.deadline = datetime.datetime.fromisoformat(d["deadline"])
@@ -352,7 +382,8 @@ else:
         elif action == "submitAssignment":
             db.add(models.Submission(
                 assignment_id=d["assignmentId"], student_id=current_user.id,
-                file_name=d["fileName"], comment=d.get("comment", "")
+                file_name=d.get("fileName", ""), file_data=d.get("fileData"),
+                comment=d.get("comment", "")
             )); db.commit()
         elif action == "saveSchedule":
             db.add(models.Schedule(

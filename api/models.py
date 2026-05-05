@@ -77,6 +77,8 @@ class Assignment(Base):
     max_score = Column(Integer, default=100)
     deadline = Column(DateTime)
     types = Column(String)
+    file_name = Column(String, nullable=True)   # teacher's attached file name
+    file_data = Column(Text, nullable=True)      # teacher's file as Base64 string
     created_at = Column(DateTime, default=datetime.utcnow)
     subject_id = Column(Integer, ForeignKey("subjects.id"))
     
@@ -87,6 +89,7 @@ class Submission(Base):
     __tablename__ = "submissions"
     id = Column(Integer, primary_key=True, index=True)
     file_name = Column(String)
+    file_data = Column(Text, nullable=True)      # student's file as Base64 string
     comment = Column(Text, nullable=True)
     submitted_at = Column(DateTime, default=datetime.utcnow)
     status = Column(String, default="submitted") # submitted, graded

@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EduAssess — Aqlli Baholash Platformasi</title>
-  <meta name="description" content="Aqlli baholash platformasi: adaptive testing, anti-cheat nazorat va real-vaqt monitoring">
+  <meta name="description"
+    content="Aqlli baholash platformasi: adaptive testing, anti-cheat nazorat va real-vaqt monitoring">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
@@ -1650,7 +1651,7 @@
       cursor: pointer;
       padding: 6px 7px;
       border-radius: 8px;
-      color: rgba(255,255,255,.65);
+      color: rgba(255, 255, 255, .65);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1658,7 +1659,11 @@
       flex-shrink: 0;
       transition: background .15s;
     }
-    .sb-toggle-btn:hover { background: rgba(255,255,255,.12); }
+
+    .sb-toggle-btn:hover {
+      background: rgba(255, 255, 255, .12);
+    }
+
     .sidebar-logo-row {
       display: flex;
       align-items: center;
@@ -1666,20 +1671,45 @@
     }
 
     /* ===== COLLAPSED SIDEBAR (desktop) ===== */
-    .sidebar { transition: width .22s cubic-bezier(.4,0,.2,1); }
-    .sidebar.collapsed { width: 64px; }
+    .sidebar {
+      transition: width .22s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .sidebar.collapsed {
+      width: 64px;
+    }
+
     .sidebar.collapsed .sidebar-logo-title,
     .sidebar.collapsed .sidebar-logo-sub,
     .sidebar.collapsed .user-n,
     .sidebar.collapsed .user-r,
-    .sidebar.collapsed .nav-item > span:last-child,
+    .sidebar.collapsed .nav-item>span:last-child,
     .sidebar.collapsed .nav-section,
-    .sidebar.collapsed .sf-btn > span { display: none !important; }
-    .sidebar.collapsed .nav-item { justify-content: center; padding: 10px 8px; }
-    .sidebar.collapsed .nav-item-icon { margin: 0; }
-    .sidebar.collapsed .sidebar-user { justify-content: center; padding: 8px 4px; }
-    .sidebar.collapsed .sidebar-logo { padding: 14px 8px; }
-    .sidebar.collapsed .sidebar-logo-row { justify-content: center; }
+    .sidebar.collapsed .sf-btn>span {
+      display: none !important;
+    }
+
+    .sidebar.collapsed .nav-item {
+      justify-content: center;
+      padding: 10px 8px;
+    }
+
+    .sidebar.collapsed .nav-item-icon {
+      margin: 0;
+    }
+
+    .sidebar.collapsed .sidebar-user {
+      justify-content: center;
+      padding: 8px 4px;
+    }
+
+    .sidebar.collapsed .sidebar-logo {
+      padding: 14px 8px;
+    }
+
+    .sidebar.collapsed .sidebar-logo-row {
+      justify-content: center;
+    }
 
     /* ===== MOBILE TOP BAR ===== */
     .mobile-topbar {
@@ -1693,8 +1723,9 @@
       position: sticky;
       top: 0;
       z-index: 200;
-      box-shadow: 0 1px 6px rgba(0,0,0,.07);
+      box-shadow: 0 1px 6px rgba(0, 0, 0, .07);
     }
+
     .mobile-topbar-toggle {
       background: none;
       border: none;
@@ -1705,7 +1736,11 @@
       display: flex;
       align-items: center;
     }
-    .mobile-topbar-toggle:active { background: var(--bg); }
+
+    .mobile-topbar-toggle:active {
+      background: var(--bg);
+    }
+
     .mobile-topbar-title {
       font-size: 15px;
       font-weight: 700;
@@ -1719,27 +1754,50 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.45);
+      background: rgba(0, 0, 0, .45);
       z-index: 299;
     }
-    .sb-backdrop.show { display: block; }
+
+    .sb-backdrop.show {
+      display: block;
+    }
 
     /* ===== RESPONSIVE ===== */
     @media(max-width:1100px) {
-      .stats-grid { grid-template-columns: 1fr 1fr }
-      .grid-3 { grid-template-columns: 1fr 1fr }
+      .stats-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .grid-3 {
+        grid-template-columns: 1fr 1fr
+      }
     }
 
     @media(max-width:900px) {
-      .hero { flex-direction: column; padding-top: 50px }
-      .hero-visual { display: none }
-      .role-demo-grid { grid-template-columns: 1fr }
-      .main-content { padding: 16px }
+      .hero {
+        flex-direction: column;
+        padding-top: 50px
+      }
+
+      .hero-visual {
+        display: none
+      }
+
+      .role-demo-grid {
+        grid-template-columns: 1fr
+      }
+
+      .main-content {
+        padding: 16px
+      }
     }
 
     @media(max-width:640px) {
+
       /* Mobile: overlay sidebar */
-      .mobile-topbar { display: flex; }
+      .mobile-topbar {
+        display: flex;
+      }
 
       .sidebar {
         position: fixed !important;
@@ -1748,40 +1806,98 @@
         height: 100vh;
         width: 260px !important;
         z-index: 300;
-        transition: left .25s cubic-bezier(.4,0,.2,1) !important;
+        transition: left .25s cubic-bezier(.4, 0, .2, 1) !important;
       }
-      .sidebar.mobile-open { left: 0 !important; }
+
+      .sidebar.mobile-open {
+        left: 0 !important;
+      }
 
       /* Always show full text on mobile overlay sidebar */
       .sidebar .sidebar-logo-title,
       .sidebar .sidebar-logo-sub,
       .sidebar .user-n,
       .sidebar .user-r,
-      .sidebar .nav-item > span:last-child,
+      .sidebar .nav-item>span:last-child,
       .sidebar .nav-section,
-      .sidebar .sf-btn > span { display: block !important; }
-      .sidebar .nav-item { justify-content: flex-start !important; padding: 10px 12px !important; }
-      .sidebar .nav-item-icon { margin-right: 4px; }
-      .sidebar .sidebar-user { justify-content: flex-start !important; padding: 10px 12px !important; }
-      .sidebar .sidebar-logo { padding: 16px !important; }
-      .sidebar .sidebar-logo-row { justify-content: space-between; }
+      .sidebar .sf-btn>span {
+        display: block !important;
+      }
 
-      .app-inner { display: block; }
-      .main-content { padding: 12px 10px; min-height: calc(100vh - 54px); }
+      .sidebar .nav-item {
+        justify-content: flex-start !important;
+        padding: 10px 12px !important;
+      }
+
+      .sidebar .nav-item-icon {
+        margin-right: 4px;
+      }
+
+      .sidebar .sidebar-user {
+        justify-content: flex-start !important;
+        padding: 10px 12px !important;
+      }
+
+      .sidebar .sidebar-logo {
+        padding: 16px !important;
+      }
+
+      .sidebar .sidebar-logo-row {
+        justify-content: space-between;
+      }
+
+      .app-inner {
+        display: block;
+      }
+
+      .main-content {
+        padding: 12px 10px;
+        min-height: calc(100vh - 54px);
+      }
 
       /* Cards & tables on small screens */
-      .tbl-wrap { font-size: 12px; }
-      .grid-2, .grid-3 { grid-template-columns: 1fr; }
-      .form-row, .form-row3 { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: 1fr 1fr; }
-      .page-header { flex-direction: column; gap: 10px; }
-      .page-title { font-size: 18px; }
-      .page-actions { width: 100%; }
-      .page-actions .btn { flex: 1; text-align: center; justify-content: center; }
+      .tbl-wrap {
+        font-size: 12px;
+      }
+
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row,
+      .form-row3 {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .page-header {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .page-title {
+        font-size: 18px;
+      }
+
+      .page-actions {
+        width: 100%;
+      }
+
+      .page-actions .btn {
+        flex: 1;
+        text-align: center;
+        justify-content: center;
+      }
     }
 
     @media(max-width:400px) {
-      .stats-grid { grid-template-columns: 1fr; }
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -1803,14 +1919,16 @@
       <div class="land-nav-links">
         <a href="#"
           onclick="event.preventDefault();document.getElementById('features-section').scrollIntoView({behavior:'smooth'})">Imkoniyatlar</a>
-        <button class="btn btn-primary shine-eff" style="font-size:16px;padding:12px 28px" onclick="showLogin()">Kirish →</button>
+        <button class="btn btn-primary shine-eff" style="font-size:16px;padding:12px 28px" onclick="showLogin()">Kirish
+          →</button>
       </div>
     </nav>
     <div class="hero">
       <div class="hero-content">
         <div class="hero-badge">Zamonaviy Raqamli Baholash Platformasi</div>
         <h1>Talabalarni baholash <span class="highlight">aqlli va samarali</span></h1>
-        <p>Adaptive testing, anti-cheat nazorat, real-vaqt monitoring va sun'iy intellekt yordamida zamonaviy ta'lim muhiti.</p>
+        <p>Adaptive testing, anti-cheat nazorat, real-vaqt monitoring va sun'iy intellekt yordamida zamonaviy ta'lim
+          muhiti.</p>
         <div class="hero-btns">
           <button class="btn btn-primary btn-lg shine-eff" onclick="showLogin()">Platformaga kirish →</button>
         </div>
@@ -1854,42 +1972,72 @@
     <div id="features-section" class="features-grid">
       <div class="feat-card">
         <div class="feat-icon-wrap">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <circle cx="12" cy="12" r="6" />
+            <circle cx="12" cy="12" r="2" />
+          </svg>
         </div>
         <div class="feat-title">Adaptive Testing</div>
-        <div class="feat-desc">Oson (1×), O'rta (2×), Qiyin (3×) og'irlik formulasi: Σ(To'g'ri × Og'irlik) / Jami × 100%</div>
+        <div class="feat-desc">Oson (1×), O'rta (2×), Qiyin (3×) og'irlik formulasi: Σ(To'g'ri × Og'irlik) / Jami × 100%
+        </div>
       </div>
       <div class="feat-card">
         <div class="feat-icon-wrap">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
         </div>
         <div class="feat-title">Anti-Cheat Tizim</div>
-        <div class="feat-desc">3 marta oyna almashtirish — test avtomatik yakunlanadi va o'qituvchiga xabar ketadi.</div>
+        <div class="feat-desc">3 marta oyna almashtirish — test avtomatik yakunlanadi va o'qituvchiga xabar ketadi.
+        </div>
       </div>
       <div class="feat-card">
         <div class="feat-icon-wrap">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+            <rect x="8" y="2" width="8" height="4" rx="1" />
+            <line x1="9" y1="12" x2="15" y2="12" />
+            <line x1="9" y1="16" x2="13" y2="16" />
+          </svg>
         </div>
         <div class="feat-title">Topshiriqlar</div>
         <div class="feat-desc">Fayl yuklash, deadline, holat kuzatish va tizim ichida toʻgʻridan-toʻgʻri baholash.</div>
       </div>
       <div class="feat-card">
         <div class="feat-icon-wrap">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>
         </div>
         <div class="feat-title">Real-vaqt Monitoring</div>
         <div class="feat-desc">O'qituvchi talabaning testni yechish jarayonini jonli kuzatishi mumkin.</div>
       </div>
       <div class="feat-card">
         <div class="feat-icon-wrap">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+            <line x1="2" y1="20" x2="22" y2="20" />
+          </svg>
         </div>
         <div class="feat-title">Tahliliy Dashboard</div>
         <div class="feat-desc">Guruh bo'yicha dinamika, reytinglar, radar diagrammalar va o'sish grafiklari.</div>
       </div>
       <div class="feat-card">
         <div class="feat-icon-wrap">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
         </div>
         <div class="feat-title">Excel Eksport</div>
         <div class="feat-desc">Vedomost ko'rinishida natijalarni CSV/Excel formatida yuklab olish imkoniyati.</div>
@@ -1904,27 +2052,37 @@
     <!-- Bubble button -->
     <button id="ai-chat-toggle" onclick="toggleAiChat()"
       style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(37,99,235,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      </svg>
     </button>
     <!-- Chat panel -->
     <div id="ai-chat-panel"
       style="display:none;position:absolute;bottom:70px;right:0;width:340px;background:#fff;border-radius:20px;box-shadow:0 12px 40px rgba(0,0,0,.18);overflow:hidden;flex-direction:column">
-      <div style="background:linear-gradient(135deg,#2563eb,#7c3aed);padding:16px 20px;display:flex;align-items:center;gap:10px">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <div
+        style="background:linear-gradient(135deg,#2563eb,#7c3aed);padding:16px 20px;display:flex;align-items:center;gap:10px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
         <div>
           <div style="color:#fff;font-weight:700;font-size:15px">AI Yordamchi</div>
           <div style="color:rgba(255,255,255,.75);font-size:12px">EduAssess bo'yicha savol bering</div>
         </div>
-        <button onclick="toggleAiChat()" style="margin-left:auto;background:none;border:none;color:#fff;font-size:18px;cursor:pointer">✕</button>
+        <button onclick="toggleAiChat()"
+          style="margin-left:auto;background:none;border:none;color:#fff;font-size:18px;cursor:pointer">✕</button>
       </div>
       <div id="ai-chat-messages"
         style="height:280px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#f8fafc">
         <div style="background:#e0e7ff;padding:10px 14px;border-radius:12px 12px 12px 0;font-size:13px;max-width:85%">
-          Salom! Men EduAssess yordamchisiman. Platforma, testlar, baholash tizimi yoki boshqa savollaringizga javob beraman.
+          Salom! Men EduAssess yordamchisiman. Platforma, testlar, baholash tizimi yoki boshqa savollaringizga javob
+          beraman.
         </div>
       </div>
       <div style="padding:12px;border-top:1px solid #e2e8f0;display:flex;gap:8px">
-        <input id="ai-chat-input" type="text" placeholder="Savol yozing..." onkeydown="if(event.key==='Enter')sendAiMessage()"
+        <input id="ai-chat-input" type="text" placeholder="Savol yozing..."
+          onkeydown="if(event.key==='Enter')sendAiMessage()"
           style="flex:1;border:1px solid #e2e8f0;border-radius:10px;padding:9px 12px;font-size:13px;outline:none">
         <button onclick="sendAiMessage()"
           style="background:#2563eb;color:#fff;border:none;border-radius:10px;padding:9px 14px;cursor:pointer;font-size:16px">➤</button>
@@ -1939,7 +2097,11 @@
     <div class="login-bg"></div>
     <div class="login-box">
       <div class="login-logo">
-        <span class="login-logo-icon"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span>
+        <span class="login-logo-icon"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+            <path d="M6 12v5c3 3 9 3 12 0v-5" />
+          </svg></span>
         <h2>EduAssess</h2>
         <p>Aqlli baholash platformasi</p>
       </div>
@@ -1960,7 +2122,13 @@
     <!-- Mobile top bar -->
     <div class="mobile-topbar" id="mobile-topbar">
       <button class="mobile-topbar-toggle" onclick="toggleSidebar()" aria-label="Menyu">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/><line x1="3" y1="22" x2="10" y2="22" opacity=".4"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+          <line x1="3" y1="22" x2="10" y2="22" opacity=".4" />
+        </svg>
       </button>
       <span class="mobile-topbar-title" id="mobile-topbar-title">EduAssess</span>
     </div>
@@ -1977,9 +2145,12 @@
               <div class="sidebar-logo-sub" id="sb-logo-sub">Baholash platformasi</div>
             </div>
             <button class="sb-toggle-btn" onclick="toggleSidebar()" title="Menyu">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/>
-                <line x1="3" y1="18" x2="21" y2="18"/><line x1="3" y1="22" x2="10" y2="22" opacity=".5"/>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round">
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+                <line x1="3" y1="22" x2="10" y2="22" opacity=".5" />
               </svg>
             </button>
           </div>
@@ -1987,7 +2158,13 @@
         </div>
         <nav class="sidebar-nav" id="sidebar-nav"></nav>
         <div class="sidebar-footer">
-          <button class="sf-btn" onclick="doLogout()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;flex-shrink:0"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Chiqish</span></button>
+          <button class="sf-btn" onclick="doLogout()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+              style="margin-right:6px;flex-shrink:0">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg><span>Chiqish</span></button>
         </div>
       </div>
 
@@ -2002,8 +2179,11 @@
               <div class="page-subtitle" id="admin-date"></div>
             </div>
             <div class="page-actions" style="display:flex;gap:8px">
-              <button class="btn btn-sm" onclick="exportData()" title="Ma'lumotlarni .json faylga yuklab olish">Eksport</button>
-              <label class="btn btn-sm" style="cursor:pointer;margin:0" title="Avval saqlangan .json faylni tiklash">Import<input type="file" accept=".json" onchange="importData(event)" style="display:none"></label>
+              <button class="btn btn-sm" onclick="exportData()"
+                title="Ma'lumotlarni .json faylga yuklab olish">Eksport</button>
+              <label class="btn btn-sm" style="cursor:pointer;margin:0"
+                title="Avval saqlangan .json faylni tiklash">Import<input type="file" accept=".json"
+                  onchange="importData(event)" style="display:none"></label>
               <button class="btn btn-sm" onclick="renderAdminDash()">Yangilash</button>
             </div>
           </div>
@@ -2052,8 +2232,8 @@
           <!-- Search & filter -->
           <div class="card" style="margin-bottom:16px">
             <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <input class="form-control" id="u-search" placeholder="Ism yoki login..."
-                style="flex:1;min-width:180px" oninput="renderUsersTable()">
+              <input class="form-control" id="u-search" placeholder="Ism yoki login..." style="flex:1;min-width:180px"
+                oninput="renderUsersTable()">
               <select class="form-control" id="u-group-filter" style="width:170px" onchange="renderUsersTable()">
                 <option value="">Barcha guruhlar</option>
               </select>
@@ -2072,7 +2252,11 @@
                 <table>
                   <thead>
                     <tr>
-                      <th>#</th><th>Ism</th><th>Login</th><th>Holat</th><th>Amal</th>
+                      <th>#</th>
+                      <th>Ism</th>
+                      <th>Login</th>
+                      <th>Holat</th>
+                      <th>Amal</th>
                     </tr>
                   </thead>
                   <tbody id="t-teachers"></tbody>
@@ -2093,7 +2277,12 @@
                 <table>
                   <thead>
                     <tr>
-                      <th>#</th><th>Ism</th><th>Guruh</th><th>Login</th><th>Holat</th><th>Amal</th>
+                      <th>#</th>
+                      <th>Ism</th>
+                      <th>Guruh</th>
+                      <th>Login</th>
+                      <th>Holat</th>
+                      <th>Amal</th>
                     </tr>
                   </thead>
                   <tbody id="t-students"></tbody>
@@ -2216,7 +2405,8 @@
             </div>
             <div class="card" style="margin-top:16px">
               <div class="card-header">
-                <div class="card-title">Barcha natijalar</div><button class="btn btn-sm" onclick="exportSubjectCSV()">CSV yuklab olish</button>
+                <div class="card-title">Barcha natijalar</div><button class="btn btn-sm"
+                  onclick="exportSubjectCSV()">CSV yuklab olish</button>
               </div>
               <div class="tbl-wrap">
                 <table>
@@ -2366,9 +2556,13 @@
         <!-- Admin: Schedule Management -->
         <div class="page" id="page-admin-schedule">
           <div class="page-header">
-            <div><div class="page-title">Dars jadvali boshqaruvi</div><div class="page-subtitle">Guruhlar bo'yicha haftalik jadval</div></div>
+            <div>
+              <div class="page-title">Dars jadvali boshqaruvi</div>
+              <div class="page-subtitle">Guruhlar bo'yicha haftalik jadval</div>
+            </div>
             <div class="page-actions">
-              <select class="form-control" id="sched-group-sel" onchange="renderAdminSchedule()" style="min-width:160px"></select>
+              <select class="form-control" id="sched-group-sel" onchange="renderAdminSchedule()"
+                style="min-width:160px"></select>
               <button class="btn btn-primary" onclick="openAddScheduleModal()">+ Dars qo'shish</button>
             </div>
           </div>
@@ -2377,39 +2571,65 @@
 
         <!-- Admin: Messages -->
         <div class="page" id="page-admin-messages">
-          <div class="page-header"><div><div class="page-title">Murojaatlar</div><div class="page-subtitle">Foydalanuvchilardan kelgan xabarlar</div></div></div>
+          <div class="page-header">
+            <div>
+              <div class="page-title">Murojaatlar</div>
+              <div class="page-subtitle">Foydalanuvchilardan kelgan xabarlar</div>
+            </div>
+          </div>
           <div id="admin-messages-list"></div>
         </div>
 
         <!-- Admin: Polls -->
         <div class="page" id="page-admin-polls">
           <div class="page-header">
-            <div><div class="page-title">So'rovnomalar</div><div class="page-subtitle">Yaratish va natijalarni ko'rish</div></div>
-            <div class="page-actions"><button class="btn btn-primary" onclick="openModal('modal-create-poll')">+ So'rovnoma</button></div>
+            <div>
+              <div class="page-title">So'rovnomalar</div>
+              <div class="page-subtitle">Yaratish va natijalarni ko'rish</div>
+            </div>
+            <div class="page-actions"><button class="btn btn-primary" onclick="openModal('modal-create-poll')">+
+                So'rovnoma</button></div>
           </div>
           <div id="admin-polls-list"></div>
         </div>
 
         <!-- Shared: Schedule view (teacher/student) -->
         <div class="page" id="page-schedule">
-          <div class="page-header"><div><div class="page-title">Dars jadvali</div><div class="page-subtitle">Haftalik dars programma</div></div></div>
+          <div class="page-header">
+            <div>
+              <div class="page-title">Dars jadvali</div>
+              <div class="page-subtitle">Haftalik dars programma</div>
+            </div>
+          </div>
           <div id="schedule-view"></div>
         </div>
 
         <!-- Shared: Tasks -->
         <div class="page" id="page-tasks">
-          <div class="page-header"><div><div class="page-title">Vazifalar</div><div class="page-subtitle">Barcha topshiriqlar</div></div></div>
+          <div class="page-header">
+            <div>
+              <div class="page-title">Vazifalar</div>
+              <div class="page-subtitle">Barcha topshiriqlar</div>
+            </div>
+          </div>
           <div id="tasks-list"></div>
         </div>
 
         <!-- Shared: Contact admin -->
         <div class="page" id="page-contact">
-          <div class="page-header"><div><div class="page-title">Adminga murojat</div><div class="page-subtitle">Savol yoki muammo yuboring</div></div></div>
+          <div class="page-header">
+            <div>
+              <div class="page-title">Adminga murojat</div>
+              <div class="page-subtitle">Savol yoki muammo yuboring</div>
+            </div>
+          </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px">
             <div class="card" style="padding:24px">
               <div style="font-size:15px;font-weight:700;margin-bottom:16px">Yangi xabar yuborish</div>
-              <div class="form-group"><label class="form-label">Mavzu *</label><input class="form-control" id="msg-title" placeholder="Masalan: Jadval haqida savol"></div>
-              <div class="form-group"><label class="form-label">Xabar *</label><textarea class="form-control" id="msg-body" rows="5" placeholder="Xabaringizni yozing..." style="resize:vertical"></textarea></div>
+              <div class="form-group"><label class="form-label">Mavzu *</label><input class="form-control"
+                  id="msg-title" placeholder="Masalan: Jadval haqida savol"></div>
+              <div class="form-group"><label class="form-label">Xabar *</label><textarea class="form-control"
+                  id="msg-body" rows="5" placeholder="Xabaringizni yozing..." style="resize:vertical"></textarea></div>
               <button class="btn btn-primary" style="width:100%" onclick="sendMessage()">Yuborish</button>
             </div>
             <div class="card" style="padding:24px">
@@ -2421,7 +2641,12 @@
 
         <!-- Shared: Polls -->
         <div class="page" id="page-polls">
-          <div class="page-header"><div><div class="page-title">So'rovnomalar</div><div class="page-subtitle">Faol so'rovnomalar</div></div></div>
+          <div class="page-header">
+            <div>
+              <div class="page-title">So'rovnomalar</div>
+              <div class="page-subtitle">Faol so'rovnomalar</div>
+            </div>
+          </div>
           <div id="polls-list"></div>
         </div>
 
@@ -2452,7 +2677,12 @@
 
   <!-- ===== CHEAT OVERLAY ===== -->
   <div class="cheat-overlay" id="cheat-overlay">
-    <div class="cheat-icon-big"><svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+    <div class="cheat-icon-big"><svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+        <line x1="12" y1="9" x2="12" y2="13" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+      </svg></div>
     <div style="font-size:26px;font-weight:800;font-family:'Outfit',sans-serif">Test to'xtatildi!</div>
     <div style="font-size:16px;opacity:.9" id="cheat-msg">Siz boshqa oynaga o'tdingiz</div>
     <div style="font-size:13px;opacity:.7">3 marta qoidabuzarlik — test avtomatik yakunlanadi</div>
@@ -2467,30 +2697,42 @@
       <button class="modal-close" onclick="closeModal('modal-add-schedule')">✕</button>
       <div class="modal-title">Dars qo'shish</div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Guruh *</label><select class="form-control" id="sch-group"></select></div>
-        <div class="form-group"><label class="form-label">Fan *</label><select class="form-control" id="sch-subject"></select></div>
+        <div class="form-group"><label class="form-label">Guruh *</label><select class="form-control"
+            id="sch-group"></select></div>
+        <div class="form-group"><label class="form-label">Fan *</label><select class="form-control"
+            id="sch-subject"></select></div>
       </div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Kun *</label>
           <select class="form-control" id="sch-day">
-            <option>Dushanba</option><option>Seshanba</option><option>Chorshanba</option>
-            <option>Payshanba</option><option>Juma</option><option>Shanba</option>
+            <option>Dushanba</option>
+            <option>Seshanba</option>
+            <option>Chorshanba</option>
+            <option>Payshanba</option>
+            <option>Juma</option>
+            <option>Shanba</option>
           </select>
         </div>
         <div class="form-group"><label class="form-label">Juft *</label>
           <select class="form-control" id="sch-period">
-            <option value="1">1 — 08:30</option><option value="2">2 — 10:00</option>
-            <option value="3">3 — 11:30</option><option value="4">4 — 13:00</option>
-            <option value="5">5 — 14:30</option><option value="6">6 — 16:00</option>
+            <option value="1">1 — 08:30</option>
+            <option value="2">2 — 10:00</option>
+            <option value="3">3 — 11:30</option>
+            <option value="4">4 — 13:00</option>
+            <option value="5">5 — 14:30</option>
+            <option value="6">6 — 16:00</option>
             <option value="7">7 — 17:30</option>
           </select>
         </div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Xona</label><input class="form-control" id="sch-room" placeholder="202-A"></div>
+        <div class="form-group"><label class="form-label">Xona</label><input class="form-control" id="sch-room"
+            placeholder="202-A"></div>
         <div class="form-group"><label class="form-label">Hafta turi</label>
           <select class="form-control" id="sch-week">
-            <option value="har">Har hafta</option><option value="toq">Toq hafta</option><option value="juft">Juft hafta</option>
+            <option value="har">Har hafta</option>
+            <option value="toq">Toq hafta</option>
+            <option value="juft">Juft hafta</option>
           </select>
         </div>
       </div>
@@ -2503,10 +2745,13 @@
     <div class="modal" style="max-width:440px">
       <button class="modal-close" onclick="closeModal('modal-create-poll')">✕</button>
       <div class="modal-title">So'rovnoma yaratish</div>
-      <div class="form-group"><label class="form-label">Savol *</label><input class="form-control" id="poll-title" placeholder="So'rovnoma savoli"></div>
+      <div class="form-group"><label class="form-label">Savol *</label><input class="form-control" id="poll-title"
+          placeholder="So'rovnoma savoli"></div>
       <div class="form-group"><label class="form-label">Kimga</label>
         <select class="form-control" id="poll-target">
-          <option value="all">Hamma</option><option value="student">Talabalar</option><option value="teacher">O'qituvchilar</option>
+          <option value="all">Hamma</option>
+          <option value="student">Talabalar</option>
+          <option value="teacher">O'qituvchilar</option>
         </select>
       </div>
       <div class="form-group"><label class="form-label">Variantlar *</label>
@@ -2526,8 +2771,10 @@
       <button class="modal-close" onclick="closeModal('modal-reply-msg')">✕</button>
       <div class="modal-title">↩️ Javob yozish</div>
       <input type="hidden" id="reply-msg-id">
-      <div id="reply-msg-preview" style="background:var(--bg);border-radius:10px;padding:14px;margin-bottom:14px;font-size:13px"></div>
-      <div class="form-group"><label class="form-label">Javob *</label><textarea class="form-control" id="reply-msg-text" rows="4" placeholder="Javobingizni yozing..."></textarea></div>
+      <div id="reply-msg-preview"
+        style="background:var(--bg);border-radius:10px;padding:14px;margin-bottom:14px;font-size:13px"></div>
+      <div class="form-group"><label class="form-label">Javob *</label><textarea class="form-control"
+          id="reply-msg-text" rows="4" placeholder="Javobingizni yozing..."></textarea></div>
       <button class="btn btn-primary" style="width:100%" onclick="replyMessage()">Yuborish</button>
     </div>
   </div>
@@ -2557,8 +2804,10 @@
           <select class="form-control" id="u-group"></select>
         </div>
       </div>
-      <div class="form-group"><label class="form-label">Login *</label><input class="form-control" id="u-username" type="text" placeholder="masalan: aziz@edu.uz"></div>
-      <div class="form-group"><label class="form-label">Parol *</label><input class="form-control" id="u-pass" type="text" placeholder="parol kiriting"></div>
+      <div class="form-group"><label class="form-label">Login *</label><input class="form-control" id="u-username"
+          type="text" placeholder="masalan: aziz@edu.uz"></div>
+      <div class="form-group"><label class="form-label">Parol *</label><input class="form-control" id="u-pass"
+          type="text" placeholder="parol kiriting"></div>
       <button class="btn btn-primary" style="width:100%" onclick="saveUser()">Saqlash va credential ko'rish</button>
     </div>
   </div>
@@ -2670,6 +2919,31 @@
       </div>
       <div class="form-group"><label class="form-label">Fayl turlari</label><input class="form-control"
           id="assign-types" value="PDF, DOCX, ZIP" placeholder="PDF, DOCX, ZIP"></div>
+      <!-- Teacher file attachment -->
+      <div class="form-group">
+        <label class="form-label">Topshiriq fayli (ixtiyoriy)</label>
+        <div id="assign-file-drop"
+          style="border:2px dashed var(--border);border-radius:12px;padding:18px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg)"
+          onclick="document.getElementById('assign-file-input').click()"
+          ondragover="event.preventDefault();this.style.borderColor='var(--green)';this.style.background='rgba(16,185,129,.06)'"
+          ondragleave="this.style.borderColor='var(--border)';this.style.background='var(--bg)'"
+          ondrop="handleAssignFileDrop(event)">
+          <div style="font-size:28px;margin-bottom:6px">📎</div>
+          <div style="font-size:13px;font-weight:600;color:var(--muted)">Fayl tanlash yoki bu yerga tashlang</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">PDF, DOCX, PPTX, ZIP va boshqalar</div>
+          <input type="file" id="assign-file-input" style="display:none" onchange="handleAssignFileSelect(this)">
+        </div>
+        <div id="assign-file-preview"
+          style="display:none;margin-top:8px;padding:10px 14px;background:var(--green-l);border-radius:10px;display:none;align-items:center;gap:10px">
+          <span style="font-size:20px">📄</span>
+          <div style="flex:1">
+            <div id="assign-file-name" style="font-weight:600;font-size:13px"></div>
+            <div id="assign-file-size" style="font-size:11px;color:var(--muted)"></div>
+          </div>
+          <button onclick="clearAssignFile()"
+            style="background:none;border:none;cursor:pointer;color:var(--red);font-size:18px;padding:2px 6px">✕</button>
+        </div>
+      </div>
       <button class="btn btn-green" style="width:100%" onclick="saveAssignment()">Topshiriq yaratish</button>
     </div>
   </div>
@@ -2682,15 +2956,19 @@
       <!-- AI / Qo'lda tab -->
       <div style="display:flex;gap:8px;margin-bottom:16px">
         <button id="quiz-tab-manual" onclick="switchQuizTab('manual')"
-          style="flex:1;padding:9px;border-radius:10px;border:2px solid #2563eb;background:#2563eb;color:#fff;font-weight:600;cursor:pointer;font-size:13px">Qo'lda yaratish</button>
+          style="flex:1;padding:9px;border-radius:10px;border:2px solid #2563eb;background:#2563eb;color:#fff;font-weight:600;cursor:pointer;font-size:13px">Qo'lda
+          yaratish</button>
         <button id="quiz-tab-ai" onclick="switchQuizTab('ai')"
-          style="flex:1;padding:9px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;color:#64748b;font-weight:600;cursor:pointer;font-size:13px">AI orqali yaratish</button>
+          style="flex:1;padding:9px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;color:#64748b;font-weight:600;cursor:pointer;font-size:13px">AI
+          orqali yaratish</button>
       </div>
       <!-- AI panel -->
-      <div id="quiz-ai-panel" style="display:none;background:#f0f4ff;border-radius:14px;padding:18px;margin-bottom:16px">
+      <div id="quiz-ai-panel"
+        style="display:none;background:#f0f4ff;border-radius:14px;padding:18px;margin-bottom:16px">
         <div style="font-weight:700;font-size:14px;margin-bottom:12px;color:#1e40af">AI yordamida test yaratish</div>
         <div class="form-group"><label class="form-label">Mavzu *</label>
-          <input class="form-control" id="ai-topic" placeholder="Masalan: Python dasturlash tili asoslari"></div>
+          <input class="form-control" id="ai-topic" placeholder="Masalan: Python dasturlash tili asoslari">
+        </div>
         <div class="form-row">
           <div class="form-group"><label class="form-label">Savollar soni</label>
             <select class="form-control" id="ai-count">
@@ -2698,20 +2976,24 @@
               <option value="10" selected>10 ta</option>
               <option value="15">15 ta</option>
               <option value="20">20 ta</option>
-            </select></div>
+            </select>
+          </div>
           <div class="form-group"><label class="form-label">Qiyinchilik</label>
             <select class="form-control" id="ai-difficulty">
               <option value="aralash" selected>Aralash</option>
               <option value="oson">Faqat oson</option>
               <option value="o'rta">Faqat o'rta</option>
               <option value="qiyin">Faqat qiyin</option>
-            </select></div>
+            </select>
+          </div>
         </div>
         <button onclick="generateAiQuiz()"
-          style="width:100%;padding:11px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px" id="ai-gen-btn">
+          style="width:100%;padding:11px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px"
+          id="ai-gen-btn">
           AI bilan test tuzish
         </button>
-        <div id="ai-gen-status" style="margin-top:10px;font-size:13px;color:#64748b;text-align:center;display:none"></div>
+        <div id="ai-gen-status" style="margin-top:10px;font-size:13px;color:#64748b;text-align:center;display:none">
+        </div>
       </div>
       <div class="form-group"><label class="form-label">Test nomi *</label><input class="form-control" id="quiz-title"
           placeholder="Test sarlavhasi"></div>
@@ -2756,11 +3038,24 @@
 
   <!-- Grade Assignment -->
   <div class="modal-backdrop" id="modal-grade">
-    <div class="modal" style="max-width:400px">
+    <div class="modal" style="max-width:420px">
       <button class="modal-close" onclick="closeModal('modal-grade')">✕</button>
       <div class="modal-title">Baholash</div>
       <div id="grade-info"
-        style="background:var(--bg);border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px"></div>
+        style="background:var(--bg);border-radius:10px;padding:14px;margin-bottom:12px;font-size:13px"></div>
+      <!-- Student submitted file download -->
+      <div id="grade-file-wrap"
+        style="display:none;margin-bottom:14px;padding:12px 14px;border-radius:10px;background:#fdf4ff;border:1px solid #dbb6f8">
+        <div
+          style="font-size:11px;font-weight:700;color:#7c3aed;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px">
+          📂 Talaba topshirgan fayl</div>
+        <button id="grade-file-btn" onclick="downloadStudentFile()"
+          style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1.5px solid #7c3aed;border-radius:8px;background:#fff;color:#7c3aed;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s"
+          onmouseover="this.style.background='#7c3aed';this.style.color='#fff'"
+          onmouseout="this.style.background='#fff';this.style.color='#7c3aed'">
+          ⬇️ <span id="grade-file-name-lbl">Faylni yuklab olish</span>
+        </button>
+      </div>
       <div class="form-group"><label class="form-label">Ball (0 – <span id="grade-max">100</span>)</label><input
           class="form-control" type="number" id="grade-score" placeholder="Ball kiriting"></div>
       <div class="form-group"><label class="form-label">Izoh (ixtiyoriy)</label><textarea class="form-control"
@@ -2772,17 +3067,53 @@
 
   <!-- Upload Assignment (Student) -->
   <div class="modal-backdrop" id="modal-upload-assign">
-    <div class="modal" style="max-width:440px">
+    <div class="modal" style="max-width:460px">
       <button class="modal-close" onclick="closeModal('modal-upload-assign')">✕</button>
       <div class="modal-title" id="upload-assign-title">Topshiriq yuklash</div>
       <div id="upload-assign-info"
-        style="background:var(--bg);border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px"></div>
-      <div class="form-group"><label class="form-label">Fayl nomi (ishlang simulyatsiya)</label><input
-          class="form-control" id="upload-fname" placeholder="Masalan: loyiha_aziz.pdf"></div>
+        style="background:var(--bg);border-radius:10px;padding:14px;margin-bottom:12px;font-size:13px"></div>
+      <!-- Teacher's attached file download -->
+      <div id="teacher-file-wrap"
+        style="display:none;margin-bottom:14px;padding:12px 14px;border-radius:10px;background:#f0f4ff;border:1px solid #c7d4f8">
+        <div
+          style="font-size:11px;font-weight:700;color:#3b5de7;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px">
+          📎 O'qituvchi topshiriq fayli</div>
+        <button id="teacher-file-btn" onclick="downloadTeacherFile()"
+          style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1.5px solid #3b5de7;border-radius:8px;background:#fff;color:#3b5de7;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s"
+          onmouseover="this.style.background='#3b5de7';this.style.color='#fff'"
+          onmouseout="this.style.background='#fff';this.style.color='#3b5de7'">
+          ⬇️ <span id="teacher-file-name-lbl">Faylni yuklab olish</span>
+        </button>
+      </div>
+      <!-- Student file upload -->
+      <div class="form-group">
+        <label class="form-label">Bajarilgan ishni yuklash *</label>
+        <div id="student-file-drop"
+          style="border:2px dashed var(--border);border-radius:12px;padding:18px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg)"
+          onclick="document.getElementById('student-file-input').click()"
+          ondragover="event.preventDefault();this.style.borderColor='#a855f7';this.style.background='rgba(168,85,247,.06)'"
+          ondragleave="this.style.borderColor='var(--border)';this.style.background='var(--bg)'"
+          ondrop="handleStudentFileDrop(event)">
+          <div style="font-size:28px;margin-bottom:6px">📤</div>
+          <div style="font-size:13px;font-weight:600;color:var(--muted)">Fayl tanlash yoki bu yerga tashlang</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Topshirilgan faylni biriktiring</div>
+          <input type="file" id="student-file-input" style="display:none" onchange="handleStudentFileSelect(this)">
+        </div>
+        <div id="student-file-preview"
+          style="display:none;margin-top:8px;padding:10px 14px;background:var(--purple-l);border-radius:10px;align-items:center;gap:10px">
+          <span style="font-size:20px">📄</span>
+          <div style="flex:1">
+            <div id="student-file-name" style="font-weight:600;font-size:13px"></div>
+            <div id="student-file-size" style="font-size:11px;color:var(--muted)"></div>
+          </div>
+          <button onclick="clearStudentFile()"
+            style="background:none;border:none;cursor:pointer;color:var(--red);font-size:18px;padding:2px 6px">✕</button>
+        </div>
+      </div>
       <div class="form-group"><label class="form-label">Izoh (ixtiyoriy)</label><textarea class="form-control"
           id="upload-comment" placeholder="Qo'shimcha izoh..."></textarea></div>
       <input type="hidden" id="upload-assign-id">
-      <button class="btn btn-purple" style="width:100%" onclick="submitAssignmentUpload()">Yuklash</button>
+      <button class="btn btn-purple" style="width:100%" onclick="submitAssignmentUpload()">Yuborish</button>
     </div>
   </div>
 
@@ -2797,14 +3128,14 @@
     function nextId(k) { if (!_nextId[k]) _nextId[k] = 1; return _nextId[k]++; }
 
     // saveDB is a no-op — data lives in the backend database
-    function saveDB() {}
+    function saveDB() { }
 
     function exportData() {
       const payload = { db: DB, nextId: _nextId, exportedAt: new Date().toISOString() };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'eduassess-backup-' + new Date().toISOString().slice(0,10) + '.json';
+      a.download = 'eduassess-backup-' + new Date().toISOString().slice(0, 10) + '.json';
       a.click();
     }
     function importData(event) {
@@ -2821,7 +3152,7 @@
           saveDB();
           alert('Ma\'lumotlar muvaffaqiyatli tiklandi!');
           renderAdminDash();
-        } catch(err) { alert('Faylni o\'qishda xatolik: ' + err.message); }
+        } catch (err) { alert('Faylni o\'qishda xatolik: ' + err.message); }
       };
       reader.readAsText(file);
       event.target.value = '';
@@ -3079,11 +3410,11 @@
 
       // Filter teachers
       let teachers = DB.users.filter(u => u.role === 'teacher');
-      if (srch) teachers = teachers.filter(u => (u.fname+' '+u.lname+login(u)).toLowerCase().includes(srch));
+      if (srch) teachers = teachers.filter(u => (u.fname + ' ' + u.lname + login(u)).toLowerCase().includes(srch));
       document.getElementById('teacher-count-badge').textContent = teachers.length;
       document.getElementById('t-teachers').innerHTML = teachers.map((u, i) => `<tr>
-        <td>${i+1}</td>
-        <td><div style="font-weight:600">${u.fname} ${u.lname||''}</div><div style="font-size:11px;color:var(--muted)">${login(u)}</div></td>
+        <td>${i + 1}</td>
+        <td><div style="font-weight:600">${u.fname} ${u.lname || ''}</div><div style="font-size:11px;color:var(--muted)">${login(u)}</div></td>
         <td style="font-family:monospace;font-size:12px">${login(u)}</td>
         <td>${holat(u)}</td>
         <td>${actions(u)}</td>
@@ -3092,13 +3423,13 @@
       // Filter students
       let students = DB.users.filter(u => u.role === 'student');
       if (grpF) students = students.filter(u => String(u.groupId) === grpF);
-      if (srch) students = students.filter(u => (u.fname+' '+u.lname+login(u)).toLowerCase().includes(srch));
+      if (srch) students = students.filter(u => (u.fname + ' ' + u.lname + login(u)).toLowerCase().includes(srch));
       document.getElementById('student-count-badge').textContent = students.length;
       document.getElementById('t-students').innerHTML = students.map((u, i) => {
         const grp = u.groupId ? (DB.groups.find(g => g.id === u.groupId)?.name || '—') : '—';
         return `<tr>
-          <td>${i+1}</td>
-          <td><div style="font-weight:600">${u.fname} ${u.lname||''}</div><div style="font-size:11px;color:var(--muted)">${login(u)}</div></td>
+          <td>${i + 1}</td>
+          <td><div style="font-weight:600">${u.fname} ${u.lname || ''}</div><div style="font-size:11px;color:var(--muted)">${login(u)}</div></td>
           <td><span style="font-size:12px;font-weight:600;color:var(--purple)">${grp}</span></td>
           <td style="font-family:monospace;font-size:12px">${login(u)}</td>
           <td>${holat(u)}</td>
@@ -3349,7 +3680,7 @@
             action = '';
           }
           return `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:var(--bg);margin-bottom:6px">
-            <div style="width:32px;height:32px;border-radius:50%;background:${st.color||'#6366f1'};color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${av}</div>
+            <div style="width:32px;height:32px;border-radius:50%;background:${st.color || '#6366f1'};color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${av}</div>
             <div style="flex:1">
               <div style="font-weight:600;font-size:13px">${st.fname} ${st.lname || ''}</div>
               ${sub ? `<div style="font-size:11px;color:var(--muted)">${sub.fileName} • ${formatDate(sub.submittedAt)}${sub.comment ? ` • "${sub.comment}"` : ''}</div>` : ''}
@@ -3363,10 +3694,11 @@
         <div style="flex:1">
           <div style="font-size:16px;font-weight:700;margin-bottom:4px">${a.title}</div>
           <div style="font-size:13px;color:var(--muted);margin-bottom:8px">${a.desc}</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:12px">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:12px;align-items:center">
             <span>⏰ Deadline: <strong>${formatDate(a.deadline)}</strong></span>
             <span>Maks: <strong>${a.maxScore}</strong></span>
             <span>${a.types}</span>
+            ${a.fileData ? `<button onclick="downloadAssignFile(${a.id})" style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border:1.5px solid #10b981;border-radius:8px;background:#dcfce7;color:#16a34a;font-weight:600;font-size:11px;cursor:pointer">📎 ${a.fileName || 'Faylni yuklab olish'}</button>` : ''}
           </div>
         </div>
         <div style="text-align:right;flex-shrink:0">
@@ -3388,20 +3720,35 @@
       const deadline = document.getElementById('assign-deadline').value;
       const types = document.getElementById('assign-types').value.trim();
       if (!title || !deadline) return alert('Sarlavha va deadline majburiy!');
-      DB.assignments.push({ id: nextId('assignment'), subjectId: currentSubjectId, title, desc, maxScore, deadline, types, createdAt: new Date().toISOString() });
+      const fileName = _assignFileData ? _assignFileName : null;
+      const fileData = _assignFileData || null;
+      DB.assignments.push({ id: nextId('assignment'), subjectId: currentSubjectId, title, desc, maxScore, deadline, types, fileName, fileData, createdAt: new Date().toISOString() });
       closeModal('modal-add-assignment');
+      clearAssignFile();
       renderAssignmentsList();
-      fire('saveAssignment', { subjectId: currentSubjectId, title, desc, maxScore, deadline, types });
+      fire('saveAssignment', { subjectId: currentSubjectId, title, desc, maxScore, deadline, types, fileName, fileData });
     }
     function openGrade(subId, maxScore) {
       const sub = DB.submissions.find(s => s.id === subId);
       const st = DB.users.find(u => u.id === sub.studentId);
       const a = DB.assignments.find(x => x.id === sub.assignmentId);
-      document.getElementById('grade-info').innerHTML = `<strong>${st.fname} ${st.lname}</strong> — ${a.title}<br><span style="color:var(--muted);font-size:12px">${sub.fileName}</span>`;
+      document.getElementById('grade-info').innerHTML = `<strong>${st.fname} ${st.lname}</strong> — ${a.title}<br><span style="color:var(--muted);font-size:12px">${sub.fileName || ''}</span>`;
       document.getElementById('grade-max').textContent = maxScore;
       document.getElementById('grade-score').value = '';
       document.getElementById('grade-comment').value = '';
       document.getElementById('grade-sub-id').value = subId;
+      // Show student file download if available
+      const fileWrap = document.getElementById('grade-file-wrap');
+      if (sub.fileData) {
+        _gradeStudentFileData = sub.fileData;
+        _gradeStudentFileName = sub.fileName || 'topshiriq_fayli';
+        document.getElementById('grade-file-name-lbl').textContent = sub.fileName || 'Faylni yuklab olish';
+        fileWrap.style.display = 'block';
+      } else {
+        fileWrap.style.display = 'none';
+        _gradeStudentFileData = null;
+        _gradeStudentFileName = null;
+      }
       openModal('modal-grade');
     }
     function submitGrade() {
@@ -3471,7 +3818,7 @@
       if (!title) return alert('Test nomi majburiy!');
       if (!quizQuestions.length) return alert("Kamida bitta savol qo'shing!");
       const qs = [...quizQuestions];
-      DB.tests.push({ id: nextId('test'), subjectId: currentSubjectId, title, attempts, days, passingScore, createdAt: new Date().toISOString().slice(0,10), questions: qs });
+      DB.tests.push({ id: nextId('test'), subjectId: currentSubjectId, title, attempts, days, passingScore, createdAt: new Date().toISOString().slice(0, 10), questions: qs });
       quizQuestions = [];
       document.getElementById('quiz-title').value = '';
       document.getElementById('quiz-questions-list').innerHTML = '';
@@ -3639,20 +3986,35 @@
       const a = DB.assignments.find(x => x.id === assignId);
       document.getElementById('upload-assign-title').textContent = a.title;
       document.getElementById('upload-assign-info').innerHTML = `<strong>${a.title}</strong><br><span style="color:var(--muted)">${a.desc}</span><br><div style="margin-top:8px">Maks: ${a.maxScore} | Deadline: ${formatDate(a.deadline)} | ${a.types}</div>`;
-      document.getElementById('upload-fname').value = '';
       document.getElementById('upload-comment').value = '';
       document.getElementById('upload-assign-id').value = assignId;
+      // Show teacher's attached file if any
+      const tw = document.getElementById('teacher-file-wrap');
+      if (a.fileData) {
+        _teacherFileData = a.fileData;
+        _teacherFileName = a.fileName || 'topshiriq';
+        document.getElementById('teacher-file-name-lbl').textContent = a.fileName || 'Faylni yuklab olish';
+        tw.style.display = 'block';
+      } else {
+        tw.style.display = 'none';
+        _teacherFileData = null;
+        _teacherFileName = null;
+      }
+      clearStudentFile();
       openModal('modal-upload-assign');
     }
     function submitAssignmentUpload() {
       const assignId = parseInt(document.getElementById('upload-assign-id').value);
-      const fileName = document.getElementById('upload-fname').value.trim();
       const comment = document.getElementById('upload-comment').value.trim();
-      if (!fileName) return alert('Fayl nomi kiriting!');
-      DB.submissions.push({ id: nextId('submission'), assignmentId: assignId, studentId: currentUser.id, fileName, comment, submittedAt: new Date().toISOString(), status: 'submitted', score: null, teacherComment: '' });
+      if (!_studentFileData) return alert('Iltimos, faylni tanlang!');
+      const fileName = _studentFileName;
+      const fileData = _studentFileData;
+      DB.submissions.push({ id: nextId('submission'), assignmentId: assignId, studentId: currentUser.id, fileName, fileData, comment, submittedAt: new Date().toISOString(), status: 'submitted', score: null, teacherComment: '' });
       closeModal('modal-upload-assign');
+      clearStudentFile();
       renderStudentUpcomingAssignments();
-      fire('submitAssignment', { assignmentId: assignId, fileName, comment });
+      if (typeof renderStudentSubjectAssigns === 'function') renderStudentSubjectAssigns();
+      fire('submitAssignment', { assignmentId: assignId, fileName, fileData, comment });
     }
     // ========== STUDENT: RESULTS ==========
     function renderStudentResults() {
@@ -3684,15 +4046,15 @@
     }
 
     // ========== SCHEDULE ==========
-    const DAYS = ['Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
-    const PERIODS = ['08:30','10:00','11:30','13:00','14:30','16:00','17:30'];
+    const DAYS = ['Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba'];
+    const PERIODS = ['08:30', '10:00', '11:30', '13:00', '14:30', '16:00', '17:30'];
 
     function scheduleTable(entries, canDelete) {
       let html = `<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">
         <thead><tr><th style="padding:10px;background:var(--bg);border:1px solid var(--border);width:80px">Juft</th>
-        ${DAYS.map(d=>`<th style="padding:10px;background:var(--bg);border:1px solid var(--border);min-width:120px">${d}</th>`).join('')}</tr></thead><tbody>`;
+        ${DAYS.map(d => `<th style="padding:10px;background:var(--bg);border:1px solid var(--border);min-width:120px">${d}</th>`).join('')}</tr></thead><tbody>`;
       for (let p = 1; p <= 7; p++) {
-        html += `<tr><td style="padding:8px;border:1px solid var(--border);text-align:center;font-weight:700;color:var(--muted);background:var(--bg)">${p}<br><span style="font-size:10px;font-weight:400">${PERIODS[p-1]}</span></td>`;
+        html += `<tr><td style="padding:8px;border:1px solid var(--border);text-align:center;font-weight:700;color:var(--muted);background:var(--bg)">${p}<br><span style="font-size:10px;font-weight:400">${PERIODS[p - 1]}</span></td>`;
         for (const day of DAYS) {
           const cell = entries.filter(e => e.day === day && e.period === p);
           html += `<td style="padding:6px;border:1px solid var(--border);vertical-align:top;min-height:48px">`;
@@ -3700,10 +4062,10 @@
             const subj = DB.subjects.find(s => s.id === e.subjectId);
             const grp = DB.groups.find(g => g.id === e.groupId);
             html += `<div style="background:var(--blue-l);border-left:3px solid var(--blue);border-radius:6px;padding:5px 7px;margin-bottom:3px;font-size:12px">
-              <div style="font-weight:700;color:var(--blue)">${subj?.name||'—'}</div>
+              <div style="font-weight:700;color:var(--blue)">${subj?.name || '—'}</div>
               ${grp ? `<div style="color:var(--muted)">${grp.name}</div>` : ''}
               ${e.room ? `<div style="color:var(--muted)">${e.room}</div>` : ''}
-              ${e.weekType!=='har'?`<div style="font-size:10px;color:#f59e0b">${e.weekType} hafta</div>`:''}
+              ${e.weekType !== 'har' ? `<div style="font-size:10px;color:#f59e0b">${e.weekType} hafta</div>` : ''}
               ${canDelete ? `<button onclick="deleteScheduleEntry(${e.id})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;padding:0;margin-top:2px">✕ O'chirish</button>` : ''}
             </div>`;
           });
@@ -3736,7 +4098,7 @@
       const teachers = DB.users.filter(u => u.role === 'teacher');
       document.getElementById('sch-subject').innerHTML = DB.subjects.map(s => {
         const t = teachers.find(u => u.id === s.teacherId);
-        return `<option value="${s.id}">${s.name}${t ? ' — '+t.fname : ''}</option>`;
+        return `<option value="${s.id}">${s.name}${t ? ' — ' + t.fname : ''}</option>`;
       }).join('');
       openModal('modal-add-schedule');
     }
@@ -3787,7 +4149,7 @@
           return `<div class="card" style="margin-bottom:12px;display:flex;align-items:center;gap:16px;padding:16px">
             <div style="flex:1">
               <div style="font-weight:700">${a.title}</div>
-              <div style="font-size:12px;color:var(--muted)">${subj?.name||'—'} • Deadline: ${formatDate(a.deadline)}</div>
+              <div style="font-size:12px;color:var(--muted)">${subj?.name || '—'} • Deadline: ${formatDate(a.deadline)}</div>
             </div>
             <div style="text-align:center;font-size:13px">
               <div style="font-size:20px;font-weight:800;color:#10b981">${graded}/${subs.length}</div>
@@ -3805,12 +4167,12 @@
           const sub = DB.submissions.find(s => s.assignmentId === a.id && s.studentId === currentUser.id);
           const overdue = a.deadline && new Date(a.deadline) < now && !sub;
           let badge = sub ? (sub.status === 'graded' ? `<span class="badge b-green">Baholandi: ${sub.score}/${a.maxScore}</span>` : `<span class="badge b-blue">Topshirildi</span>`)
-                          : (overdue ? `<span class="badge b-red">⏰ Muddati o'tdi</span>` : `<span class="badge b-amber">⏳ Kutilmoqda</span>`);
+            : (overdue ? `<span class="badge b-red">⏰ Muddati o'tdi</span>` : `<span class="badge b-amber">⏳ Kutilmoqda</span>`);
           return `<div class="card" style="margin-bottom:12px;padding:16px">
             <div style="display:flex;align-items:center;gap:12px">
               <div style="flex:1">
                 <div style="font-weight:700">${a.title}</div>
-                <div style="font-size:12px;color:var(--muted)">${subj?.name||'—'} • ${formatDate(a.deadline)} • ${a.maxScore} ball</div>
+                <div style="font-size:12px;color:var(--muted)">${subj?.name || '—'} • ${formatDate(a.deadline)} • ${a.maxScore} ball</div>
                 ${a.desc ? `<div style="font-size:12px;color:var(--muted);margin-top:4px">${a.desc}</div>` : ''}
               </div>
               ${badge}
@@ -3854,8 +4216,8 @@
         return `<div class="card" style="margin-bottom:12px;padding:16px">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
             <div style="flex:1">
-              <div style="font-weight:700;margin-bottom:4px">${m.title} ${statusBadges[m.status]||''}</div>
-              <div style="font-size:12px;color:var(--muted);margin-bottom:6px">${user ? user.fname+' '+user.lname : '—'} • ${formatDate(m.createdAt)}</div>
+              <div style="font-weight:700;margin-bottom:4px">${m.title} ${statusBadges[m.status] || ''}</div>
+              <div style="font-size:12px;color:var(--muted);margin-bottom:6px">${user ? user.fname + ' ' + user.lname : '—'} • ${formatDate(m.createdAt)}</div>
               <div style="font-size:13px">${m.body}</div>
               ${m.reply ? `<div style="background:var(--green-l);border-left:3px solid #10b981;padding:8px;border-radius:6px;margin-top:8px;font-size:13px"><strong>Javob:</strong> ${m.reply}</div>` : ''}
             </div>
@@ -3870,7 +4232,7 @@
       if (!m) return;
       const user = DB.users.find(u => u.id === m.fromUserId);
       document.getElementById('reply-msg-id').value = id;
-      document.getElementById('reply-msg-preview').innerHTML = `<strong>${m.title}</strong><br><span style="color:var(--muted)">${user ? user.fname+' '+user.lname : ''}</span><br><br>${m.body}`;
+      document.getElementById('reply-msg-preview').innerHTML = `<strong>${m.title}</strong><br><span style="color:var(--muted)">${user ? user.fname + ' ' + user.lname : ''}</span><br><br>${m.body}`;
       document.getElementById('reply-msg-text').value = '';
       openModal('modal-reply-msg');
     }
@@ -3967,8 +4329,8 @@
           <div class="card" style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:32px">
             <div id="profile-av-wrap" style="position:relative;cursor:pointer" onclick="document.getElementById('profile-photo-input').click()">
               ${savedPhoto
-                ? `<img id="profile-av-img" src="${savedPhoto}" style="width:110px;height:110px;border-radius:50%;object-fit:cover;border:4px solid var(--blue)">`
-                : `<div id="profile-av-img" style="width:110px;height:110px;border-radius:50%;background:${u.color};color:#fff;font-size:38px;font-weight:800;display:flex;align-items:center;justify-content:center;border:4px solid var(--blue)">${av}</div>`}
+          ? `<img id="profile-av-img" src="${savedPhoto}" style="width:110px;height:110px;border-radius:50%;object-fit:cover;border:4px solid var(--blue)">`
+          : `<div id="profile-av-img" style="width:110px;height:110px;border-radius:50%;background:${u.color};color:#fff;font-size:38px;font-weight:800;display:flex;align-items:center;justify-content:center;border:4px solid var(--blue)">${av}</div>`}
               <div style="position:absolute;bottom:4px;right:4px;background:var(--blue);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
             </div>
             <input type="file" id="profile-photo-input" accept="image/*" style="display:none" onchange="handleProfilePhoto(event)">
@@ -4003,7 +4365,7 @@
       if (!file) return;
       if (file.size > 2 * 1024 * 1024) return alert("Rasm hajmi 2 MB dan oshmasin!");
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         const base64 = e.target.result;
         localStorage.setItem(`profile_photo_${currentUser.id}`, base64);
         renderProfilePage();
@@ -4161,9 +4523,11 @@
       });
 
       const score = Math.round((earnedWeight / totalWeight) * 100);
-      DB.results.push({ id: nextId('result'), testId: activeTest.id, studentId: currentUser.id,
+      DB.results.push({
+        id: nextId('result'), testId: activeTest.id, studentId: currentUser.id,
         score, easy: `${correctEasy}/${totalEasy}`, mid: `${correctMid}/${totalMid}`,
-        hard: `${correctHard}/${totalHard}`, cheatCount, date: new Date().toISOString().slice(0,10) });
+        hard: `${correctHard}/${totalHard}`, cheatCount, date: new Date().toISOString().slice(0, 10)
+      });
       fire('submitTest', {
         testId: activeTest.id, score,
         easy: `${correctEasy}/${totalEasy}`, mid: `${correctMid}/${totalMid}`,
@@ -4205,7 +4569,7 @@
       const res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(data) });
       if (!res.ok) {
         let msg = 'Server xatosi (' + res.status + ')';
-        try { const e = await res.json(); msg = e.detail || JSON.stringify(e); } catch(x) {}
+        try { const e = await res.json(); msg = e.detail || JSON.stringify(e); } catch (x) { }
         throw new Error(msg);
       }
       return res.json();
@@ -4240,7 +4604,7 @@
     }
 
     async function fetchDB() {
-      try { await loadDataFromAPI(); } catch(e) { console.warn('fetchDB:', e); }
+      try { await loadDataFromAPI(); } catch (e) { console.warn('fetchDB:', e); }
     }
 
     // Fire-and-forget: instant local update, sync to server in background
@@ -4255,7 +4619,7 @@
     async function apiAction(action, data) {
       try {
         await apiPost('/api/action', { action, data });
-      } catch(e) {
+      } catch (e) {
         alert('Xatolik: ' + e.message);
         throw e;
       }
@@ -4272,7 +4636,7 @@
 
     // ========== LOGIN via API ==========
     const _origDoLogin = doLogin;
-    doLogin = async function() {
+    doLogin = async function () {
       const username = document.getElementById('login-username').value.trim();
       const pass = document.getElementById('login-password').value.trim();
       const err = document.getElementById('login-error');
@@ -4293,7 +4657,7 @@
         // Show UI immediately — load data in background
         showApp();
         loadDataFromAPI().then(() => onPageLoad(currentPage)).catch(console.error);
-      } catch(e) {
+      } catch (e) {
         if (btn) { btn.disabled = false; btn.textContent = 'Kirish'; }
         err.style.display = 'flex';
         const msg = e.message;
@@ -4305,7 +4669,7 @@
 
     // ========== LOGOUT ==========
     const _origDoLogout = doLogout;
-    doLogout = function() {
+    doLogout = function () {
       authToken = '';
       localStorage.removeItem('auth_token');
       localStorage.removeItem('currentUser');
@@ -4313,9 +4677,9 @@
     };
 
     // ========== SESSION RESTORE ==========
-    window.onload = async function() {
+    window.onload = async function () {
       // Pre-warm Vercel serverless function in background
-      fetch('/api/health').catch(() => {});
+      fetch('/api/health').catch(() => { });
       const savedUser = localStorage.getItem('currentUser');
       const savedToken = localStorage.getItem('auth_token');
       if (savedUser && savedToken) {
@@ -4331,7 +4695,7 @@
           const homePage = { admin: 'page-admin-dash', teacher: 'page-teacher-dash', student: 'page-student-dash' };
           nav(homePage[currentUser.role]);
           loadDataFromAPI().then(() => onPageLoad(currentPage)).catch(console.error);
-        } catch(e) {
+        } catch (e) {
           authToken = '';
           localStorage.removeItem('auth_token');
           localStorage.removeItem('currentUser');
@@ -4344,7 +4708,7 @@
   <script>
     // ---- Groq API Key (loaded from backend) ----
     let groqApiKey = '';
-    fetch('/api/config').then(r => r.json()).then(d => { groqApiKey = d.groqKey || ''; }).catch(() => {});
+    fetch('/api/config').then(r => r.json()).then(d => { groqApiKey = d.groqKey || ''; }).catch(() => { });
 
     async function callGroq(messages) {
       if (!groqApiKey) {
@@ -4482,13 +4846,13 @@ FAQAT JSON massiv qaytargin, boshqa hech narsa yozma.`;
       const list = document.getElementById('quiz-questions-list');
       list.innerHTML = qs.map((q, i) => `
         <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;margin-bottom:8px;font-size:13px">
-          <div style="font-weight:600;margin-bottom:4px">${i+1}. ${q.text}</div>
+          <div style="font-weight:600;margin-bottom:4px">${i + 1}. ${q.text}</div>
           <div style="color:#64748b">${q.opts.join(' | ')}</div>
           <div style="margin-top:4px">To'g'ri: <b>${q.correct}</b> · ${q.diff} · ${q.time}s
           <button onclick="removeAiQ(${i})" style="float:right;background:none;border:none;cursor:pointer;color:#dc2626;font-size:12px">O'chirish</button></div>
         </div>`).join('');
       document.getElementById('qq-count').textContent = qs.length;
-      const pts = qs.reduce((s,q) => s + (q.diff==='easy'?1:q.diff==='medium'?2:3), 0);
+      const pts = qs.reduce((s, q) => s + (q.diff === 'easy' ? 1 : q.diff === 'medium' ? 2 : 3), 0);
       document.getElementById('qq-maxpts').textContent = pts;
     }
 
@@ -4499,7 +4863,7 @@ FAQAT JSON massiv qaytargin, boshqa hech narsa yozma.`;
 
     // Patch saveQuiz to also include AI-generated questions
     const _origSaveQuiz = saveQuiz;
-    saveQuiz = function() {
+    saveQuiz = function () {
       if (window._quizQuestions && window._quizQuestions.length > 0) {
         const title = document.getElementById('quiz-title').value.trim();
         const attempts = parseInt(document.getElementById('quiz-attempts').value) || 1;
@@ -4507,7 +4871,7 @@ FAQAT JSON massiv qaytargin, boshqa hech narsa yozma.`;
         const passingScore = parseInt(document.getElementById('quiz-pass').value) || 60;
         if (!title) return alert('Test nomini kiriting!');
         const qs = [...window._quizQuestions];
-        DB.tests.push({ id: nextId('test'), subjectId: currentSubjectId, title, attempts, days, passingScore, createdAt: new Date().toISOString().slice(0,10), questions: qs });
+        DB.tests.push({ id: nextId('test'), subjectId: currentSubjectId, title, attempts, days, passingScore, createdAt: new Date().toISOString().slice(0, 10), questions: qs });
         window._quizQuestions = [];
         document.getElementById('quiz-title').value = '';
         closeModal('modal-add-quiz');
@@ -4517,6 +4881,121 @@ FAQAT JSON massiv qaytargin, boshqa hech narsa yozma.`;
       }
       _origSaveQuiz();
     };
+
+    // ========== FILE UPLOAD HELPERS ==========
+    // State variables for file upload flows
+    let _assignFileData = null;   // teacher's file (create assignment)
+    let _assignFileName = null;
+    let _studentFileData = null;  // student's submission file
+    let _studentFileName = null;
+    let _teacherFileData = null;  // teacher's file shown in student modal
+    let _teacherFileName = null;
+    let _gradeStudentFileData = null; // student file shown in grade modal
+    let _gradeStudentFileName = null;
+
+    // Utility: format file size
+    function fmtSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+
+    // Utility: trigger base64 file download
+    function downloadB64File(fileName, base64) {
+      const a = document.createElement('a');
+      a.href = base64;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // ---- Teacher Assignment File (create modal) ----
+    function readAssignFile(file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        _assignFileData = e.target.result; // full data URL
+        _assignFileName = file.name;
+        document.getElementById('assign-file-name').textContent = file.name;
+        document.getElementById('assign-file-size').textContent = fmtSize(file.size);
+        const prev = document.getElementById('assign-file-preview');
+        prev.style.display = 'flex';
+        const drop = document.getElementById('assign-file-drop');
+        drop.style.borderColor = 'var(--green)';
+        drop.style.background = 'rgba(16,185,129,.06)';
+      };
+      reader.readAsDataURL(file);
+    }
+    function handleAssignFileSelect(input) {
+      if (input.files[0]) readAssignFile(input.files[0]);
+    }
+    function handleAssignFileDrop(event) {
+      event.preventDefault();
+      const drop = document.getElementById('assign-file-drop');
+      drop.style.borderColor = 'var(--border)';
+      drop.style.background = 'var(--bg)';
+      if (event.dataTransfer.files[0]) readAssignFile(event.dataTransfer.files[0]);
+    }
+    function clearAssignFile() {
+      _assignFileData = null;
+      _assignFileName = null;
+      document.getElementById('assign-file-preview').style.display = 'none';
+      document.getElementById('assign-file-input').value = '';
+      const drop = document.getElementById('assign-file-drop');
+      drop.style.borderColor = 'var(--border)';
+      drop.style.background = 'var(--bg)';
+    }
+
+    // ---- Student Submission File (upload modal) ----
+    function readStudentFile(file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        _studentFileData = e.target.result;
+        _studentFileName = file.name;
+        document.getElementById('student-file-name').textContent = file.name;
+        document.getElementById('student-file-size').textContent = fmtSize(file.size);
+        const prev = document.getElementById('student-file-preview');
+        prev.style.display = 'flex';
+        const drop = document.getElementById('student-file-drop');
+        drop.style.borderColor = '#a855f7';
+        drop.style.background = 'rgba(168,85,247,.06)';
+      };
+      reader.readAsDataURL(file);
+    }
+    function handleStudentFileSelect(input) {
+      if (input.files[0]) readStudentFile(input.files[0]);
+    }
+    function handleStudentFileDrop(event) {
+      event.preventDefault();
+      const drop = document.getElementById('student-file-drop');
+      drop.style.borderColor = 'var(--border)';
+      drop.style.background = 'var(--bg)';
+      if (event.dataTransfer.files[0]) readStudentFile(event.dataTransfer.files[0]);
+    }
+    function clearStudentFile() {
+      _studentFileData = null;
+      _studentFileName = null;
+      const prev = document.getElementById('student-file-preview');
+      if (prev) prev.style.display = 'none';
+      const input = document.getElementById('student-file-input');
+      if (input) input.value = '';
+      const drop = document.getElementById('student-file-drop');
+      if (drop) { drop.style.borderColor = 'var(--border)'; drop.style.background = 'var(--bg)'; }
+    }
+
+    // ---- Download helpers ----
+    function downloadTeacherFile() {
+      if (_teacherFileData) downloadB64File(_teacherFileName || 'topshiriq', _teacherFileData);
+    }
+    function downloadStudentFile() {
+      if (_gradeStudentFileData) downloadB64File(_gradeStudentFileName || 'topshiriq_talaba', _gradeStudentFileData);
+    }
+    // Download teacher's file from assignment card
+    function downloadAssignFile(assignId) {
+      const a = DB.assignments.find(x => x.id === assignId);
+      if (a && a.fileData) downloadB64File(a.fileName || 'topshiriq', a.fileData);
+    }
+
   </script>
 </body>
 
