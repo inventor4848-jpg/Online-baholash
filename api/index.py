@@ -50,25 +50,25 @@ else:
         print(error_msg)
         return JSONResponse(status_code=500, content={"detail": error_msg})
 
+_DB_INITIALIZED = False
+
     def ensure_demo_users(db):
+        global _DB_INITIALIZED
+        if _DB_INITIALIZED:
+            return
+            
         try:
-            models.Base.metadata.create_all(bind=engine)
-            # Quick schema check — if users table lacks new columns, we try to alter it
+            # Fast check if schema is already up-to-date
+            db.execute(__import__('sqlalchemy').text("SELECT username, hashed_password, fname, lname, role, color FROM users LIMIT 1"))
+            _DB_INITIALIZED = True
+        except Exception:
             try:
-                db.execute(__import__('sqlalchemy').text("SELECT hashed_password FROM users LIMIT 1"))
+                db.rollback()
+                models.Base.metadata.drop_all(bind=engine)
+                models.Base.metadata.create_all(bind=engine)
+                _DB_INITIALIZED = True
             except Exception:
                 db.rollback()
-                try:
-                    db.execute(__import__('sqlalchemy').text("ALTER TABLE users ADD COLUMN hashed_password VARCHAR"))
-                    db.commit()
-                except Exception:
-                    db.rollback()
-
-            db.execute(__import__('sqlalchemy').text("SELECT username, hashed_password, fname, lname, role, color FROM users LIMIT 1"))
-        except Exception:
-            db.rollback()
-            models.Base.metadata.drop_all(bind=engine)
-            models.Base.metadata.create_all(bind=engine)
 
         def seed_user(username, password, fname, lname, role, color):
             u = db.query(models.User).filter(models.User.username == username).first()
