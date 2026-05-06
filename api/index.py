@@ -128,7 +128,7 @@ else:
             db.commit()
         except Exception as e:
             db.rollback()
-            print(f"Error in ensure_demo_users: {e}")
+            raise Exception(f"EnsureDemo failed: {e}")
 
     @app.get("/api/debug/seed")
     def manual_seed(db=Depends(get_db)):
@@ -190,7 +190,10 @@ else:
         except Exception as e:
             raise HTTPException(status_code=422, detail=f"Ma'lumotlarni o'qishda xato: {str(e)}")
 
-        ensure_demo_users(db)
+        try:
+            ensure_demo_users(db)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
 
         user = db.query(models.User).filter(models.User.username == username).first()
         if not user:
