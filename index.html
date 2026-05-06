@@ -1919,6 +1919,9 @@
       <div class="land-nav-links">
         <a href="#"
           onclick="event.preventDefault();document.getElementById('features-section').scrollIntoView({behavior:'smooth'})">Imkoniyatlar</a>
+        <a href="#"
+          onclick="event.preventDefault();document.getElementById('methodology-section').scrollIntoView({behavior:'smooth'})">Baholashda
+          online platformalar</a>
         <button class="btn btn-primary shine-eff" style="font-size:16px;padding:12px 28px" onclick="showLogin()">Kirish
           →</button>
       </div>
@@ -2041,6 +2044,48 @@
         </div>
         <div class="feat-title">Excel Eksport</div>
         <div class="feat-desc">Vedomost ko'rinishida natijalarni CSV/Excel formatida yuklab olish imkoniyati.</div>
+      </div>
+    </div>
+
+    <!-- Methodology section -->
+    <div id="methodology-section" class="features-grid" style="padding-top: 20px;">
+      <div style="grid-column: 1 / -1; text-align: center; margin-bottom: 20px;">
+        <h2
+          style="font-size: 32px; font-weight: 800; font-family: 'Outfit', sans-serif; color: #1e3a5f; margin-bottom: 12px;">
+          Online Baholash Metodikasi</h2>
+        <p style="font-size: 16px; color: var(--muted); max-width: 600px; margin: 0 auto;">EduAssess platformasida
+          Moodle va Google Classroom platformalarining baholash imkoniyatlaridan unumli foydalanish strategiyalari.</p>
+      </div>
+      <div class="feat-card" style="grid-column: span 2;">
+        <div class="feat-icon-wrap" style="background:#dbeafe;color:#2563eb">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2l9 4.9V17L12 22l-9-4.9V6.9z" />
+          </svg>
+        </div>
+        <div class="feat-title">Nima uchun EduAssess?</div>
+        <div class="feat-desc" style="display:flex;flex-direction:column;gap:12px;">
+          <div><strong style="color:var(--text)">Moodle:</strong> Murakkab foydalanuvchi interfeysi, sekinroq yuklanish.
+          </div>
+          <div><strong style="color:var(--text)">Google Classroom:</strong> Adaptive testlash va proctoring mavjud emas.
+          </div>
+          <div><strong style="color:var(--blue)">EduAssess:</strong> Dars materiallarini import qilish hamda proctoring
+            integratsiyasi orqali sinergik yondashuv.</div>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-title">Qanday tanlash kerak?</div>
+        <div class="feat-desc">Ta'lim muassasasining ehtiyojiga qarab, agarda qat'iy nazorat va avtomatika kerak bo'lsa
+          EduAssess ni, uzoq muddatli bazaviy kurslar uchun Moodle ni tanlash metodik jihatdan to'g'ri sanaladi.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-title">Qanday sozlash kerak?</div>
+        <div class="feat-desc">Baholash integratsiyasida o'qituvchi test va topshiriqlarni platformaga kiritadi hamda
+          natijalarni LMS tizimlariga ko'chiradi. Bu aniq, xolis va obyektiv metodika.</div>
+      </div>
+      <div style="grid-column: 1 / -1; text-align: center; margin-top: 10px;">
+        <button class="btn btn-primary btn-lg shine-eff"
+          onclick="document.getElementById('methodology-modal').classList.add('open')">Metodikani ko'rish →</button>
       </div>
     </div>
 
@@ -5033,6 +5078,34 @@ FAQAT JSON massiv qaytargin, boshqa hech narsa yozma.`;
     }
 
   </script>
+
+  <!-- Methodological Modal -->
+  <div id="methodology-modal" class="modal-backdrop">
+    <div class="modal">
+      <button class="modal-close"
+        onclick="document.getElementById('methodology-modal').classList.remove('open')">✕</button>
+      <h3 class="modal-title">Baholash Metodikasi va Ekspertiza</h3>
+      <div style="font-size: 14px; line-height: 1.6; color: var(--muted); display:flex;flex-direction:column;gap:14px;">
+        <p><strong>Retsenzentlar e'tiroziga ijobiy yechim:</strong></p>
+        <div class="alert alert-info" style="margin-bottom:0;">
+          "EduAssess tizimi nafaqat test oladi, balki Moodle va Google Classroom kabi tizimlar bilan integratsiyalashgan
+          holda, baholashning eng xolis metodikasini taqdim etadi."
+        </div>
+        <p>Aksariyat onlayn platformalar faqat baholash qismini kafolatlamaydi. EduAssess metodik jihatdan pedagoglar
+          uchun qulay va ishonchli yondashuvni taqdim etadi:</p>
+        <ul style="padding-left: 20px; color: var(--text);">
+          <li><strong>Proctoring xolisligi:</strong> Moodle dagi oddiy testlardan farqli o'laroq, yuz identifikatsiyasi
+            va oyna almashish tekshiruvi.</li>
+          <li><strong>Adaptive testing mexanizmi:</strong> Google Classroom da yo'q bo'lgan, talaba darajasiga
+            moslashuvchan testlar.</li>
+          <li><strong>Gibrid yondashuv:</strong> O'qituvchilar barcha kontentni Google Classroom/Moodle da saqlashini va
+            faqat oraliq/yakuniy nazorat uchun EduAssess dan foydalanishini tavsiya etamiz.</li>
+        </ul>
+        <button class="btn btn-primary" style="margin-top: 10px; width: 100%; justify-content: center;"
+          onclick="document.getElementById('methodology-modal').classList.remove('open')">Tushunarli</button>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
