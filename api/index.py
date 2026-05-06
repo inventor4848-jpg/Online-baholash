@@ -74,6 +74,10 @@ else:
                 sqlite_add_col("users", "role", "VARCHAR")
                 sqlite_add_col("users", "color", "VARCHAR")
                 sqlite_add_col("users", "active", "BOOLEAN")
+                sqlite_add_col("faculties", "code", "VARCHAR")
+                sqlite_add_col("groups", "course", "INTEGER")
+                sqlite_add_col("tests", "passing_score", "INTEGER")
+                sqlite_add_col("tests", "days", "INTEGER")
             else:
                 # PostgreSQL
                 def pg_add_col(table, col, col_type):
@@ -88,6 +92,10 @@ else:
                 pg_add_col("users", "role", "VARCHAR")
                 pg_add_col("users", "color", "VARCHAR")
                 pg_add_col("users", "active", "BOOLEAN")
+                pg_add_col("faculties", "code", "VARCHAR")
+                pg_add_col("groups", "course", "INTEGER")
+                pg_add_col("tests", "passing_score", "INTEGER")
+                pg_add_col("tests", "days", "INTEGER")
                 
                 try:
                     db.execute(_text("ALTER TABLE users ALTER COLUMN password DROP NOT NULL"))
