@@ -88,6 +88,12 @@ else:
                 pg_add_col("users", "role", "VARCHAR")
                 pg_add_col("users", "color", "VARCHAR")
                 pg_add_col("users", "active", "BOOLEAN")
+                
+                try:
+                    db.execute(_text("ALTER TABLE users ALTER COLUMN password DROP NOT NULL"))
+                    db.commit()
+                except Exception:
+                    db.rollback()
         except Exception as em:
             db.rollback()
             print(f"Migration warning: {em}")
