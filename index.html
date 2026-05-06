@@ -3222,8 +3222,10 @@
     function selectRole(r) {
       ['admin', 'teacher', 'student'].forEach(x => {
         const b = document.getElementById('rt-' + x);
-        b.className = 'role-tab-btn';
-        if (x === r) b.classList.add('active-' + x);
+        if (b) {
+          b.className = 'role-tab-btn';
+          if (x === r) b.classList.add('active-' + x);
+        }
       });
       const hintEl = document.getElementById('demo-hint');
       if (hintEl) hintEl.innerText = r === 'admin' ? 'Login: admin@edu.uz\nParol: admin123' : '';

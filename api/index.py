@@ -85,6 +85,7 @@ else:
         run_migrations(db)
         try:
             # Check for missing columns in 'users' table
+            from sqlalchemy import text
             check_query = text("""
                 SELECT column_name 
                 FROM information_schema.columns 
