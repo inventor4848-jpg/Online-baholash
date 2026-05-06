@@ -68,6 +68,11 @@ else:
                 sqlite_add_col("assignments", "file_name", "VARCHAR")
                 sqlite_add_col("assignments", "file_data", "TEXT")
                 sqlite_add_col("submissions", "file_data", "TEXT")
+                sqlite_add_col("users", "hashed_password", "VARCHAR")
+                sqlite_add_col("users", "fname", "VARCHAR")
+                sqlite_add_col("users", "lname", "VARCHAR")
+                sqlite_add_col("users", "role", "VARCHAR")
+                sqlite_add_col("users", "color", "VARCHAR")
             else:
                 # PostgreSQL
                 def pg_add_col(table, col, col_type):
@@ -76,34 +81,28 @@ else:
                 pg_add_col("assignments", "file_name", "VARCHAR")
                 pg_add_col("assignments", "file_data", "TEXT")
                 pg_add_col("submissions", "file_data", "TEXT")
+                pg_add_col("users", "hashed_password", "VARCHAR")
+                pg_add_col("users", "fname", "VARCHAR")
+                pg_add_col("users", "lname", "VARCHAR")
+                pg_add_col("users", "role", "VARCHAR")
+                pg_add_col("users", "color", "VARCHAR")
         except Exception as em:
             db.rollback()
             print(f"Migration warning: {em}")
 
     def ensure_demo_users(db):
         """fast check to ensure tables exist and demo users are present"""
+        Base.metadata.create_all(bind=engine)
         run_migrations(db)
         try:
-            # Check for missing columns in 'users' table
-            from sqlalchemy import text
-            check_query = text("""
-                SELECT column_name 
-                FROM information_schema.columns 
-                WHERE table_name = 'users' AND column_name IN ('fname', 'lname', 'role', 'color', 'hashed_password')
-            """)
-            existing_columns = [row[0] for row in db.execute(check_query).fetchall()]
-            
-            # If any required columns are missing, reset the schema
-            if len(existing_columns) < 5:
-                print("Schema mismatch detected, resetting database...")
-                Base.metadata.drop_all(bind=engine)
-                Base.metadata.create_all(bind=engine)
-                db.commit()
-            else:
-                # Tables exist with correct columns, now check for demo admin
-                admin = db.query(User).filter(User.username == "admin@edu.uz").first()
-                if admin:
-                    return
+            # Check for demo admin
+            admin = db.query(User).filter(User.username == "admin@edu.uz").first()
+            if admin:
+                # If admin exists but lacks password due to old schema, we can heal it
+                if not admin.hashed_password:
+                    admin.hashed_password = pwd_context.hash("admin123")
+                    db.commit()
+                return
 
             # Seed demo data if missing or reset
             admin_user = User(
