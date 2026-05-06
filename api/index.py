@@ -30,7 +30,8 @@ app = FastAPI(title="EduAssess Full-Stack API")
 def health_check():
     if STARTUP_ERROR:
         return {"status": "error", "startup_error": STARTUP_ERROR}
-    return {"status": "ok", "message": "Backend is running!"}
+    db_type = "PostgreSQL" if not str(engine.url).startswith("sqlite") else "SQLite"
+    return {"status": "ok", "message": "Backend is running!", "database": db_type}
 
 if STARTUP_ERROR:
     # Minimal app — only health works, startup error is exposed
@@ -248,6 +249,10 @@ else:
 
     @app.get("/api/data")
     def get_all_data(db=Depends(get_db), current_user=Depends(auth.get_current_user)):
+        global _DB_INITIALIZED
+        if not _DB_INITIALIZED:
+            ensure_demo_users(db)
+            _DB_INITIALIZED = True
         faculties = db.query(models.Faculty).all()
         departments = db.query(models.Department).all()
         groups = db.query(models.Group).all()

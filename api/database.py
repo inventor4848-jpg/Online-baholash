@@ -12,11 +12,13 @@ if SQLALCHEMY_DATABASE_URL and SQLALCHEMY_DATABASE_URL.startswith("postgres://")
     SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 if not SQLALCHEMY_DATABASE_URL:
-    print("WARNING: DATABASE_URL not found in .env. Falling back to local SQLite.")
-    # On Vercel only /tmp is writable; locally use current directory
-    if os.path.exists("/tmp"):
+    # On Vercel, we MUST have a DATABASE_URL for persistence
+    if os.getenv("VERCEL") or os.path.exists("/tmp"):
+        print("CRITICAL: DATABASE_URL not found on Vercel. SQLite fallback is dangerous.")
+        # We'll still set it to /tmp just in case, but we should log it
         SQLALCHEMY_DATABASE_URL = "sqlite:////tmp/sql_app.db"
     else:
+        print("WARNING: DATABASE_URL not found. Using local SQLite.")
         SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
 
 is_sqlite = SQLALCHEMY_DATABASE_URL.startswith("sqlite")
