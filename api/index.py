@@ -73,6 +73,7 @@ else:
                 sqlite_add_col("users", "lname", "VARCHAR")
                 sqlite_add_col("users", "role", "VARCHAR")
                 sqlite_add_col("users", "color", "VARCHAR")
+                sqlite_add_col("users", "active", "BOOLEAN")
             else:
                 # PostgreSQL
                 def pg_add_col(table, col, col_type):
@@ -86,6 +87,7 @@ else:
                 pg_add_col("users", "lname", "VARCHAR")
                 pg_add_col("users", "role", "VARCHAR")
                 pg_add_col("users", "color", "VARCHAR")
+                pg_add_col("users", "active", "BOOLEAN")
         except Exception as em:
             db.rollback()
             print(f"Migration warning: {em}")
