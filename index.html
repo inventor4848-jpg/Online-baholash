@@ -945,7 +945,56 @@
       font-family: 'Outfit', sans-serif
     }
 
-    /* Role demo cards */
+    /* Features Layout */
+    .features-section-wrap {
+      padding: 80px 5%;
+      background: #fff;
+      display: flex;
+      align-items: flex-start;
+      gap: 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .features-visual-box {
+      flex: 1;
+      position: sticky;
+      top: 150px;
+      height: 450px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .features-content-box {
+      flex: 1.2;
+    }
+
+    @media (max-width: 1024px) {
+      .features-section-wrap {
+        flex-direction: column;
+      }
+
+      .features-visual-box {
+        position: static;
+        width: 100%;
+        height: 350px;
+      }
+    }
+
+    /* Methodology Frame */
+    .methodology-frame {
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      box-shadow: var(--shadow-sm);
+    }
+
     .role-demo-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -1953,156 +2002,167 @@
           <button class="btn btn-primary btn-lg shine-eff" onclick="showLogin()">Platformaga kirish →</button>
         </div>
       </div>
-      <div class="hero-visual">
-        <div class="mockup-laptop">
-          <div class="laptop-screen">
-            <div class="ls-header"></div>
-            <div class="ls-grid">
-              <div class="ls-card">
-                <div style="font-size:10px;color:var(--muted);margin-bottom:4px">Talabalar</div>
-                <div style="font-size:18px;font-weight:700;color:var(--blue)">147</div>
-                <div class="ls-bar fill-blue"></div>
-              </div>
-              <div class="ls-card">
-                <div style="font-size:10px;color:var(--muted);margin-bottom:4px">Ball</div>
-                <div style="font-size:18px;font-weight:700;color:#10b981">74.2%</div>
-                <div class="ls-bar fill-green"></div>
-              </div>
-              <div class="ls-card" style="grid-column:span 2">
-                <div style="font-size:10px;color:var(--muted);margin-bottom:4px">Faollik grafigi</div>
-                <div style="height:40px;background:var(--blue-l);border-radius:6px"></div>
-              </div>
-            </div>
-          </div>
-          <div class="laptop-chin"></div>
-        </div>
-        <div class="mockup-phone">
-          <div class="phone-screen">
-            <div class="ph-score">87%</div>
-            <div class="ph-bar w80"></div>
-            <div class="ph-bar w60" style="margin-top:6px"></div>
-            <div class="ph-bar w40" style="margin-top:6px"></div>
-          </div>
-        </div>
-      </div>
     </div>
 
 
     <!-- Features section -->
-    <div id="features-section" class="features-grid">
-      <div class="feat-card">
-        <div class="feat-icon-wrap">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <circle cx="12" cy="12" r="6" />
-            <circle cx="12" cy="12" r="2" />
-          </svg>
-        </div>
-        <div class="feat-title">Adaptive Testing</div>
-        <div class="feat-desc">Oson (1×), O'rta (2×), Qiyin (3×) og'irlik formulasi: Σ(To'g'ri × Og'irlik) / Jami × 100%
+    <div id="features-section" class="features-section-wrap">
+      <div class="features-visual-box">
+        <div class="hero-visual" style="position: relative; flex: none; transform: scale(0.9);">
+          <div class="mockup-laptop"
+            style="position: relative; left: auto; top: auto; right: auto; transform: rotateY(-10deg) rotateX(4deg);">
+            <div class="laptop-screen">
+              <div class="ls-header"></div>
+              <div class="ls-grid">
+                <div class="ls-card">
+                  <div style="font-size:10px;color:var(--muted);margin-bottom:4px">Talabalar</div>
+                  <div style="font-size:18px;font-weight:700;color:var(--blue)">147</div>
+                  <div class="ls-bar fill-blue"></div>
+                </div>
+                <div class="ls-card">
+                  <div style="font-size:10px;color:var(--muted);margin-bottom:4px">Ball</div>
+                  <div style="font-size:18px;font-weight:700;color:#10b981">74.2%</div>
+                  <div class="ls-bar fill-green"></div>
+                </div>
+                <div class="ls-card" style="grid-column:span 2">
+                  <div style="font-size:10px;color:var(--muted);margin-bottom:4px">Faollik grafigi</div>
+                  <div style="height:40px;background:var(--blue-l);border-radius:6px"></div>
+                </div>
+              </div>
+            </div>
+            <div class="laptop-chin"></div>
+          </div>
+          <div class="mockup-phone" style="top: 100px; left: -20px;">
+            <div class="phone-screen">
+              <div class="ph-score">87%</div>
+              <div class="ph-bar w80"></div>
+              <div class="ph-bar w60" style="margin-top:6px"></div>
+              <div class="ph-bar w40" style="margin-top:6px"></div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="feat-card">
-        <div class="feat-icon-wrap">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-          </svg>
+
+      <div class="features-content-box">
+        <h2
+          style="font-size: 36px; font-weight: 800; color: #1e3a5f; margin-bottom: 30px; font-family: 'Outfit', sans-serif;">
+          Platforma Imkoniyatlari</h2>
+        <div class="features-grid"
+          style="grid-template-columns: 1fr 1fr; margin-bottom: 0; padding: 0; box-shadow: none; border: none; background: transparent;">
+          <div class="feat-card">
+            <div class="feat-icon-wrap">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <circle cx="12" cy="12" r="6" />
+                <circle cx="12" cy="12" r="2" />
+              </svg>
+            </div>
+            <div class="feat-title">Adaptive Testing</div>
+            <div class="feat-desc">Oson (1×), O'rta (2×), Qiyin (3×) og'irlik formulasi.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon-wrap">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
+            <div class="feat-title">Anti-Cheat Tizim</div>
+            <div class="feat-desc">3 marta oyna almashtirish — avtomatik yakunlanadi.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon-wrap">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                <rect x="8" y="2" width="8" height="4" rx="1" />
+              </svg>
+            </div>
+            <div class="feat-title">Topshiriqlar</div>
+            <div class="feat-desc">Fayl yuklash va tizim ichida baholash.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon-wrap">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+            </div>
+            <div class="feat-title">Real-vaqt Monitoring</div>
+            <div class="feat-desc">Jonli kuzatish imkoniyati.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon-wrap">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" />
+              </svg>
+            </div>
+            <div class="feat-title">Dashboard</div>
+            <div class="feat-desc">Tahliliy tahlil va grafiklar.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon-wrap">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+              </svg>
+            </div>
+            <div class="feat-title">Eksport</div>
+            <div class="feat-desc">Excel formatida natijalar.</div>
+          </div>
         </div>
-        <div class="feat-title">Anti-Cheat Tizim</div>
-        <div class="feat-desc">3 marta oyna almashtirish — test avtomatik yakunlanadi va o'qituvchiga xabar ketadi.
-        </div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon-wrap">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-            <rect x="8" y="2" width="8" height="4" rx="1" />
-            <line x1="9" y1="12" x2="15" y2="12" />
-            <line x1="9" y1="16" x2="13" y2="16" />
-          </svg>
-        </div>
-        <div class="feat-title">Topshiriqlar</div>
-        <div class="feat-desc">Fayl yuklash, deadline, holat kuzatish va tizim ichida toʻgʻridan-toʻgʻri baholash.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon-wrap">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-            stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-          </svg>
-        </div>
-        <div class="feat-title">Real-vaqt Monitoring</div>
-        <div class="feat-desc">O'qituvchi talabaning testni yechish jarayonini jonli kuzatishi mumkin.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon-wrap">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-            stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="20" x2="18" y2="10" />
-            <line x1="12" y1="20" x2="12" y2="4" />
-            <line x1="6" y1="20" x2="6" y2="14" />
-            <line x1="2" y1="20" x2="22" y2="20" />
-          </svg>
-        </div>
-        <div class="feat-title">Tahliliy Dashboard</div>
-        <div class="feat-desc">Guruh bo'yicha dinamika, reytinglar, radar diagrammalar va o'sish grafiklari.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon-wrap">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-        </div>
-        <div class="feat-title">Excel Eksport</div>
-        <div class="feat-desc">Vedomost ko'rinishida natijalarni CSV/Excel formatida yuklab olish imkoniyati.</div>
       </div>
     </div>
 
     <!-- Methodology section -->
-    <div id="methodology-section" class="features-grid" style="padding-top: 20px;">
-      <div style="grid-column: 1 / -1; text-align: center; margin-bottom: 20px;">
+    <div id="methodology-section" style="padding: 60px 5%; background: var(--bg);">
+      <div style="text-align: center; margin-bottom: 40px;">
         <h2
           style="font-size: 32px; font-weight: 800; font-family: 'Outfit', sans-serif; color: #1e3a5f; margin-bottom: 12px;">
           Online Baholash Metodikasi</h2>
-        <p style="font-size: 16px; color: var(--muted); max-width: 600px; margin: 0 auto;">EduAssess platformasida
-          Moodle va Google Classroom platformalarining baholash imkoniyatlaridan unumli foydalanish strategiyalari.</p>
+        <p style="font-size: 16px; color: var(--muted); max-width: 600px; margin: 0 auto;">Platformadan unumli
+          foydalanish strategiyalari.</p>
       </div>
-      <div class="feat-card" style="grid-column: span 2;">
-        <div class="feat-icon-wrap" style="background:#dbeafe;color:#2563eb">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2l9 4.9V17L12 22l-9-4.9V6.9z" />
-          </svg>
-        </div>
-        <div class="feat-title">Nima uchun EduAssess?</div>
-        <div class="feat-desc" style="display:flex;flex-direction:column;gap:12px;">
-          <div><strong style="color:var(--text)">Moodle:</strong> Murakkab foydalanuvchi interfeysi, sekinroq yuklanish.
+
+      <div class="methodology-frame">
+        <div class="features-grid"
+          style="grid-template-columns: 1fr 1fr; gap: 30px; border: none; background: transparent; padding: 0; box-shadow: none;">
+          <div class="feat-card"
+            style="grid-column: span 2; border: none; background: #fff; box-shadow: var(--shadow-sm);">
+            <div class="feat-icon-wrap" style="background:#dbeafe;color:#2563eb">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2l9 4.9V17L12 22l-9-4.9V6.9z" />
+              </svg>
+            </div>
+            <div class="feat-title">Nima uchun EduAssess?</div>
+            <div class="feat-desc" style="display:flex;flex-direction:column;gap:12px;">
+              <div><strong style="color:var(--text)">Moodle:</strong> Murakkab interfeys, sekin yuklanish.</div>
+              <div><strong style="color:var(--text)">Google Classroom:</strong> Adaptive testlash mavjud emas.</div>
+              <div><strong style="color:var(--blue)">EduAssess:</strong> Dars materiallarini import qilish hamda
+                proctoring integratsiyasi.</div>
+            </div>
           </div>
-          <div><strong style="color:var(--text)">Google Classroom:</strong> Adaptive testlash va proctoring mavjud emas.
+          <div class="feat-card" style="border: none; background: #fff; box-shadow: var(--shadow-sm);">
+            <div class="feat-title">Qanday tanlash kerak?</div>
+            <div class="feat-desc">Agarda qat'iy nazorat va avtomatika kerak bo'lsa EduAssess ni, uzoq muddatli bazaviy
+              kurslar uchun Moodle ni tanlash to'g'ri.</div>
           </div>
-          <div><strong style="color:var(--blue)">EduAssess:</strong> Dars materiallarini import qilish hamda proctoring
-            integratsiyasi orqali sinergik yondashuv.</div>
+          <div class="feat-card" style="border: none; background: #fff; box-shadow: var(--shadow-sm);">
+            <div class="feat-title">Qanday sozlash kerak?</div>
+            <div class="feat-desc">O'qituvchi test va topshiriqlarni kiritadi hamda natijalarni LMS tizimlariga
+              ko'chiradi. Bu aniq va obyektiv metodika.</div>
+          </div>
         </div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-title">Qanday tanlash kerak?</div>
-        <div class="feat-desc">Ta'lim muassasasining ehtiyojiga qarab, agarda qat'iy nazorat va avtomatika kerak bo'lsa
-          EduAssess ni, uzoq muddatli bazaviy kurslar uchun Moodle ni tanlash metodik jihatdan to'g'ri sanaladi.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-title">Qanday sozlash kerak?</div>
-        <div class="feat-desc">Baholash integratsiyasida o'qituvchi test va topshiriqlarni platformaga kiritadi hamda
-          natijalarni LMS tizimlariga ko'chiradi. Bu aniq, xolis va obyektiv metodika.</div>
-      </div>
-      <div style="grid-column: 1 / -1; text-align: center; margin-top: 10px;">
-        <button class="btn btn-primary btn-lg shine-eff" onclick="window.location.href='methodology.html'">Metodikani
-          ko'rish →</button>
+        <div style="text-align: center; margin-top: 30px;">
+          <button class="btn btn-primary btn-lg shine-eff" onclick="window.location.href='methodology.html'">Metodikani
+            to'liq ko'rish →</button>
+        </div>
       </div>
     </div>
 
