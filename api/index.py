@@ -97,45 +97,34 @@ else:
         models.Base.metadata.create_all(bind=engine)
         run_migrations(db)
         try:
-            # Check for demo admin
-            admin = db.query(models.User).filter(models.User.username == "admin@edu.uz").first()
-            if admin:
-                # Heal all users' passwords just to be 100% sure they can login
-                users = db.query(models.User).all()
-                for u in users:
-                    if u.role == "admin" and (not u.hashed_password or "pbkdf2" not in str(u.hashed_password)):
-                        u.hashed_password = auth.get_password_hash("admin123")
-                    elif u.role == "teacher" and (not u.hashed_password or "pbkdf2" not in str(u.hashed_password)):
-                        u.hashed_password = auth.get_password_hash("teacher123")
-                    elif u.role == "student" and (not u.hashed_password or "pbkdf2" not in str(u.hashed_password)):
-                        u.hashed_password = auth.get_password_hash("student123")
-                db.commit()
-                return
-
-            # Seed demo data if missing
-            admin_user = models.User(
-                username="admin@edu.uz",
-                fname="Admin",
-                lname="Edu",
-                hashed_password=auth.get_password_hash("admin123"),
-                role="admin",
-                color="#3b82f6",
-                active=True
-            )
-            db.add(admin_user)
-            
-            # Add sample teacher
-            teacher_user = models.User(
-                username="teacher@edu.uz",
-                fname="Jamshid",
-                lname="Karimov",
-                hashed_password=auth.get_password_hash("teacher123"),
-                role="teacher",
-                color="#10b981",
-                active=True
-            )
-            db.add(teacher_user)
-            
+            demo_accounts = [
+                ("admin@edu.uz", "Admin", "Edu", "admin", "#3b82f6"),
+                ("teacher@edu.uz", "Jamshid", "Karimov", "teacher", "#10b981"),
+                ("student@edu.uz", "Talaba", "Hasanov", "student", "#a855f7")
+            ]
+            for uname, fname, lname, role, color in demo_accounts:
+                target_pass = f"{role}123"
+                u = db.query(models.User).filter(models.User.username == uname).first()
+                if not u:
+                    new_u = models.User(
+                        username=uname, fname=fname, lname=lname,
+                        hashed_password=auth.get_password_hash(target_pass),
+                        role=role, color=color, active=True
+                    )
+                    db.add(new_u)
+                else:
+                    needs_heal = False
+                    if not u.hashed_password:
+                        needs_heal = True
+                    else:
+                        try:
+                            if not auth.verify_password(target_pass, u.hashed_password):
+                                needs_heal = True
+                        except Exception:
+                            needs_heal = True
+                            
+                    if needs_heal:
+                        u.hashed_password = auth.get_password_hash(target_pass)
             db.commit()
         except Exception as e:
             db.rollback()
