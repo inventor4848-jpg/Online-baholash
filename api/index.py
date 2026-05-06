@@ -91,6 +91,13 @@ else:
                 
                 try:
                     db.execute(_text("ALTER TABLE users ALTER COLUMN password DROP NOT NULL"))
+                except: pass
+                
+                try:
+                    db.execute(_text("ALTER TABLE users ALTER COLUMN full_name DROP NOT NULL"))
+                except: pass
+                
+                try:
                     db.commit()
                 except Exception:
                     db.rollback()
