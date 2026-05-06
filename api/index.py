@@ -92,24 +92,24 @@ else:
 
     def ensure_demo_users(db):
         """fast check to ensure tables exist and demo users are present"""
-        Base.metadata.create_all(bind=engine)
+        models.Base.metadata.create_all(bind=engine)
         run_migrations(db)
         try:
             # Check for demo admin
-            admin = db.query(User).filter(User.username == "admin@edu.uz").first()
+            admin = db.query(models.User).filter(models.User.username == "admin@edu.uz").first()
             if admin:
                 # If admin exists but lacks password due to old schema, we can heal it
                 if not admin.hashed_password:
-                    admin.hashed_password = pwd_context.hash("admin123")
+                    admin.hashed_password = auth.get_password_hash("admin123")
                     db.commit()
                 return
 
             # Seed demo data if missing or reset
-            admin_user = User(
+            admin_user = models.User(
                 username="admin@edu.uz",
                 fname="Admin",
                 lname="Edu",
-                hashed_password=pwd_context.hash("admin123"),
+                hashed_password=auth.get_password_hash("admin123"),
                 role="admin",
                 color="#3b82f6",
                 active=True
@@ -117,11 +117,11 @@ else:
             db.add(admin_user)
             
             # Add sample teacher
-            teacher_user = User(
+            teacher_user = models.User(
                 username="teacher@edu.uz",
                 fname="Jamshid",
                 lname="Karimov",
-                hashed_password=pwd_context.hash("teacher123"),
+                hashed_password=auth.get_password_hash("teacher123"),
                 role="teacher",
                 color="#10b981",
                 active=True
