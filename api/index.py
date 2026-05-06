@@ -100,13 +100,19 @@ else:
             # Check for demo admin
             admin = db.query(models.User).filter(models.User.username == "admin@edu.uz").first()
             if admin:
-                # If admin exists but lacks password due to old schema, we can heal it
-                if not admin.hashed_password:
-                    admin.hashed_password = auth.get_password_hash("admin123")
-                    db.commit()
+                # Heal all users' passwords just to be 100% sure they can login
+                users = db.query(models.User).all()
+                for u in users:
+                    if u.role == "admin" and (not u.hashed_password or "pbkdf2" not in str(u.hashed_password)):
+                        u.hashed_password = auth.get_password_hash("admin123")
+                    elif u.role == "teacher" and (not u.hashed_password or "pbkdf2" not in str(u.hashed_password)):
+                        u.hashed_password = auth.get_password_hash("teacher123")
+                    elif u.role == "student" and (not u.hashed_password or "pbkdf2" not in str(u.hashed_password)):
+                        u.hashed_password = auth.get_password_hash("student123")
+                db.commit()
                 return
 
-            # Seed demo data if missing or reset
+            # Seed demo data if missing
             admin_user = models.User(
                 username="admin@edu.uz",
                 fname="Admin",
