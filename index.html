@@ -5081,28 +5081,77 @@ FAQAT JSON massiv qaytargin, boshqa hech narsa yozma.`;
 
   <!-- Methodological Modal -->
   <div id="methodology-modal" class="modal-backdrop">
-    <div class="modal">
+    <div class="modal" style="max-width: 850px;">
       <button class="modal-close"
         onclick="document.getElementById('methodology-modal').classList.remove('open')">✕</button>
-      <h3 class="modal-title">Baholash Metodikasi va Ekspertiza</h3>
-      <div style="font-size: 14px; line-height: 1.6; color: var(--muted); display:flex;flex-direction:column;gap:14px;">
-        <p><strong>Retsenzentlar e'tiroziga ijobiy yechim:</strong></p>
-        <div class="alert alert-info" style="margin-bottom:0;">
-          "EduAssess tizimi nafaqat test oladi, balki Moodle va Google Classroom kabi tizimlar bilan integratsiyalashgan
-          holda, baholashning eng xolis metodikasini taqdim etadi."
+      <h3 class="modal-title"
+        style="font-size: 24px; border-bottom: 2px solid var(--border); padding-bottom: 14px; margin-bottom: 20px;">
+        Platformalarning Baholash Metodikasi va Ishlash Mexanizmi</h3>
+
+      <div
+        style="font-size: 14px; line-height: 1.7; color: var(--muted); display:flex;flex-direction:column;gap:18px; max-height: 70vh; overflow-y: auto; padding-right: 8px;">
+
+        <p><strong>Retsenzentlar e'tiroziga batafsil yechim tavsifi:</strong> "Qanday qilib onlayn platformalar ishlashi
+          va reytinglashda adolatni ta'minlash mumkin?" Ushbu savolga ta'lim muassasalarida keng tarqalgan 3 xil
+          platforma orqali metodik qadamlarni keltiramiz.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+          <div class="card" style="padding: 16px;">
+            <h4 style="color: var(--blue); margin-bottom: 10px; font-size: 16px;">1. Moodle (LMS) – Qanday ishlaydi va
+              baholaydi?</h4>
+            <ul
+              style="padding-left: 20px; color: var(--text); font-size: 13px; display:flex;flex-direction:column;gap:8px;">
+              <li><strong>Ishlash prinsipi:</strong> Professor-o'qituvchi o'z video darslari, kurs materiallari va
+                kitoblarini joylashtiradi. Tizim markazlashgan va barqaror resurs bazasi bo'lib xizmat qiladi.</li>
+              <li><strong>Baholash (Grading):</strong> Asosan an'anaviy test va ochiq tipdagi esselarni
+                qo'llab-quvvatlaydi. O'qituvchi natijalarni manual baholashiga to'g'ri keladi.</li>
+              <li><strong>Kamchiligi:</strong> Tizim serverlarga katta yuklama beradi, test olayotganda talaba qanday
+                holatda ekanini bilish (proctoring) deyarli imkonsiz.</li>
+            </ul>
+          </div>
+
+          <div class="card" style="padding: 16px;">
+            <h4 style="color: #16a34a; margin-bottom: 10px; font-size: 16px;">2. Google Classroom – Nimalar qilish
+              kerak?</h4>
+            <ul
+              style="padding-left: 20px; color: var(--text); font-size: 13px; display:flex;flex-direction:column;gap:8px;">
+              <li><strong>Ishlash prinsipi:</strong> Bulutli texnologiya (Google Drive integratsiyasi). Berilgan
+                topshiriq va vedomostlar onlayn hujjatlarda saqlanadi.</li>
+              <li><strong>Baholash (Grading):</strong> Talaba har bir mavzu bo'yicha hujjat (PDF, Word) yuklaydi.
+                Rubrika orqali o'qituvchi ball qo'yadi.</li>
+              <li><strong>Kamchiligi:</strong> Talabalar guruh ishlarini baholash oson bo'lsa-da, aniq qoidalashtirilgan
+                va moslashuvchan (adaptive) test imkoniyati yo'q. Qat'iy nazorat mexanizmi yo'qoladi.</li>
+            </ul>
+          </div>
+
         </div>
-        <p>Aksariyat onlayn platformalar faqat baholash qismini kafolatlamaydi. EduAssess metodik jihatdan pedagoglar
-          uchun qulay va ishonchli yondashuvni taqdim etadi:</p>
-        <ul style="padding-left: 20px; color: var(--text);">
-          <li><strong>Proctoring xolisligi:</strong> Moodle dagi oddiy testlardan farqli o'laroq, yuz identifikatsiyasi
-            va oyna almashish tekshiruvi.</li>
-          <li><strong>Adaptive testing mexanizmi:</strong> Google Classroom da yo'q bo'lgan, talaba darajasiga
-            moslashuvchan testlar.</li>
-          <li><strong>Gibrid yondashuv:</strong> O'qituvchilar barcha kontentni Google Classroom/Moodle da saqlashini va
-            faqat oraliq/yakuniy nazorat uchun EduAssess dan foydalanishini tavsiya etamiz.</li>
-        </ul>
-        <button class="btn btn-primary" style="margin-top: 10px; width: 100%; justify-content: center;"
-          onclick="document.getElementById('methodology-modal').classList.remove('open')">Tushunarli</button>
+
+        <div class="card" style="padding: 18px; border: 2px solid var(--blue); background: var(--blue-l);">
+          <h4 style="color: var(--blue-d); margin-bottom: 12px; font-size: 18px;">3-Namuna sifatida EduAssess tizimi
+          </h4>
+          <p style="margin-bottom: 14px; color: var(--text);">EduAssess — xolis va aqlli baholash yondashuvini ushbu
+            ikkala muammo ustiga quradi. U Google Classroom yoki Moodle'ga ulanib yakuniy nazoratni o'zlashtiradi:</p>
+          <ul
+            style="padding-left: 20px; color: var(--text); font-size: 14px; margin-bottom: 18px; display:flex;flex-direction:column;gap:10px;">
+            <li><strong>Intellektual baholash:</strong> Tizim Adaptive Testing (moslashuvchan test) qulayligi yordamida
+              oson (1 ball), o'rta (2 ball), qiyin (3 ball) tamoyilini avtomatik ajratadi.</li>
+            <li><strong>Anti-Cheat (Nazorat):</strong> Oyna almashishi, begona shaxs identifikatsiyasi kuzatiladi.
+              Talaba Google da qidirsa tizim u va uning o'qituvchisini avtomatik ogohlantiradi.</li>
+            <li><strong>Analitika:</strong> Qaysi mavzular o'zlashtirilgani bo'yicha diagrammalar chiqaradi va Excelga
+              tortib beradi.</li>
+          </ul>
+
+          <div style="background: white; padding: 16px; border-radius: 8px; text-align: center;">
+            <p style="font-weight: 700; color: var(--text); margin-bottom: 12px; font-size: 15px;">Yuqorida
+              aytilganlarni amalda sinab ko'rish uchun EduAssess tizimiga kiring:</p>
+            <button class="btn btn-primary btn-lg shine-eff"
+              style="width: 100%; max-width: 300px; justify-content: center; font-size: 16px;"
+              onclick="document.getElementById('methodology-modal').classList.remove('open'); showLogin();">Tizimga
+              kirish ➔</button>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
