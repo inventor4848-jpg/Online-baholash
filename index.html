@@ -733,17 +733,35 @@
       display: flex;
       align-items: center;
       gap: 48px;
-      padding: 90px 5% 60px;
-      max-width: 1300px;
-      margin: 0 auto;
+      padding: 120px 5% 100px;
       width: 100%;
       position: relative;
-      z-index: 1
+      z-index: 1;
+      background: url('hero-bg.png') no-repeat center center;
+      background-size: cover;
+      min-height: 500px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.2);
+      z-index: -1;
     }
 
     .hero-content {
       flex: 1;
-      max-width: 600px
+      max-width: 550px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 60px 50px;
+      border-radius: 4px;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(8px);
+      z-index: 2;
     }
 
     .hero-badge {
