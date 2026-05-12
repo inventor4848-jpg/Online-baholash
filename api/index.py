@@ -93,6 +93,17 @@ else:
                 def pg_add_col(table, col, col_type):
                     db.execute(_text(f"ALTER TABLE {table} ADD COLUMN IF NOT EXISTS {col} {col_type}"))
                     db.commit()
+
+                # Fix for the 'department_id' vs 'dept_id' issue in groups table
+                try:
+                    # Check if department_id exists
+                    check_sql = _text("SELECT column_name FROM information_schema.columns WHERE table_name='groups' AND column_name='department_id'")
+                    if db.execute(check_sql).fetchone():
+                        # Rename it to dept_id
+                        db.execute(_text("ALTER TABLE groups RENAME COLUMN department_id TO dept_id"))
+                        db.commit()
+                except: db.rollback()
+
                 pg_add_col("assignments", "file_name", "VARCHAR")
                 pg_add_col("assignments", "file_data", "TEXT")
                 pg_add_col("submissions", "file_data", "TEXT")
@@ -108,15 +119,23 @@ else:
                 pg_add_col("tests", "passing_score", "INTEGER")
                 pg_add_col("tests", "days", "INTEGER")
                 
-                # Ensure foreign key exists for groups -> departments
+                # Make dept_id nullable initially to avoid integrity errors during migration
                 try:
-                    db.execute(_text("ALTER TABLE groups ADD CONSTRAINT fk_groups_dept FOREIGN KEY (dept_id) REFERENCES departments(id)"))
+                    db.execute(_text("ALTER TABLE groups ALTER COLUMN dept_id DROP NOT NULL"))
                     db.commit()
                 except: db.rollback()
                 
                 try:
                     db.execute(_text("ALTER TABLE users ALTER COLUMN hashed_password DROP NOT NULL"))
-                except: pass
+                    db.execute(_text("ALTER TABLE users ALTER COLUMN username DROP NOT NULL"))
+                    db.commit()
+                except: db.rollback()
+                
+                # Ensure foreign key exists for groups -> departments
+                try:
+                    db.execute(_text("ALTER TABLE groups ADD CONSTRAINT fk_groups_dept FOREIGN KEY (dept_id) REFERENCES departments(id)"))
+                    db.commit()
+                except: db.rollback()
                 
                 try:
                     db.execute(_text("ALTER TABLE users ALTER COLUMN full_name DROP NOT NULL"))
