@@ -104,11 +104,18 @@ else:
                 pg_add_col("users", "active", "BOOLEAN")
                 pg_add_col("faculties", "code", "VARCHAR")
                 pg_add_col("groups", "course", "INTEGER")
+                pg_add_col("groups", "dept_id", "INTEGER")
                 pg_add_col("tests", "passing_score", "INTEGER")
                 pg_add_col("tests", "days", "INTEGER")
                 
+                # Ensure foreign key exists for groups -> departments
                 try:
-                    db.execute(_text("ALTER TABLE users ALTER COLUMN password DROP NOT NULL"))
+                    db.execute(_text("ALTER TABLE groups ADD CONSTRAINT fk_groups_dept FOREIGN KEY (dept_id) REFERENCES departments(id)"))
+                    db.commit()
+                except: db.rollback()
+                
+                try:
+                    db.execute(_text("ALTER TABLE users ALTER COLUMN hashed_password DROP NOT NULL"))
                 except: pass
                 
                 try:
@@ -125,9 +132,14 @@ else:
 
     def ensure_demo_users(db):
         """fast check to ensure tables exist and demo users are present"""
+        # Faqat kerak bo'lganda migratsiyani ishga tushiramiz
         models.Base.metadata.create_all(bind=engine)
         run_migrations(db)
         try:
+            # Faqat bitta foydalanuvchi borligini tekshiramiz, agar bo'lsa demo userlar shart emas
+            exists = db.query(models.User).first()
+            if exists: return
+
             demo_accounts = [
                 ("admin@edu.uz", "Admin", "Edu", "admin", "#3b82f6"),
                 ("teacher@edu.uz", "Jamshid", "Karimov", "teacher", "#10b981"),
@@ -135,31 +147,16 @@ else:
             ]
             for uname, fname, lname, role, color in demo_accounts:
                 target_pass = f"{role}123"
-                u = db.query(models.User).filter(models.User.username == uname).first()
-                if not u:
-                    new_u = models.User(
-                        username=uname, fname=fname, lname=lname,
-                        hashed_password=auth.get_password_hash(target_pass),
-                        role=role, color=color, active=True
-                    )
-                    db.add(new_u)
-                else:
-                    needs_heal = False
-                    if not u.hashed_password:
-                        needs_heal = True
-                    else:
-                        try:
-                            if not auth.verify_password(target_pass, u.hashed_password):
-                                needs_heal = True
-                        except Exception:
-                            needs_heal = True
-                            
-                    if needs_heal:
-                        u.hashed_password = auth.get_password_hash(target_pass)
+                new_u = models.User(
+                    username=uname, fname=fname, lname=lname,
+                    hashed_password=auth.get_password_hash(target_pass),
+                    role=role, color=color, active=True
+                )
+                db.add(new_u)
             db.commit()
         except Exception as e:
             db.rollback()
-            raise Exception(f"EnsureDemo failed: {e}")
+            print(f"EnsureDemo warning: {e}")
 
     @app.get("/api/debug/seed")
     def manual_seed(db=Depends(get_db)):
@@ -203,6 +200,7 @@ else:
         if not _DB_INITIALIZED:
             ensure_demo_users(db)
             _DB_INITIALIZED = True
+        
         try:
             content_type = request.headers.get("content-type", "")
             if "application/json" in content_type:
@@ -220,11 +218,6 @@ else:
             raise
         except Exception as e:
             raise HTTPException(status_code=422, detail=f"Ma'lumotlarni o'qishda xato: {str(e)}")
-
-        try:
-            ensure_demo_users(db)
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
 
         user = db.query(models.User).filter(models.User.username == username).first()
         if not user:
