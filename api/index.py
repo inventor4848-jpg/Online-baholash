@@ -90,20 +90,29 @@ else:
                 sqlite_add_col("tests", "days", "INTEGER")
             else:
                 # PostgreSQL
-                def pg_add_col(table, col, col_type):
-                    db.execute(_text(f"ALTER TABLE {table} ADD COLUMN IF NOT EXISTS {col} {col_type}"))
-                    db.commit()
+                # PostgreSQL uchun maxsus "Xirurgik" migratsiya
+                def pg_exec(sql):
+                    try:
+                        db.execute(_text(sql))
+                        db.commit()
+                    except: db.rollback()
 
-                # Fix for the 'department_id' vs 'dept_id' issue in groups table
+                # 1. department_id ni dept_id ga aylantirish va eskisini o'chirish
                 try:
-                    # Check if department_id exists
-                    check_sql = _text("SELECT column_name FROM information_schema.columns WHERE table_name='groups' AND column_name='department_id'")
-                    if db.execute(check_sql).fetchone():
-                        # Rename it to dept_id
-                        db.execute(_text("ALTER TABLE groups RENAME COLUMN department_id TO dept_id"))
+                    # Agar dept_id yo'q bo'lsa qo'shamiz
+                    db.execute(_text("ALTER TABLE groups ADD COLUMN IF NOT EXISTS dept_id INTEGER"))
+                    db.commit()
+                    
+                    # Agar department_id bo'lsa, ma'lumotni ko'chirib uni o'chiramiz
+                    check_old = db.execute(_text("SELECT column_name FROM information_schema.columns WHERE table_name='groups' AND column_name='department_id'")).fetchone()
+                    if check_old:
+                        db.execute(_text("UPDATE groups SET dept_id = department_id WHERE dept_id IS NULL"))
+                        db.execute(_text("ALTER TABLE groups ALTER COLUMN department_id DROP NOT NULL"))
+                        db.execute(_text("ALTER TABLE groups DROP COLUMN department_id"))
                         db.commit()
                 except: db.rollback()
 
+                # 2. Boshqa ustunlarni qo'shish
                 pg_add_col("assignments", "file_name", "VARCHAR")
                 pg_add_col("assignments", "file_data", "TEXT")
                 pg_add_col("submissions", "file_data", "TEXT")
@@ -115,21 +124,14 @@ else:
                 pg_add_col("users", "active", "BOOLEAN")
                 pg_add_col("faculties", "code", "VARCHAR")
                 pg_add_col("groups", "course", "INTEGER")
-                pg_add_col("groups", "dept_id", "INTEGER")
                 pg_add_col("tests", "passing_score", "INTEGER")
                 pg_add_col("tests", "days", "INTEGER")
                 
-                # Make dept_id nullable initially to avoid integrity errors during migration
-                try:
-                    db.execute(_text("ALTER TABLE groups ALTER COLUMN dept_id DROP NOT NULL"))
-                    db.commit()
-                except: db.rollback()
-                
-                try:
-                    db.execute(_text("ALTER TABLE users ALTER COLUMN hashed_password DROP NOT NULL"))
-                    db.execute(_text("ALTER TABLE users ALTER COLUMN username DROP NOT NULL"))
-                    db.commit()
-                except: db.rollback()
+                # 3. Barcha NOT NULL cheklovlarini yumshatish
+                pg_exec("ALTER TABLE groups ALTER COLUMN dept_id DROP NOT NULL")
+                pg_exec("ALTER TABLE users ALTER COLUMN username DROP NOT NULL")
+                pg_exec("ALTER TABLE users ALTER COLUMN hashed_password DROP NOT NULL")
+                pg_exec("ALTER TABLE users ALTER COLUMN role DROP NOT NULL")
                 
                 # Ensure foreign key exists for groups -> departments
                 try:
