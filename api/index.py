@@ -30,8 +30,17 @@ app = FastAPI(title="EduAssess Full-Stack API")
 def health_check():
     if STARTUP_ERROR:
         return {"status": "error", "startup_error": STARTUP_ERROR}
-    db_type = "PostgreSQL" if not str(engine.url).startswith("sqlite") else "SQLite"
-    return {"status": "ok", "message": "Backend is running!", "database": db_type}
+    import os
+    db_url = os.getenv("DATABASE_URL", "")
+    db_type = "PostgreSQL" if (db_url and not db_url.startswith("sqlite")) else "SQLite (ma'lumotlar saqlanmaydi!)"
+    has_db_url = bool(db_url.strip())
+    return {
+        "status": "ok",
+        "message": "Backend ishlayapti!",
+        "database": db_type,
+        "has_database_url": has_db_url,
+        "warning": None if has_db_url else "DATABASE_URL kiritilmagan — ma'lumotlar yo'qoladi!"
+    }
 
 if STARTUP_ERROR:
     # Minimal app — only health works, startup error is exposed
