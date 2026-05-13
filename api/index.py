@@ -164,6 +164,16 @@ else:
                 pg_exec("ALTER TABLE submissions DROP CONSTRAINT IF EXISTS submissions_student_id_fkey")
                 pg_exec("ALTER TABLE submissions ADD CONSTRAINT submissions_student_id_fkey FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE")
                 
+                pg_exec("ALTER TABLE schedules DROP CONSTRAINT IF EXISTS schedules_subject_id_fkey")
+                pg_exec("ALTER TABLE schedules ADD CONSTRAINT schedules_subject_id_fkey FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE")
+                pg_exec("ALTER TABLE schedules DROP CONSTRAINT IF EXISTS schedules_group_id_fkey")
+                pg_exec("ALTER TABLE schedules ADD CONSTRAINT schedules_group_id_fkey FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE")
+
+                pg_exec("ALTER TABLE subject_groups DROP CONSTRAINT IF EXISTS subject_groups_subject_id_fkey")
+                pg_exec("ALTER TABLE subject_groups ADD CONSTRAINT subject_groups_subject_id_fkey FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE")
+                pg_exec("ALTER TABLE subject_groups DROP CONSTRAINT IF EXISTS subject_groups_group_id_fkey")
+                pg_exec("ALTER TABLE subject_groups ADD CONSTRAINT subject_groups_group_id_fkey FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE")
+                
                 try:
                     db.commit()
                 except Exception:

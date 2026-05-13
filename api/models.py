@@ -30,6 +30,7 @@ class Group(Base):
     department = relationship("Department", back_populates="groups")
     users = relationship("User", back_populates="group")
     subject_links = relationship("SubjectGroupLink", back_populates="group", cascade="all, delete-orphan")
+    schedules = relationship("Schedule", back_populates="group", cascade="all, delete-orphan")
 
 class User(Base):
     __tablename__ = "users"
@@ -59,12 +60,13 @@ class Subject(Base):
     group_links = relationship("SubjectGroupLink", back_populates="subject", cascade="all, delete-orphan")
     assignments = relationship("Assignment", back_populates="subject", cascade="all, delete-orphan")
     tests = relationship("Test", back_populates="subject", cascade="all, delete-orphan")
+    schedules = relationship("Schedule", back_populates="subject", cascade="all, delete-orphan")
 
 class SubjectGroupLink(Base):
     __tablename__ = "subject_groups"
     id = Column(Integer, primary_key=True, index=True)
-    subject_id = Column(Integer, ForeignKey("subjects.id"))
-    group_id = Column(Integer, ForeignKey("groups.id"))
+    subject_id = Column(Integer, ForeignKey("subjects.id", ondelete="CASCADE"))
+    group_id = Column(Integer, ForeignKey("groups.id", ondelete="CASCADE"))
     
     subject = relationship("Subject", back_populates="group_links")
     group = relationship("Group", back_populates="subject_links")
@@ -162,12 +164,15 @@ class Mistake(Base):
 class Schedule(Base):
     __tablename__ = "schedules"
     id = Column(Integer, primary_key=True, index=True)
-    group_id = Column(Integer, ForeignKey("groups.id"))
-    subject_id = Column(Integer, ForeignKey("subjects.id"))
+    group_id = Column(Integer, ForeignKey("groups.id", ondelete="CASCADE"))
+    subject_id = Column(Integer, ForeignKey("subjects.id", ondelete="CASCADE"))
     day = Column(String)       # Dushanba..Shanba
     period = Column(Integer)   # 1-7
     room = Column(String, nullable=True)
     week_type = Column(String, default="har")  # har, toq, juft
+    
+    group = relationship("Group", back_populates="schedules")
+    subject = relationship("Subject", back_populates="schedules")
 
 class Message(Base):
     __tablename__ = "messages"
