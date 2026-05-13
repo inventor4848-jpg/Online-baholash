@@ -115,6 +115,7 @@ class Test(Base):
     subject = relationship("Subject", back_populates="tests")
     questions = relationship("Question", back_populates="test", cascade="all, delete-orphan")
     results = relationship("TestResult", back_populates="test", cascade="all, delete-orphan")
+    mistakes = relationship("Mistake", back_populates="test", cascade="all, delete-orphan")
 
 class Question(Base):
     __tablename__ = "questions"
@@ -153,8 +154,10 @@ class Mistake(Base):
     diff = Column(String)
     explanation = Column(Text, nullable=True)
 
-    test_id = Column(Integer, ForeignKey("tests.id"))
-    student_id = Column(Integer, ForeignKey("users.id"))
+    test_id = Column(Integer, ForeignKey("tests.id", ondelete="CASCADE"))
+    student_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
+    
+    test = relationship("Test", back_populates="mistakes")
 
 class Schedule(Base):
     __tablename__ = "schedules"

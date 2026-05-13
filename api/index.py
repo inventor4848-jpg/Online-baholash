@@ -143,6 +143,27 @@ else:
                     db.execute(_text("ALTER TABLE users ALTER COLUMN full_name DROP NOT NULL"))
                 except: pass
                 
+                # Fix foreign keys for cascade delete
+                pg_exec("ALTER TABLE mistakes DROP CONSTRAINT IF EXISTS mistakes_test_id_fkey")
+                pg_exec("ALTER TABLE mistakes ADD CONSTRAINT mistakes_test_id_fkey FOREIGN KEY (test_id) REFERENCES tests(id) ON DELETE CASCADE")
+                pg_exec("ALTER TABLE mistakes DROP CONSTRAINT IF EXISTS mistakes_student_id_fkey")
+                pg_exec("ALTER TABLE mistakes ADD CONSTRAINT mistakes_student_id_fkey FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE")
+                
+                pg_exec("ALTER TABLE poll_responses DROP CONSTRAINT IF EXISTS poll_responses_poll_id_fkey")
+                pg_exec("ALTER TABLE poll_responses ADD CONSTRAINT poll_responses_poll_id_fkey FOREIGN KEY (poll_id) REFERENCES polls(id) ON DELETE CASCADE")
+                pg_exec("ALTER TABLE poll_responses DROP CONSTRAINT IF EXISTS poll_responses_user_id_fkey")
+                pg_exec("ALTER TABLE poll_responses ADD CONSTRAINT poll_responses_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE")
+
+                pg_exec("ALTER TABLE test_results DROP CONSTRAINT IF EXISTS test_results_test_id_fkey")
+                pg_exec("ALTER TABLE test_results ADD CONSTRAINT test_results_test_id_fkey FOREIGN KEY (test_id) REFERENCES tests(id) ON DELETE CASCADE")
+                pg_exec("ALTER TABLE test_results DROP CONSTRAINT IF EXISTS test_results_student_id_fkey")
+                pg_exec("ALTER TABLE test_results ADD CONSTRAINT test_results_student_id_fkey FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE")
+
+                pg_exec("ALTER TABLE submissions DROP CONSTRAINT IF EXISTS submissions_assignment_id_fkey")
+                pg_exec("ALTER TABLE submissions ADD CONSTRAINT submissions_assignment_id_fkey FOREIGN KEY (assignment_id) REFERENCES assignments(id) ON DELETE CASCADE")
+                pg_exec("ALTER TABLE submissions DROP CONSTRAINT IF EXISTS submissions_student_id_fkey")
+                pg_exec("ALTER TABLE submissions ADD CONSTRAINT submissions_student_id_fkey FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE")
+                
                 try:
                     db.commit()
                 except Exception:
