@@ -308,6 +308,26 @@
             color: #92400e;
         }
 
+        .video-container {
+            margin-top: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            background: #000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
         @media (max-width: 768px) {
             .part-section {
                 padding: 30px;
@@ -346,7 +366,7 @@
         <div id="part1" class="part-section">
             <span class="part-tag">1-Qism</span>
             <h2 class="part-title">Talabalarni onlayn baholash platformalari</h2>
-            <p class="part-desc">Dunyo bo'ylab eng ko'p qo'llaniladigan va tan olingan 7ta asosiy platformaning qisqacha
+            <p class="part-desc">Dunyo bo'ylab eng ko'p qo'llaniladigan va tan olingan 6ta asosiy platformaning qisqacha
                 tavsifi va imkoniyatlari.</p>
 
             <div class="platform-grid">
@@ -355,42 +375,54 @@
                     <h3 class="platform-title">Moodle</h3>
                     <p class="platform-info">O'quv jarayonini boshqarishning eng qudratli ochiq kodli tizimi.
                         Universitetlar uchun ideal tanlov.</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/9qN19MLwdbo" allowfullscreen></iframe>
+                    </div>
                 </div>
                 <div class="platform-card">
                     <span class="badge bg-google">Cloud</span>
                     <h3 class="platform-title">Google Classroom</h3>
                     <p class="platform-info">Google xizmatlari bilan integratsiyalashgan, oddiy va tushunarli classroom
                         management vositasi.</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/HEzCTl0TE9E" allowfullscreen></iframe>
+                    </div>
                 </div>
                 <div class="platform-card">
                     <span class="badge bg-kahoot">Gamified</span>
                     <h3 class="platform-title">Kahoot!</h3>
                     <p class="platform-info">O'yin shaklidagi qizqarli viktorinalar va so'rovnomalar o'tkazish uchun eng
                         ommabop servis.</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/BhsX0vLD0jo" allowfullscreen></iframe>
+                    </div>
                 </div>
                 <div class="platform-card">
                     <span class="badge bg-quiz">Quiz</span>
                     <h3 class="platform-title">Quizizz</h3>
                     <p class="platform-info">Talabalarning o'z tezligida test yechishi va raqobatlashishi uchun
                         yaratilgan interaktiv platforma.</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/p6CpL-wxUuc" allowfullscreen></iframe>
+                    </div>
                 </div>
                 <div class="platform-card">
                     <span class="badge bg-coursera">MOOC</span>
                     <h3 class="platform-title">Coursera</h3>
                     <p class="platform-info">Professional kurslar va xalqaro sertifikatlar tizimiga asoslangan akademik
                         baholash maskani.</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/g7Q2E9oNyhs" allowfullscreen></iframe>
+                    </div>
                 </div>
                 <div class="platform-card">
                     <span class="badge bg-github">Code</span>
                     <h3 class="platform-title">GitHub (Classroom)</h3>
                     <p class="platform-info">Dasturchilar va IT talabalari uchun kod bilan ishlash va avtomatik baholash
                         muhiti.</p>
-                </div>
-                <div class="platform-card">
-                    <span class="badge bg-pear">Interactive</span>
-                    <h3 class="platform-title">Pear Deck</h3>
-                    <p class="platform-info">Taqdimotlarni interaktiv darsga aylantiruvchi, real-vaqtda javob olish
-                        imkonini beruvchi vosita.</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/WKksUaf5KfM" allowfullscreen></iframe>
+                    </div>
                 </div>
             </div>
         </div>
@@ -491,20 +523,6 @@
                 </ul>
             </div>
 
-            <!-- Pear Deck -->
-            <div class="workflow-item">
-                <h3 class="workflow-name">7. Pear Deck</h3>
-                <ul class="workflow-steps">
-                    <li><strong>Interaktiv slaydlar:</strong> Google Slides dagi oddiy slaydlarga "Drawing", "Drag &
-                        Drop", "Text" savollari qo'shiladi.</li>
-                    <li><strong>Instructor-Paced:</strong> O'qituvchi slaydlarni o'zgartiradi va bu talaba ekranida ham
-                        darhol aks etadi.</li>
-                    <li><strong>Anonim javoblar:</strong> Talabalar dars vaqtida javob berishadi (ismlari yashirilgan
-                        holda ekranda ko'rinadi).</li>
-                    <li><strong>Darsdan keyin (Takeaways):</strong> Har bir talaba o'z javoblari va o'qituvchi izohlari
-                        bilan Google Doc hisobot oladi.</li>
-                </ul>
-            </div>
         </div>
 
         <!-- PART 3 -->
