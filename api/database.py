@@ -12,6 +12,10 @@ SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
 if SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
     SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
+# psycopg (v3) o'rnatilmagan — psycopg2 drayveriga o'tkazamiz
+if SQLALCHEMY_DATABASE_URL.startswith("postgresql+psycopg://"):
+    SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgresql+psycopg://", "postgresql://", 1)
+
 # psycopg2 channel_binding parametrini qabul qilmaydi — olib tashlaymiz
 if "channel_binding=require" in SQLALCHEMY_DATABASE_URL:
     SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("&channel_binding=require", "")
