@@ -4726,7 +4726,10 @@
       DB.faculties = data.faculties || [];
       DB.departments = data.departments || [];
       DB.groups = data.groups || [];
-      DB.users = (data.users || []).map(u => ({ ...u, active: u.active !== false }));
+      // Ismi bazada bo'sh bo'lgan eski foydalanuvchilar uchun "null" o'rniga login ko'rsatiladi
+      DB.users = (data.users || []).map(u => ({
+        ...u, fname: u.fname || u.username || '?', lname: u.lname || '', active: u.active !== false
+      }));
       DB.subjects = data.subjects || [];
       DB.assignments = data.assignments || [];
       DB.submissions = data.submissions || [];
