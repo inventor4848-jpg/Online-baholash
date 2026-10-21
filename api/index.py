@@ -32,14 +32,14 @@ def health_check():
         return {"status": "error", "startup_error": STARTUP_ERROR}
     import os
     db_url = os.getenv("DATABASE_URL", "")
-    db_type = "PostgreSQL" if (db_url and not db_url.startswith("sqlite")) else "SQLite (ma'lumotlar saqlanmaydi!)"
+    db_type = "PostgreSQL" if (db_url and not db_url.startswith("sqlite")) else "SQLite (ma’lumotlar saqlanmaydi!)"
     has_db_url = bool(db_url.strip())
     return {
         "status": "ok",
         "message": "Backend ishlayapti!",
         "database": db_type,
         "has_database_url": has_db_url,
-        "warning": None if has_db_url else "DATABASE_URL kiritilmagan — ma'lumotlar yo'qoladi!"
+        "warning": None if has_db_url else "DATABASE_URL kiritilmagan — ma’lumotlar yo‘qoladi!"
     }
 
 if STARTUP_ERROR:
@@ -269,7 +269,7 @@ else:
         except HTTPException:
             raise
         except Exception as e:
-            raise HTTPException(status_code=422, detail=f"Ma'lumotlarni o'qishda xato: {str(e)}")
+            raise HTTPException(status_code=422, detail=f"Ma’lumotlarni o‘qishda xato: {str(e)}")
 
         user = db.query(models.User).filter(models.User.username == username).first()
         if not user:
@@ -282,7 +282,7 @@ else:
         if not auth.verify_password(password, user.hashed_password):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Parol noto'g'ri",
+                detail="Parol noto‘g‘ri",
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
