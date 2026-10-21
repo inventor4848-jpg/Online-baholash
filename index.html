@@ -61,6 +61,13 @@
       --sidebar-w: 260px;
     }
 
+    input,
+    button,
+    select,
+    textarea {
+      font-family: inherit;
+    }
+
     html,
     body {
       height: 100%;
@@ -4739,6 +4746,29 @@
         loadDataFromAPI().then(() => onPageLoad(currentPage));
       });
     }
+
+    // ========== IMLO (api/imlo.py bilan bir xil qoidalar) ==========
+    const imlo = {
+      apostrophes: t => t.replace(/([oOgG])['`ʻʼ‘’](?=[A-Za-z])/g, '$1‘').replace(/([A-Za-z])['`ʻʼ](?=[A-Za-z])/g, '$1’'),
+      quotes: t => t.replace(/"([^"\n]{1,300}?)"/g, '“$1”'),
+      sentenceCase: t => t.replace(/(?<![\w‘’])[A-Z][a-z‘’]+(?:[ -][A-Z][a-z‘’]+)+(?![\w‘’])/g,
+        run => run.replace(/([ -])([A-Z])/g, (_, sep, ch) => sep + ch.toLowerCase())),
+    };
+    imlo.text = t => imlo.quotes(imlo.apostrophes(t));
+    imlo.title = t => imlo.sentenceCase(imlo.text(t));
+
+    // Maydondan chiqilganda matnni to'g'rilaydi; login, parol, kod va qidiruvga tegmaydi
+    const IMLO_SKIP = ['login-username', 'u-username', 'prof-username', 'u-pass', 'fac-code', 'assign-types', 'u-search', 'grp-name'];
+    const IMLO_TITLE = ['fac-name', 'dept-name', 'sub-name', 'assign-title', 'quiz-title', 'poll-title', 'msg-title'];
+    const IMLO_APOS = ['u-fname', 'u-lname', 'prof-fname', 'prof-lname', 'sch-room', 'qq-opts', 'qq-correct'];
+    document.addEventListener('change', e => {
+      const el = e.target;
+      if (!(el.matches('textarea') || el.matches('input:not([type]), input[type="text"]'))) return;
+      if (IMLO_SKIP.includes(el.id)) return;
+      const fn = IMLO_TITLE.includes(el.id) ? imlo.title : IMLO_APOS.includes(el.id) ? imlo.apostrophes : imlo.text;
+      const v = fn(el.value);
+      if (v !== el.value) el.value = v;
+    }, true);
 
     // Legacy async apiAction (used by messages, polls)
     async function apiAction(action, data) {

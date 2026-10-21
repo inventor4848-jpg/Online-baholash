@@ -19,7 +19,7 @@ try:
     from pydantic import BaseModel
 
     from database import engine, get_db
-    import models, schemas, auth
+    import models, schemas, auth, imlo
 except Exception as _e:
     STARTUP_ERROR = traceback.format_exc()
 
@@ -372,7 +372,7 @@ else:
     @app.post("/api/action")
     def perform_action(payload: GenericPayload, db=Depends(get_db), current_user=Depends(auth.get_current_user)):
         action = payload.action
-        d = payload.data
+        d = imlo.normalize_payload(action, payload.data)
 
         if action == "saveUser":
             password = d.get('pass')
