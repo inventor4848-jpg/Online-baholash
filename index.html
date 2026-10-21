@@ -3670,7 +3670,7 @@
         const dept = DB.departments.find(d => d.id === g.deptId);
         const cnt = DB.users.filter(u => u.groupId === g.id).length;
         return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:var(--bg);margin-bottom:6px">
-      <div><div style="font-weight:600">${g.name} <span class="badge b-muted">${cnt} ta</span></div><div style="font-size:11px;color:var(--muted)">${dept?.name || '—'} • ${g.course}-kurs</div></div>
+      <div><div style="font-weight:600">${g.name} <span class="badge b-muted">${cnt} ta</span></div><div style="font-size:11px;color:var(--muted)">${dept?.name || '—'}${g.course ? ` • ${g.course}-kurs` : ''}</div></div>
       <button class="btn btn-sm btn-danger" onclick="deleteGroup(${g.id})">O‘chirish</button>
     </div>`;
       }).join('') || '<div style="color:var(--muted);font-size:13px;padding:10px">Guruh yo‘q</div>';
@@ -4675,16 +4675,25 @@
 
     // Global handlers for opening modals
     function openAddGroup() { openModal('modal-add-group'); }
-    async function openAddSubject() {
-      await fetchDB();
+    function fillSubjectModal() {
+      const teacherSel = document.getElementById('sub-teacher');
+      const prevTeacher = teacherSel.value;
+      const checked = [...document.querySelectorAll('#sub-groups-checkboxes input:checked')].map(i => i.value);
       const teachers = DB.users.filter(u => u.role === 'teacher' && u.active !== false);
-      document.getElementById('sub-teacher').innerHTML = teachers.length
+      teacherSel.innerHTML = teachers.length
         ? teachers.map(t => `<option value="${t.id}">${t.fname} ${t.lname}</option>`).join('')
         : '<option value="">-- O‘qituvchi topilmadi --</option>';
+      if (prevTeacher && teachers.some(t => String(t.id) === prevTeacher)) teacherSel.value = prevTeacher;
       document.getElementById('sub-groups-checkboxes').innerHTML = DB.groups.length
-        ? DB.groups.map(g => `<label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" value="${g.id}"> ${g.name}</label>`).join('')
+        ? DB.groups.map(g => `<label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" value="${g.id}"${checked.includes(String(g.id)) ? ' checked' : ''}> ${g.name}</label>`).join('')
         : '<span style="color:var(--muted);font-size:13px">Guruh topilmadi</span>';
+    }
+    function openAddSubject() {
+      // Oyna darhol ochiladi; ro'yxatlar serverdan yangilangach qayta to'ldiriladi
+      document.getElementById('sub-groups-checkboxes').innerHTML = '';
+      fillSubjectModal();
       openModal('modal-add-subject');
+      fetchDB().then(fillSubjectModal);
     }
 
   </script>
@@ -4749,7 +4758,9 @@
 
     // ========== IMLO (api/imlo.py bilan bir xil qoidalar) ==========
     const imlo = {
-      apostrophes: t => t.replace(/([oOgG])['`ʻʼ‘’](?=[A-Za-z])/g, '$1‘').replace(/([A-Za-z])['`ʻʼ](?=[A-Za-z])/g, '$1’'),
+      apostrophes: t => t.replace(/([oOgG])['`ʻʼ‘’](?=[A-Za-z])/g, '$1‘')
+        .replace(/(?<=[A-Za-z])([oOgG])['`ʻʼ’](?![\w‘’'])/g, '$1‘')
+        .replace(/([A-Za-z])['`ʻʼ](?=[A-Za-z])/g, '$1’'),
       quotes: t => t.replace(/"([^"\n]{1,300}?)"/g, '“$1”'),
       sentenceCase: t => t.replace(/(?<![\w‘’])[A-Z][a-z‘’]+(?:[ -][A-Z][a-z‘’]+)+(?![\w‘’])/g,
         run => run.replace(/([ -])([A-Z])/g, (_, sep, ch) => sep + ch.toLowerCase())),
@@ -4758,9 +4769,9 @@
     imlo.title = t => imlo.sentenceCase(imlo.text(t));
 
     // Maydondan chiqilganda matnni to'g'rilaydi; login, parol, kod va qidiruvga tegmaydi
-    const IMLO_SKIP = ['login-username', 'u-username', 'prof-username', 'u-pass', 'fac-code', 'assign-types', 'u-search', 'grp-name'];
+    const IMLO_SKIP = ['login-username', 'u-username', 'prof-username', 'u-pass', 'fac-code', 'assign-types', 'u-search'];
     const IMLO_TITLE = ['fac-name', 'dept-name', 'sub-name', 'assign-title', 'quiz-title', 'poll-title', 'msg-title'];
-    const IMLO_APOS = ['u-fname', 'u-lname', 'prof-fname', 'prof-lname', 'sch-room', 'qq-opts', 'qq-correct'];
+    const IMLO_APOS = ['grp-name', 'u-fname', 'u-lname', 'prof-fname', 'prof-lname', 'sch-room', 'qq-opts', 'qq-correct'];
     document.addEventListener('change', e => {
       const el = e.target;
       if (!(el.matches('textarea') || el.matches('input:not([type]), input[type="text"]'))) return;

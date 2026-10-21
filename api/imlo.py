@@ -7,6 +7,7 @@ RUN = re.compile(r"(?<![\w‘’])" + WORD + r"(?:[ -]" + WORD + r")+(?![\w‘�
 
 def apostrophes(t):
     t = re.sub(r"([oOgG])['`ʻʼ‘’](?=[A-Za-z])", r"\1‘", t)
+    t = re.sub(r"(?<=[A-Za-z])([oOgG])['`ʻʼ’](?![\w‘’'])", r"\1‘", t)  # so'z oxirida: CNNO' -> CNNO‘
     return re.sub(r"(?<=[A-Za-z])['`ʻʼ](?=[A-Za-z])", "’", t)
 
 
@@ -59,7 +60,9 @@ def normalize_payload(action, d):
     for k, v in d.items():
         if k in ("questions", "mistakes") and isinstance(v, list):
             out[k] = [normalize_payload(action, x) for x in v]
-        elif k in PAYLOAD_RULES and not (k == "name" and action == "saveGroup"):
+        elif k == "name" and action == "saveGroup":
+            out[k] = _apply(apostrophes, v)
+        elif k in PAYLOAD_RULES:
             out[k] = _apply(PAYLOAD_RULES[k], v)
         else:
             out[k] = v
