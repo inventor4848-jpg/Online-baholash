@@ -2067,7 +2067,7 @@
               </svg>
             </div>
             <div class="feat-title">Adaptive testing</div>
-            <div class="feat-desc">Oson (1×), O‘rta (2×), Qiyin (3×) og‘irlik formulasi.</div>
+            <div class="feat-desc">Oson (1×), o‘rta (2×), qiyin (3×) og‘irlik formulasi.</div>
           </div>
           <div class="feat-card">
             <div class="feat-icon-wrap">
@@ -2097,7 +2097,7 @@
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
               </svg>
             </div>
-            <div class="feat-title">Real-vaqt Monitoring</div>
+            <div class="feat-title">Real-vaqt monitoring</div>
             <div class="feat-desc">Jonli kuzatish imkoniyati.</div>
           </div>
           <div class="feat-card">
@@ -2197,7 +2197,7 @@
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
         </svg>
         <div>
-          <div style="color:#fff;font-weight:700;font-size:15px">AI Yordamchi</div>
+          <div style="color:#fff;font-weight:700;font-size:15px">AI yordamchi</div>
           <div style="color:rgba(255,255,255,.75);font-size:12px">EduAssess bo‘yicha savol bering</div>
         </div>
         <button onclick="toggleAiChat()"
@@ -4765,8 +4765,11 @@
         .replace(/(?<=[A-Za-z])([oOgG])['`ʻʼ’](?![\w‘’'])/g, '$1‘')
         .replace(/([A-Za-z])['`ʻʼ](?=[A-Za-z])/g, '$1’'),
       quotes: t => t.replace(/"([^"\n]{1,300}?)"/g, '“$1”'),
-      sentenceCase: t => t.replace(/(?<![\w‘’])[A-Z][a-z‘’]+(?:[ -][A-Z][a-z‘’]+)+(?![\w‘’])/g,
-        run => run.replace(/([ -])([A-Z])/g, (_, sep, ch) => sep + ch.toLowerCase())),
+      // Birinchi so'z va gap (. ! ?) boshidagi so'zdan tashqari hammasi kichik harf bilan
+      sentenceCase: t => t.replace(/(?<![\w‘’])[A-Z][a-z‘’]+(?![\w‘’])/g, (w, pos) => {
+        const before = t.slice(0, pos).trimEnd();
+        return !/[A-Za-z0-9‘’]/.test(before) || '.!?'.includes(before.slice(-1)) ? w : w[0].toLowerCase() + w.slice(1);
+      }),
     };
     imlo.text = t => imlo.quotes(imlo.apostrophes(t));
     imlo.title = t => imlo.sentenceCase(imlo.text(t));
@@ -4991,7 +4994,7 @@ FAQAT JSON massiv qaytargin, boshqa hech narsa yozma.`;
 
         // Set title from topic
         if (!document.getElementById('quiz-title').value.trim()) {
-          document.getElementById('quiz-title').value = topic + ' — Test';
+          document.getElementById('quiz-title').value = topic + ' — test';
         }
 
         questions.forEach(q => {

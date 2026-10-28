@@ -1,8 +1,8 @@
 """O'zbek imlosi: o'/g' -> o‘/g‘, a' -> a’, "..." -> “...”, sarlavhada faqat birinchi so'z bosh harfda."""
 import re
 
-WORD = r"[A-Z][a-z‘’]+"
-RUN = re.compile(r"(?<![\w‘’])" + WORD + r"(?:[ -]" + WORD + r")+(?![\w‘’])")
+# Bosh harfli oddiy so'z (EduAssess, AI kabi aralash/katta harfli nomlar emas)
+CAP_WORD = re.compile(r"(?<![\w‘’])[A-Z][a-z‘’]+(?![\w‘’])")
 
 
 def apostrophes(t):
@@ -16,10 +16,13 @@ def quotes(t):
 
 
 def sentence_case(t):
+    # Birinchi so'z va gap (. ! ?) boshidagi so'zdan tashqari hammasi kichik harf bilan
     def low(m):
-        parts = re.split(r"([ -])", m.group(0))
-        return "".join(p if i == 0 or i % 2 else p[0].lower() + p[1:] for i, p in enumerate(parts))
-    return RUN.sub(low, t)
+        before = t[:m.start()].rstrip()
+        if not re.search(r"[A-Za-z0-9‘’]", before) or before[-1] in ".!?":
+            return m.group(0)
+        return m.group(0)[0].lower() + m.group(0)[1:]
+    return CAP_WORD.sub(low, t)
 
 
 def text(t):        # oddiy matn
