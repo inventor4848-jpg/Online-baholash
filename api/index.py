@@ -234,7 +234,45 @@ else:
 
     @app.get("/api/config")
     def get_config():
-        return {"groqKey": os.getenv("GROQ_KEY", "").strip()}
+        # Kalitning o'zi brauzerga berilmaydi — faqat AI sozlanganmi yoki yo'qmi
+        return {"aiEnabled": bool(os.getenv("GROQ_KEY", "").strip())}
+
+    @app.post("/api/ai/chat")
+    def ai_chat(payload: Dict[str, Any], current_user=Depends(auth.get_current_user)):
+        """Groq'ga so'rovni server orqali uzatadi, GROQ_KEY brauzerga chiqmaydi."""
+        import json, urllib.request, urllib.error
+        key = os.getenv("GROQ_KEY", "").strip()
+        if not key:
+            raise HTTPException(status_code=503, detail="AI sozlanmagan: serverda GROQ_KEY yo‘q")
+        messages = payload.get("messages")
+        if (not isinstance(messages, list) or not messages
+                or not all(isinstance(m, dict) and isinstance(m.get("content"), str) for m in messages)
+                or sum(len(m["content"]) for m in messages) > 20000):
+            raise HTTPException(status_code=422, detail="Noto‘g‘ri so‘rov")
+        body = {
+            # llama-3.3-70b-versatile Groq'da o'chirilgan; 20 ta savol ~1900 token oladi
+            "model": "openai/gpt-oss-120b",
+            "messages": [{"role": m.get("role", "user"), "content": m["content"]} for m in messages],
+            "temperature": 0.7, "max_tokens": 8192, "reasoning_effort": "low",
+        }
+        req = urllib.request.Request(
+            "https://api.groq.com/openai/v1/chat/completions",
+            data=json.dumps(body).encode(),
+            headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json",
+                     "User-Agent": "EduAssess/1.0"},
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=55) as r:
+                d = json.load(r)
+        except urllib.error.HTTPError as e:
+            try:
+                msg = json.loads(e.read()).get("error", {}).get("message", "")
+            except Exception:
+                msg = ""
+            raise HTTPException(status_code=502, detail=f"AI xatosi: {msg or e.code}")
+        except Exception as e:
+            raise HTTPException(status_code=502, detail=f"AI bilan bog‘lanib bo‘lmadi: {e}")
+        return {"content": d["choices"][0]["message"].get("content") or ""}
 
     @app.get("/api/debug/ping")
     @app.get("/debug/ping")
